@@ -1,15 +1,26 @@
 import { google } from "googleapis"
-import path from "path"
 import stream from "stream"
+import dotenv from "dotenv"
+
+dotenv.config()
+
+const serviceAccountJson = Buffer.from(
+  process.env.GOOGLE_SERVICE_ACCOUNT_BASE64!,
+  "base64"
+).toString("utf8")
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: path.join(__dirname, "../config/google-service-account.json"),
+  credentials: JSON.parse(serviceAccountJson),
   scopes: ["https://www.googleapis.com/auth/drive.file"],
 })
 
 const driveService = google.drive({ version: "v3", auth })
 
-const uploadBufferToDrive = async (file: Express.Multer.File, folderId = "1KyHzvvFvbqIu1_P1RUJwBHTkXrokuro4", makePublic = true) => {
+const uploadBufferToDrive = async (
+  file: Express.Multer.File,
+  folderId = "1KyHzvvFvbqIu1_P1RUJwBHTkXrokuro4",
+  makePublic = true
+) => {
   const bufferStream = new stream.PassThrough()
   bufferStream.end(file.buffer)
 
@@ -32,7 +43,7 @@ const uploadBufferToDrive = async (file: Express.Multer.File, folderId = "1KyHzv
   const fileId = response.data.id
   const mimeType = response.data.mimeType
 
-   if (makePublic && fileId) {
+  if (makePublic && fileId) {
     await driveService.permissions.create({
       fileId,
       requestBody: {
@@ -42,12 +53,10 @@ const uploadBufferToDrive = async (file: Express.Multer.File, folderId = "1KyHzv
     })
   }
 
-  console.log(mimeType)
-
   let url = ""
-  if (mimeType && mimeType.startsWith("image/")) {
+  if (mimeType?.startsWith("image/")) {
     url = `https://drive.google.com/uc?export=view&id=${fileId}`
-  } else if (mimeType && mimeType.startsWith("video/")) {
+  } else if (mimeType?.startsWith("video/")) {
     url = `https://drive.google.com/file/d/${fileId}/preview`
   } else {
     url = `https://drive.google.com/file/d/${fileId}/view`
@@ -79,5 +88,5 @@ export default {
     const fileId = match ? match[0] : null
     if (!fileId) throw new Error("Invalid file URL")
     return await removeFileFromDrive(fileId)
-  }
+  },
 }
