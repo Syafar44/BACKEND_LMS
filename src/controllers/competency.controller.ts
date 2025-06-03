@@ -3,7 +3,6 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import CompetancyModel ,{ competencyDAO } from "../models/competency.model"
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
-import CompetencyModel from "../models/competency.model";
 
 export default {
     async create(req: IReqUser, res: Response) {
@@ -96,27 +95,37 @@ export default {
     async findByMainCompetency(req: IReqUser, res: Response) {
         try {
             const { main_competency } = req.params;
-            const { search } = req.query; // ambil search dari query
+            const { search, limit = "10", page = "1" } = req.query;
 
-            // Buat filter dasar berdasarkan main_competency
-            const filter: any = {
-                main_competency,
-            };
+            const filter: any = { main_competency };
 
-            // Jika search ada, tambahkan regex search ke dalam filter
             if (search) {
-                filter.$or = [
-                    { title: { $regex: search, $options: 'i' } },
-                    { description: { $regex: search, $options: 'i' } }
+            filter.$or = [
+                    { name: { $regex: search, $options: "i" } },
+                    { description: { $regex: search, $options: "i" } },
                 ];
             }
 
-            const result = await CompetancyModel.find(filter);
+            const limitNumber = parseInt(limit as string);
+            const pageNumber = parseInt(page as string);
+            const skip = (pageNumber - 1) * limitNumber;
 
-            if (!result || result.length === 0)
+            const result = await CompetancyModel.find(filter)
+            .skip(skip)
+            .limit(limitNumber);
+
+            const total = await CompetancyModel.countDocuments(filter);
+
+            if (!result || result.length === 0) {
             return response.notFound(res, "Competency not found");
+            }
 
-            response.success(res, result, "Success find all by main competency");
+            response.success(res, {
+                data: result,
+                total,
+                currentPage: pageNumber,
+                totalPages: Math.ceil(total / limitNumber),
+            }, "Success find all by main competency");
         } catch (error) {
             response.error(res, error, "Failed find all by main competency");
         }
