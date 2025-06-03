@@ -12,7 +12,7 @@ const doc = {
             description: "Local server"
         },
         {
-            url: "https://lms-panglima.vercel.app/api",
+            url: "https://backend-lms-panglima.vercel.app/api",
             description: "Deploy server"
         },
     ],
