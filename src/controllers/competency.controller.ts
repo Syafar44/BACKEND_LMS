@@ -95,16 +95,30 @@ export default {
     },
     async findByMainCompetency(req: IReqUser, res: Response) {
         try {
-          const { main_competency } = req.params;
-          const result = await CompetancyModel.find({
-            main_competency
-          });
-    
-          if (!result) return response.notFound(res, "Competancy not found");
-    
-          response.success(res, result, "Success find all by main Competancy");
+            const { main_competency } = req.params;
+            const { search } = req.query; // ambil search dari query
+
+            // Buat filter dasar berdasarkan main_competency
+            const filter: any = {
+                main_competency,
+            };
+
+            // Jika search ada, tambahkan regex search ke dalam filter
+            if (search) {
+                filter.$or = [
+                    { title: { $regex: search, $options: 'i' } },
+                    { description: { $regex: search, $options: 'i' } }
+                ];
+            }
+
+            const result = await CompetancyModel.find(filter);
+
+            if (!result || result.length === 0)
+            return response.notFound(res, "Competency not found");
+
+            response.success(res, result, "Success find all by main competency");
         } catch (error) {
-          response.error(res, error, "Failed find all by main Competancy");
+            response.error(res, error, "Failed find all by main competency");
         }
     },
     async findOneBySlug(req: IReqUser, res: Response) {

@@ -4,7 +4,7 @@ const doc = {
     info: {
         version: "v1.0.0",
         title: "Dokumentasi Api LMS Panglima",
-        description: "Dokumentasi Api RGP",
+        description: "Dokumentasi Api lms",
     },
     servers: [
         {
