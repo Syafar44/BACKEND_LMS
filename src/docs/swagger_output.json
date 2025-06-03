@@ -492,6 +492,34 @@
         ]
       }
     },
+    "/competency/{main_competency}/main_competency": {
+      "get": {
+        "tags": [
+          "Competency"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "main_competency",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/subcompetency": {
       "post": {
         "tags": [
@@ -1052,6 +1080,10 @@
       "CreateCompetencyRequest": {
         "type": "object",
         "properties": {
+          "main_competency": {
+            "type": "string",
+            "example": "mainCompetencyId"
+          },
           "title": {
             "type": "string",
             "example": "Competency 1"

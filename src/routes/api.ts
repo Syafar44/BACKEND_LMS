@@ -139,6 +139,12 @@ router.get('/competency/slug/:slug', competencyController.findOneBySlug
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
+router.get('/competency/:main_competency/main_competency', competencyController.findByMainCompetency
+    /*
+    #swagger.tags = ['Competency']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 
 /// SUB COMPETENCY

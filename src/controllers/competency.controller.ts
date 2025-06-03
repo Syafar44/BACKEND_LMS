@@ -3,6 +3,7 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import CompetancyModel ,{ competencyDAO } from "../models/competency.model"
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
+import CompetencyModel from "../models/competency.model";
 
 export default {
     async create(req: IReqUser, res: Response) {
@@ -92,7 +93,20 @@ export default {
             response.error(res, error, "Failed remove Competancy")
         }
     },
-
+    async findByMainCompetency(req: IReqUser, res: Response) {
+        try {
+          const { main_competency } = req.params;
+          const result = await CompetancyModel.find({
+            main_competency
+          });
+    
+          if (!result) return response.notFound(res, "Competancy not found");
+    
+          response.success(res, result, "Success find all by main Competancy");
+        } catch (error) {
+          response.error(res, error, "Failed find all by main Competancy");
+        }
+    },
     async findOneBySlug(req: IReqUser, res: Response) {
         try {
           const { slug } = req.params;

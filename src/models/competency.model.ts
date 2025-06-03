@@ -6,6 +6,7 @@ export const COMPETENCY_MODEL_NAME = "Competency";
 const Schema = mongoose.Schema
 
 export const competencyDAO = Yup.object({
+    main_competency: Yup.string().required(),
     title: Yup.string().required(),
     description: Yup.string().required(),
     image: Yup.string().required(),
@@ -16,6 +17,10 @@ export const competencyDAO = Yup.object({
 export type TCompetency = Yup.InferType<typeof competencyDAO>
 
 const CompetencyScema = new Schema<TCompetency>({
+    main_competency: {
+        type: Schema.Types.String,
+        required: true,
+    },
     title: {
         type: Schema.Types.String,
         required: true,

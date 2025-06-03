@@ -95,20 +95,31 @@ export default {
 
     async findOneBySlug(req: IReqUser, res: Response) {
         try {
-          const { slug } = req.params;
-          const result = await SubCompetencyModel.findOne({
-            slug,
-          });
+            const { slug } = req.params;
+            const result = await SubCompetencyModel.findOne({
+                slug,
+            });
     
-          if (!result) return response.notFound(res, "SubCompetency not found");
+            if (!result) return response.notFound(res, "SubCompetency not found");
     
-          response.success(res, result, "Success find one by slug an SubCompetency");
+            response.success(res, result, "Success find one by slug an SubCompetency");
         } catch (error) {
-          response.error(res, error, "Failed find one by slug an SubCompetency");
+            response.error(res, error, "Failed find one by slug an SubCompetency");
         }
-      },
+    },
 
-      async findAllByCompetency(req: IReqUser, res: Response) {
+    // async findByMainCompetency(req: IReqUser, res: Response) {
+    //     try {
+    //         const { mainCompetency } = req.params;
+
+    //         const result = await SubCompetencyModel.find({ main_competency: mainCompetency }).exec();
+    //         response.success(res, result, `Success find all subCompetency with ${mainCompetency} competency`);
+    //     } catch (error) {
+    //         response.error(res, error, "Failed to find subCompetency by main competency");
+    //     }
+    // },
+
+    async findAllByCompetency(req: IReqUser, res: Response) {
         try {
             const { competencyId } = req.params
 
