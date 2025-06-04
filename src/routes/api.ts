@@ -307,10 +307,7 @@ router.post('/media/upload-multiple', [
     */
 )
 
-router.delete('/media/remove', [
-    authMiddleware, 
-    aclMiddleware([ROLES.SUPER_ADMIN]),
-], mediaController.remove
+router.delete('/media/remove', mediaController.remove
     /*
     #swagger.tags = ['Media']
     #swagger.security = [{ "bearerAuth": [] }]
