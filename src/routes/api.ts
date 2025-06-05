@@ -83,7 +83,7 @@ router.delete('/kajian/:id', kajianController.remove
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/kajian/slug/:slug', kajianController.findOneBySlug
+router.get('/kajian/:slug/slug', kajianController.findOneBySlug
     /*
     #swagger.tags = ['Kajian']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -133,7 +133,7 @@ router.delete('/competency/:id', competencyController.remove
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/competency/slug/:slug', competencyController.findOneBySlug
+router.get('/competency/:slug/slug', competencyController.findOneBySlug
     /*
     #swagger.tags = ['Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -190,13 +190,13 @@ router.delete('/subcompetency/:id', subCompetencyController.remove
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/subcompetency/slug/:slug', subCompetencyController.findOneBySlug
+router.get('/subcompetency/:slug/slug', subCompetencyController.findOneBySlug
     /*
     #swagger.tags = ['Sub Competency']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/subcompetency/competencyId/:competencyId', subCompetencyController.findAllByCompetency
+router.get('/subcompetency/:competencyId/competencyId', subCompetencyController.findAllByCompetency
     /*
     #swagger.tags = ['Sub Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -246,7 +246,7 @@ router.delete('/kuiscompetency/:id', kuisCompetencyController.remove
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/kuiscompetency/subCompetencyId/:subCompetencyId', kuisCompetencyController.findAllBySubCompetency
+router.get('/kuiscompetency/:subCompetencyId/subCompetencyId', kuisCompetencyController.findAllBySubCompetency
     /*
     #swagger.tags = ['Kuis Competency']
     #swagger.security = [{ "bearerAuth": [] }]

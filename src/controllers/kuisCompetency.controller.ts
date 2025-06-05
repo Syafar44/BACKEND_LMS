@@ -97,33 +97,45 @@ export default {
     async findAllBySubCompetency(req: IReqUser, res: Response) {
         try {
             const { subCompetencyId } = req.params;
-            const { search, limit = "10", page = "1" } = req.query; 
+            const { search, limit = "10", page = "1" } = req.query;
 
+            // Validasi ID
             if (!isValidObjectId(subCompetencyId)) {
-                return response.error(res, null, "Kuis competency not found");
+                return response.error(res, null, "SubCompetency ID is invalid or not found");
             }
 
+            // Filter dasar
             const filter: any = { bySubCompetency: subCompetencyId };
 
+            // Filter berdasarkan pencarian jika ada
             if (search) {
                 filter.$or = [
-                    { question: { $regex: search, $options: "i" } },   
+                    { question: { $regex: search, $options: "i" } }
                 ];
             }
 
-            const limitNumber = parseInt(limit as string);
-            const pageNumber = parseInt(page as string);
-            const skip = (pageNumber - 1) * limitNumber;  
+            // Konversi pagination
+            const limitNumber = parseInt(limit as string, 10);
+            const pageNumber = parseInt(page as string, 10);
+            const skip = (pageNumber - 1) * limitNumber;
 
+            // Ambil data dan total
             const result = await KuisCompetencyModel.find(filter)
                 .skip(skip)
                 .limit(limitNumber);
 
             const total = await KuisCompetencyModel.countDocuments(filter);
 
-            response.success(res, { result, total, page: pageNumber, limit: limitNumber }, "Success find all kuis Competency by Sub competency");
+            // Gunakan response.pagination agar konsisten dengan method lainnya
+            response.pagination(res, result, {
+                total,
+                totalPages: Math.ceil(total / limitNumber),
+                current: pageNumber,
+            }, "Success find all KuisCompetency by SubCompetency");
+
         } catch (error) {
-            response.error(res, error, "Failed to find all kuis Competency by Sub competency");
+            response.error(res, error, "Failed to find all KuisCompetency by SubCompetency");
         }
     }
+
 }

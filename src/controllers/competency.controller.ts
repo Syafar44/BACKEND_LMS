@@ -97,37 +97,43 @@ export default {
             const { main_competency } = req.params;
             const { search, limit = "10", page = "1" } = req.query;
 
+            // Inisialisasi filter dasar
             const filter: any = { main_competency };
 
+            // Tambahkan filter pencarian jika ada search
             if (search) {
-            filter.$or = [
+                filter.$or = [
                     { name: { $regex: search, $options: "i" } },
                     { description: { $regex: search, $options: "i" } },
                 ];
             }
 
-            const limitNumber = parseInt(limit as string);
-            const pageNumber = parseInt(page as string);
+            // Pagination
+            const limitNumber = parseInt(limit as string, 10);
+            const pageNumber = parseInt(page as string, 10);
             const skip = (pageNumber - 1) * limitNumber;
 
+            // Query data dan jumlah total
             const result = await CompetancyModel.find(filter)
-            .skip(skip)
-            .limit(limitNumber);
+                .skip(skip)
+                .limit(limitNumber);
 
             const total = await CompetancyModel.countDocuments(filter);
 
+            // Jika tidak ditemukan
             if (!result || result.length === 0) {
-            return response.notFound(res, "Competency not found");
+                return response.notFound(res, "No competency found with the given main competency");
             }
 
-            response.success(res, {
-                data: result,
+            // Respon data dengan pagination
+            response.pagination(res, result, {
                 total,
-                currentPage: pageNumber,
                 totalPages: Math.ceil(total / limitNumber),
+                current: pageNumber,
             }, "Success find all by main competency");
+
         } catch (error) {
-            response.error(res, error, "Failed find all by main competency");
+            response.error(res, error, "Failed to find all by main competency");
         }
     },
     async findOneBySlug(req: IReqUser, res: Response) {

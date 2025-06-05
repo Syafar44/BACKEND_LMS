@@ -269,7 +269,7 @@
         ]
       }
     },
-    "/kajian/slug/{slug}": {
+    "/kajian/{slug}/slug": {
       "get": {
         "tags": [
           "Kajian"
@@ -464,7 +464,7 @@
         ]
       }
     },
-    "/competency/slug/{slug}": {
+    "/competency/{slug}/slug": {
       "get": {
         "tags": [
           "Competency"
@@ -708,7 +708,7 @@
         ]
       }
     },
-    "/subcompetency/slug/{slug}": {
+    "/subcompetency/{slug}/slug": {
       "get": {
         "tags": [
           "Sub Competency"
@@ -736,7 +736,7 @@
         ]
       }
     },
-    "/subcompetency/competencyId/{competencyId}": {
+    "/subcompetency/{competencyId}/competencyId": {
       "get": {
         "tags": [
           "Sub Competency"
@@ -952,7 +952,7 @@
         ]
       }
     },
-    "/kuiscompetency/subCompetencyId/{subCompetencyId}": {
+    "/kuiscompetency/{subCompetencyId}/subCompetencyId": {
       "get": {
         "tags": [
           "Kuis Competency"

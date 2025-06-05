@@ -3,6 +3,7 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
 import SubCompetencyModel, { subCompetencyDAO } from "../models/subCompetency.model";
+import { isReadonlyKeywordOrPlusOrMinusToken } from "typescript";
 
 export default {
     async create(req: IReqUser, res: Response) {
@@ -122,39 +123,42 @@ export default {
     async findAllByCompetency(req: IReqUser, res: Response) {
         try {
             const { competencyId } = req.params;
-            const { search, limit = "10", page = "1" } = req.query;  // Menambahkan query parameters untuk search, limit, dan page
+            const { search, limit = "10", page = "1" } = req.query;
 
             // Validasi competencyId
             if (!isValidObjectId(competencyId)) {
                 return response.error(res, null, "Competency not found");
             }
 
-            // Filter dasar berdasarkan competencyId
+            // Filter dasar
             const filter: any = { byCompetency: competencyId };
 
-            // Jika ada search query, tambahkan filter pencarian
+            // Filter pencarian jika search tersedia
             if (search) {
                 filter.$or = [
-                    { title: { $regex: search, $options: "i" } },  // Pencarian berdasarkan nama (case insensitive)
-                    { description: { $regex: search, $options: "i" } }  // Pencarian berdasarkan deskripsi (case insensitive)
+                    { title: { $regex: search, $options: "i" } },
+                    { description: { $regex: search, $options: "i" } }
                 ];
             }
 
-            // Mengatur limit dan page untuk pagination
-            const limitNumber = parseInt(limit as string);
-            const pageNumber = parseInt(page as string);
-            const skip = (pageNumber - 1) * limitNumber;  // Menghitung skip berdasarkan page dan limit
+            // Pagination
+            const limitNumber = parseInt(limit as string, 10);
+            const pageNumber = parseInt(page as string, 10);
+            const skip = (pageNumber - 1) * limitNumber;
 
-            // Menjalankan query dengan pagination dan filter pencarian
+            // Query data dan total
             const result = await SubCompetencyModel.find(filter)
                 .skip(skip)
                 .limit(limitNumber);
 
-            // Menghitung total data yang cocok dengan filter
-            const total = await SubCompetencyModel.countDocuments(filter);
+            const count = await SubCompetencyModel.countDocuments(filter);
 
-            // Mengembalikan hasil pencarian
-            response.success(res, { result, total, page: pageNumber, limit: limitNumber }, "Success find all subCompetency by competency");
+            // Respon data dengan pagination
+            response.pagination(res, result, {
+                total: count,
+                totalPages: Math.ceil(count / limitNumber),
+                current: pageNumber,
+            }, "Success find all SubCompetency");
         } catch (error) {
             response.error(res, error, "Failed to find all subCompetency by competency");
         }
