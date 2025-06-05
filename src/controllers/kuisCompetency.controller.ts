@@ -96,16 +96,34 @@ export default {
 
     async findAllBySubCompetency(req: IReqUser, res: Response) {
         try {
-            const { subCompetencyId } = req.params
+            const { subCompetencyId } = req.params;
+            const { search, limit = "10", page = "1" } = req.query; 
 
             if (!isValidObjectId(subCompetencyId)) {
-                return response.error(res, null, "kuis competency not found");
+                return response.error(res, null, "Kuis competency not found");
             }
 
-            const result = await KuisCompetencyModel.find({ bySubCompetency: subCompetencyId }).exec();
-            response.success(res, result, "Success find all kuis Competency by Sub competency");
+            const filter: any = { bySubCompetency: subCompetencyId };
+
+            if (search) {
+                filter.$or = [
+                    { question: { $regex: search, $options: "i" } },   
+                ];
+            }
+
+            const limitNumber = parseInt(limit as string);
+            const pageNumber = parseInt(page as string);
+            const skip = (pageNumber - 1) * limitNumber;  
+
+            const result = await KuisCompetencyModel.find(filter)
+                .skip(skip)
+                .limit(limitNumber);
+
+            const total = await KuisCompetencyModel.countDocuments(filter);
+
+            response.success(res, { result, total, page: pageNumber, limit: limitNumber }, "Success find all kuis Competency by Sub competency");
         } catch (error) {
-            response.error(res, error, "Failed to find all kuis Competency by Sub competency")
+            response.error(res, error, "Failed to find all kuis Competency by Sub competency");
         }
-    },
+    }
 }

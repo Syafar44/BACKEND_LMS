@@ -121,16 +121,42 @@ export default {
 
     async findAllByCompetency(req: IReqUser, res: Response) {
         try {
-            const { competencyId } = req.params
+            const { competencyId } = req.params;
+            const { search, limit = "10", page = "1" } = req.query;  // Menambahkan query parameters untuk search, limit, dan page
 
+            // Validasi competencyId
             if (!isValidObjectId(competencyId)) {
-                return response.error(res, null, "competency not found");
+                return response.error(res, null, "Competency not found");
             }
 
-            const result = await SubCompetencyModel.find({ competency: competencyId }).exec();
-            response.success(res, result, "Success find all subCompetency by competency");
+            // Filter dasar berdasarkan competencyId
+            const filter: any = { byCompetency: competencyId };
+
+            // Jika ada search query, tambahkan filter pencarian
+            if (search) {
+                filter.$or = [
+                    { title: { $regex: search, $options: "i" } },  // Pencarian berdasarkan nama (case insensitive)
+                    { description: { $regex: search, $options: "i" } }  // Pencarian berdasarkan deskripsi (case insensitive)
+                ];
+            }
+
+            // Mengatur limit dan page untuk pagination
+            const limitNumber = parseInt(limit as string);
+            const pageNumber = parseInt(page as string);
+            const skip = (pageNumber - 1) * limitNumber;  // Menghitung skip berdasarkan page dan limit
+
+            // Menjalankan query dengan pagination dan filter pencarian
+            const result = await SubCompetencyModel.find(filter)
+                .skip(skip)
+                .limit(limitNumber);
+
+            // Menghitung total data yang cocok dengan filter
+            const total = await SubCompetencyModel.countDocuments(filter);
+
+            // Mengembalikan hasil pencarian
+            response.success(res, { result, total, page: pageNumber, limit: limitNumber }, "Success find all subCompetency by competency");
         } catch (error) {
-            response.error(res, error, "Failed to find all subCompetency by competency")
+            response.error(res, error, "Failed to find all subCompetency by competency");
         }
-    },
+    }
 }
