@@ -7,18 +7,28 @@ import response from "../utils/response"
 
 export default {
     async single(req: IReqUser, res: Response) {
-        if(!req.file) {
-            return res.status(400).json({
-                data: null,
-                message: "file not exist",
-            })
+      const file = (req as any).file;
+      if (!file) {
+        return res.status(400).json({
+          data: null,
+          message: "file not exist",
+        });
+      }
+
+      try {
+        if (!req.file) {
+          return response.error(res, null, "File not found");
         }
-        try {
-            const result = await uploader.uploadSingle(req.file as Express.Multer.File)
-            response.success(res, result, "Success upload a file")
-        } catch {
-            response.error(res, null, "Failed upload a file")
-        }
+        const result = await uploader.uploadSingle({
+          buffer: req.file.buffer,
+          originalname: req.file.originalname,
+          mimetype: req.file.mimetype,
+        });
+
+        response.success(res, result, "Success upload a file");
+      } catch {
+        response.error(res, null, "Failed upload a file");
+      }
     },
     async multiple(req: IReqUser, res: Response) {
         if (!req.files || req.files.length === 0) {
