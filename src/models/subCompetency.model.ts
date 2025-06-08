@@ -9,7 +9,6 @@ export const subCompetencyDAO = Yup.object({
     byCompetency: Yup.string().required(),
     title: Yup.string().required(),
     description: Yup.string().required(),
-    image: Yup.string().required(),
     video: Yup.string().required(),
     slug: Yup.string(),
 })
@@ -31,10 +30,6 @@ const SubCompetencyScema = new Schema<SubCompetency>({
         required: true,
     },
     description: {
-        type: Schema.Types.String,
-        required: true,
-    },
-    image: {
         type: Schema.Types.String,
         required: true,
     },
