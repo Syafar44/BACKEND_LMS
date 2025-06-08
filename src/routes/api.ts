@@ -56,13 +56,11 @@ router.post('/kajian', kajianController.create
 router.get('/kajian', kajianController.findAll
     /*
     #swagger.tags = ['Kajian']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.get('/kajian/:id', kajianController.findOne
     /*
     #swagger.tags = ['Kajian']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.put('/kajian/:id', kajianController.update
@@ -106,13 +104,11 @@ router.post('/competency', competencyController.create
 router.get('/competency', competencyController.findAll
     /*
     #swagger.tags = ['Competency']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.get('/competency/:id', competencyController.findOne
     /*
     #swagger.tags = ['Competency']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.put('/competency/:id', competencyController.update
@@ -163,13 +159,11 @@ router.post('/subcompetency', subCompetencyController.create
 router.get('/subcompetency', subCompetencyController.findAll
     /*
     #swagger.tags = ['Sub Competency']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.get('/subcompetency/:id', subCompetencyController.findOne
     /*
     #swagger.tags = ['Sub Competency']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.put('/subcompetency/:id', subCompetencyController.update
@@ -219,13 +213,11 @@ router.post('/kuiscompetency', kuisCompetencyController.create
 router.get('/kuiscompetency', kuisCompetencyController.findAll
     /*
     #swagger.tags = ['Kuis Competency']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.get('/kuiscompetency/:id', kuisCompetencyController.findOne
     /*
     #swagger.tags = ['Kuis Competency']
-    #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.put('/kuiscompetency/:id', kuisCompetencyController.update
