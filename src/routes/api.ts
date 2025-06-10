@@ -48,7 +48,7 @@ router.post('/kajian', kajianController.create
     #swagger.requestBody = {
         required: true,
         schema: {
-            $ref: "#/components/schemas/CreateCompetencyRequest"
+            $ref: "#/components/schemas/CreateKajianRequest"
         }
     }
     */

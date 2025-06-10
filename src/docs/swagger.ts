@@ -35,6 +35,12 @@ const doc = {
                 password: "26/11/04",
                 confirmPassword: "26/11/04"
             },
+            CreateKajianRequest: {
+                title: "Kajian 1",
+                description: "Description 1",
+                image: "https://picsum.photos/id/1/200/300",
+                video: "https://picsum.photos/id/1/200/300",
+            },
             CreateCompetencyRequest: {
                 main_competency: "mainCompetencyId",
                 title: "Competency 1",

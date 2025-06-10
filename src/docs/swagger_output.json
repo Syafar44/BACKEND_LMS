@@ -123,12 +123,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCompetencyRequest"
+                "$ref": "#/components/schemas/CreateKajianRequest"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCompetencyRequest"
+                "$ref": "#/components/schemas/CreateKajianRequest"
               }
             }
           }
@@ -1098,6 +1098,30 @@
         },
         "xml": {
           "name": "RegisterRequest"
+        }
+      },
+      "CreateKajianRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Kajian 1"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description 1"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://picsum.photos/id/1/200/300"
+          },
+          "video": {
+            "type": "string",
+            "example": "https://picsum.photos/id/1/200/300"
+          }
+        },
+        "xml": {
+          "name": "CreateKajianRequest"
         }
       },
       "CreateCompetencyRequest": {
