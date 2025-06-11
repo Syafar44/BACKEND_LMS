@@ -49,6 +49,7 @@ export default {
     
             const result = await UserModel.create({
                 fullName,
+                access,
                 email,
                 password
             });
