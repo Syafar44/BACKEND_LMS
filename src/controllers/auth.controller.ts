@@ -4,10 +4,11 @@ import * as Yup from 'yup';
 import UserModel from '../models/user.model';
 import { encrypt } from '../utils/encryption';
 import { generateToken } from '../utils/jwt';
-import { IReqUser } from '../utils/interfaces';
+import { IPaginationQuery, IReqUser } from '../utils/interfaces';
+import response from '../utils/response';
+import { readUsersFromExcelBuffer } from '../utils/excel';
 
-
-type TRegister = {
+export type TRegister = {
     fullName: string;
     email: string;
     access: string;
@@ -28,6 +29,17 @@ const registerValidationSchema = Yup.object({
     confirmPassword: Yup.string().required().oneOf([Yup.ref('password'), ""], 'Passwords must match'),
 })
 
+const updatePasswordValidationSchema = Yup.object({
+    currentPassword: Yup.string().required('Current password is required'),
+    newPassword: Yup.string().required('New password is required').min(6, 'New password must be at least 6 characters'),
+    confirmPassword: Yup.string().required('Confirm password is required')
+        .oneOf([Yup.ref('newPassword'), ""], 'Passwords must match'),
+});
+
+const adminUpdatePasswordValidationSchema = Yup.object({
+    newPassword: Yup.string().required('New password is required').min(6, 'New password must be at least 6 characters'),
+});
+
 export default {
     async register(req: Request, res: Response) {
         
@@ -44,7 +56,7 @@ export default {
     
             const existingUser = await UserModel.findOne({ email });
             if (existingUser) {
-                return res.status(400).json({ message: 'Nomor telepon sudah digunakan', data: null });
+                return res.status(400).json({ message: 'Email sudah digunakan', data: null });
             }
     
             const result = await UserModel.create({
@@ -60,7 +72,85 @@ export default {
             const err = error as unknown as Error;
             res.status(400).json({ message: err.message, data: null });
         }
-    },    
+    },  
+    
+    async updatePassword(req: IReqUser, res: Response) {
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+
+        try {
+            await updatePasswordValidationSchema.validate({
+                currentPassword,
+                newPassword,
+                confirmPassword,
+            });
+
+            const userId = req.user?.id; 
+
+            if (!userId) {
+                return res.status(403).json({ message: 'User not authenticated', data: null });
+            }
+
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found', data: null });
+            }
+            const isPasswordCorrect = encrypt(currentPassword) === user.password;
+
+            if (!isPasswordCorrect) {
+                return res.status(403).json({ message: 'Current password is incorrect', data: null });
+            }
+            const encryptedPassword = newPassword;
+
+            user.password = encryptedPassword;
+            await user.save();
+
+            res.status(200).json({
+                message: 'Password updated successfully',
+                data: null,
+            });
+
+        } catch (error) {
+            const err = error as Error;
+            res.status(400).json({ message: err.message, data: null });
+        }
+    },
+
+    async adminUpdatePassword(req: Request, res: Response) {
+        const { newPassword } = req.body;
+
+        try {
+            await adminUpdatePasswordValidationSchema.validate({
+                newPassword,
+            });
+
+            const userId = req.params.id;
+
+            if (!userId) {
+                return res.status(400).json({ message: 'User ID is required', data: null });
+            }
+
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found', data: null });
+            }
+
+            const encryptedPassword = encrypt(newPassword);
+
+            user.password = encryptedPassword;
+            await user.save();
+
+            res.status(200).json({
+                message: 'Password updated successfully',
+                data: null,
+            });
+
+        } catch (error) {
+            const err = error as Error;
+            res.status(400).json({ message: err.message, data: null });
+        }
+    },
 
     async login(req: Request, res: Response) {
 
@@ -74,6 +164,8 @@ export default {
                 return res.status(403).json({message: 'User not found', data: null})
             }
 
+            console.log("userByIdentifier", userByIdentifier);
+            console.log("password", encrypt(password));
             const validatePassword: boolean = encrypt(password) === userByIdentifier.password;
 
             if (!validatePassword) {
@@ -117,35 +209,77 @@ export default {
         }
     },
 
-    async activation(req: Request, res: Response) {
-        
+    async FindAll(req: IReqUser, res: Response) {
+        const { page = 1, limit = 10, search } = req.query as unknown as IPaginationQuery
         try {
-            const { code } = req.body as { code: string }
-    
-            const user = await UserModel.findOneAndUpdate(
-                { activationCode: code },
-                { isActive: true },
-                { new: true }
-            )
-    
-            if (!user) {
-                return res.status(404).json({
-                    message: 'Activation code not found',
-                    data: null
+            const query = {}
+            
+            if(search) {
+                Object.assign(query, {
+                    $or: [
+                        {
+                            title: { $regex: search, $options: 'i' },
+                        },
+                        {
+                            description: { $regex: search, $options: 'i' },
+                        }
+                    ],
                 })
             }
-    
-            res.status(200).json({
-                message: 'User activated successfully',
-                data: user
-            })
+
+            const result = await UserModel.find(query).limit(limit).skip((page - 1) * limit).sort({createdAt: -1}).exec()
+            const count =  await UserModel.countDocuments(query)
+
+            response.pagination(res, result, {
+                total: count,
+                totalPages: Math.ceil(count / limit),
+                current: page,
+            }, "Success find all User")
         } catch (error) {
-            const err = error as unknown as Error
-            res.status(400).json({
-                message: err.message,
-                data: null
-            })
+            response.error(res, error, "Failed find all User")
         }
-    }    
+    },
+
+    async bulkRegister(req: IReqUser, res: Response) {
+        if (!req.file || !req.file.buffer) {
+            return res.status(400).json({ message: 'No file uploaded', data: null });
+        }
+
+        try {
+            const users = await readUsersFromExcelBuffer(req.file.buffer);
+            const errors: string[] = [];
+            const createdUsers: any[] = [];
+
+            for (const user of users) {
+                try {
+                    await registerValidationSchema.validate(user);
+                    const exists = await UserModel.findOne({ email: user.email });
+                    if (exists) {
+                        errors.push(`Email already used: ${user.email}`);
+                        continue;
+                    }
+
+                    const newUser = await UserModel.create({
+                        fullName: user.fullName,
+                        email: user.email,
+                        access: user.access,
+                        password: user.password,
+                    });
+
+                    createdUsers.push(newUser);
+                } catch (err) {
+                    errors.push(`Error for ${user.email || user.fullName}: ${(err as Error).message}`);
+                }
+            }
+
+            res.status(201).json({
+                message: `Imported ${createdUsers.length} users`,
+                data: createdUsers,
+                errors,
+            });
+        } catch (err) {
+            res.status(500).json({ message: (err as Error).message, data: null });
+        }
+    },
 }
 

@@ -9,6 +9,7 @@ import competencyController from '../controllers/competency.controller';
 import subCompetencyController from '../controllers/subCompetency.controller';
 import kuisCompetencyController from '../controllers/kuisCompetency.controller';
 import kajianController from '../controllers/kajian.controller';
+import { uploadExcel } from '../middleware/upload.middleware';
 
 
 const router = express.Router();
@@ -19,6 +20,26 @@ router.post('/auth/register', authController.register
         #swagger.requestBody = {
             required: true, 
             schema: {$ref: "#/components/schemas/RegisterRequest"}
+        }
+    */
+);
+router.post('/auth/password', authMiddleware ,authController.updatePassword
+    /**
+        #swagger.tags = ['Auth']
+        #swagger.security = [{ "bearerAuth": [] }]
+        #swagger.requestBody = {
+            required: true, 
+            schema: {$ref: "#/components/schemas/UpdatePasswordRequest"}
+        }
+    */
+);
+router.post('/auth/password/:id', authMiddleware ,authController.adminUpdatePassword
+    /**
+        #swagger.tags = ['Auth']
+        #swagger.security = [{ "bearerAuth": [] }]
+        #swagger.requestBody = {
+            required: true, 
+            schema: {$ref: "#/components/schemas/UpdatePasswordAdminRequest"}
         }
     */
 );
@@ -39,6 +60,40 @@ router.get('/auth/me', authMiddleware, authController.me
         }]
     */
 )
+router.get('/auth/user', authController.FindAll
+    /**
+        #swagger.tags = ['Auth']
+        #swagger.security = [{
+            "bearerAuth": []
+        }]
+    */
+)
+router.post(
+  '/auth/register/bulk',
+  uploadExcel.single("file"),
+  authController.bulkRegister
+/*
+    #swagger.tags = ['Auth']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.consumes = ['multipart/form-data']
+    #swagger.requestBody = {
+        required: true,
+        content: {
+            "multipart/form-data": {
+                schema: {
+                    type: "object",
+                    properties: {
+                        file: {
+                            type: "string",
+                            format: "binary"
+                        }
+                    }
+                }
+            }
+        }
+    }
+  */
+);
 
 /// KAJIAN
 router.post('/kajian', kajianController.create

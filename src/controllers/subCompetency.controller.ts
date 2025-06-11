@@ -3,7 +3,6 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
 import SubCompetencyModel, { subCompetencyDAO } from "../models/subCompetency.model";
-import { isReadonlyKeywordOrPlusOrMinusToken } from "typescript";
 
 export default {
     async create(req: IReqUser, res: Response) {

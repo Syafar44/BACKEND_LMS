@@ -35,6 +35,14 @@ const doc = {
                 password: "26/11/04",
                 confirmPassword: "26/11/04"
             },
+            UpdatePasswordRequest:{
+                currentPassword: "26/11/04",
+                newPassword: "26/11/04",
+                confirmPassword: "26/11/04"
+            },
+            UpdatePasswordAdminRequest:{
+                newPassword: "26/11/04",
+            },
             CreateKajianRequest: {
                 title: "Kajian 1",
                 description: "Description 1",
