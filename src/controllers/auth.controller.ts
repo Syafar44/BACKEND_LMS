@@ -136,9 +136,7 @@ export default {
                 return res.status(404).json({ message: 'User not found', data: null });
             }
 
-            const encryptedPassword = encrypt(newPassword);
-
-            user.password = encryptedPassword;
+            user.password = newPassword;
             await user.save();
 
             res.status(200).json({
