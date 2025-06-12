@@ -40,6 +40,11 @@ const doc = {
                 newPassword: "26/11/04",
                 confirmPassword: "26/11/04"
             },
+            UpdateUserAdminRequest:{
+                fullName: "syafaruddin2",
+                email: "syafar@panglimaunivercity.com",
+                access: "gerai",
+            },
             UpdatePasswordAdminRequest:{
                 newPassword: "26/11/04",
             },

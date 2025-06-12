@@ -76,6 +76,26 @@ router.get('/auth/user/:id', authController.findById
         }]
     */
 )
+router.put('/auth/user/:id', authController.updateUser
+    /**
+        #swagger.tags = ['Auth']
+        #swagger.security = [{
+            "bearerAuth": []
+        }]
+        #swagger.requestBody = {
+            required: true, 
+            schema: {$ref: "#/components/schemas/UpdateUserAdminRequest"}
+        }
+    */
+)
+router.delete('/auth/user/:id', authController.deleteUser
+    /**
+        #swagger.tags = ['Auth']
+        #swagger.security = [{
+            "bearerAuth": []
+        }]
+    */
+)
 router.post(
   '/auth/register/bulk',
   uploadExcel.single("file"),

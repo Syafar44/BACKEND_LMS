@@ -218,10 +218,13 @@ export default {
                 Object.assign(query, {
                     $or: [
                         {
-                            title: { $regex: search, $options: 'i' },
+                            fullName: { $regex: search, $options: 'i' },
                         },
                         {
-                            description: { $regex: search, $options: 'i' },
+                            email: { $regex: search, $options: 'i' },
+                        },
+                        {
+                            access: { $regex: search, $options: 'i' },
                         }
                     ],
                 })
@@ -250,6 +253,36 @@ export default {
             response.success(res, result, "Success find User by id")
         } catch (error) {
             response.error(res, error, "Failed find User by id")
+        }
+    },
+    async updateUser(req: IReqUser, res: Response) {
+        const { id } = req.params;
+        const { fullName, email, access } = req.body as unknown as TRegister;
+        try {
+            const user = await UserModel.findById(id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found', data: null });
+            }
+            user.fullName = fullName;
+            user.email = email;
+            user.access = access;
+            await user.save();
+            response.success(res, user, "Success update User")
+        } catch (error) {
+            response.error(res, error, "Failed update User")
+        }
+    },
+    async deleteUser(req: IReqUser, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const user = await UserModel.findByIdAndDelete(id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found', data: null });
+            }
+            response.success(res, user, "Success delete User")
+        } catch (error) {
+            response.error(res, error, "Failed delete User")
         }
     },
     async bulkRegister(req: IReqUser, res: Response) {
