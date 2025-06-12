@@ -108,17 +108,6 @@ export default {
         }
     },
 
-    // async findByMainCompetency(req: IReqUser, res: Response) {
-    //     try {
-    //         const { mainCompetency } = req.params;
-
-    //         const result = await SubCompetencyModel.find({ main_competency: mainCompetency }).exec();
-    //         response.success(res, result, `Success find all subCompetency with ${mainCompetency} competency`);
-    //     } catch (error) {
-    //         response.error(res, error, "Failed to find subCompetency by main competency");
-    //     }
-    // },
-
     async findAllByCompetency(req: IReqUser, res: Response) {
         try {
             const { competencyId } = req.params;

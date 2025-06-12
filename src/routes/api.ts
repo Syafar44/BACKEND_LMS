@@ -23,7 +23,52 @@ router.post('/auth/register', authController.register
         }
     */
 );
-router.post('/auth/password', authMiddleware ,authController.updatePassword
+router.post('/auth/login', authController.login
+    /**
+     #swagger.tags = ['Auth']
+     #swagger.requestBody = {
+            required: true, 
+            schema: {$ref: "#/components/schemas/LoginRequest"}
+        }
+        */
+);
+router.get('/auth/me', authMiddleware, authController.me
+    /**
+     #swagger.tags = ['Auth']
+     #swagger.security = [{
+            "bearerAuth": []
+        }]
+        */
+    )
+    router.get('/auth/user', authController.findAll
+    /**
+     #swagger.tags = ['Auth']
+     #swagger.security = [{
+        "bearerAuth": []
+    }]
+    */
+)
+router.get('/auth/user/:id', authController.findById
+    /**
+     #swagger.tags = ['Auth']
+     #swagger.security = [{
+        "bearerAuth": []
+    }]
+    */
+)
+router.put('/auth/user/:id', authController.updateUser
+    /**
+     #swagger.tags = ['Auth']
+     #swagger.security = [{
+        "bearerAuth": []
+    }]
+    #swagger.requestBody = {
+        required: true, 
+        schema: {$ref: "#/components/schemas/UpdateUserAdminRequest"}
+    }
+    */
+)
+router.put('/auth/password', authMiddleware ,authController.updatePassword
     /**
         #swagger.tags = ['Auth']
         #swagger.security = [{ "bearerAuth": [] }]
@@ -33,7 +78,7 @@ router.post('/auth/password', authMiddleware ,authController.updatePassword
         }
     */
 );
-router.post('/auth/password/:id', authMiddleware ,authController.adminUpdatePassword
+router.put('/auth/password/:id', authMiddleware ,authController.adminUpdatePassword
     /**
         #swagger.tags = ['Auth']
         #swagger.security = [{ "bearerAuth": [] }]
@@ -43,51 +88,6 @@ router.post('/auth/password/:id', authMiddleware ,authController.adminUpdatePass
         }
     */
 );
-router.post('/auth/login', authController.login
-    /**
-        #swagger.tags = ['Auth']
-        #swagger.requestBody = {
-            required: true, 
-            schema: {$ref: "#/components/schemas/LoginRequest"}
-        }
-    */
-);
-router.get('/auth/me', authMiddleware, authController.me
-    /**
-        #swagger.tags = ['Auth']
-        #swagger.security = [{
-            "bearerAuth": []
-        }]
-    */
-)
-router.get('/auth/user', authController.findAll
-    /**
-        #swagger.tags = ['Auth']
-        #swagger.security = [{
-            "bearerAuth": []
-        }]
-    */
-)
-router.get('/auth/user/:id', authController.findById
-    /**
-        #swagger.tags = ['Auth']
-        #swagger.security = [{
-            "bearerAuth": []
-        }]
-    */
-)
-router.put('/auth/user/:id', authController.updateUser
-    /**
-        #swagger.tags = ['Auth']
-        #swagger.security = [{
-            "bearerAuth": []
-        }]
-        #swagger.requestBody = {
-            required: true, 
-            schema: {$ref: "#/components/schemas/UpdateUserAdminRequest"}
-        }
-    */
-)
 router.delete('/auth/user/:id', authController.deleteUser
     /**
         #swagger.tags = ['Auth']

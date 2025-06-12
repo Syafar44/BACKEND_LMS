@@ -47,97 +47,6 @@
         }
       }
     },
-    "/auth/password": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePasswordRequest"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePasswordRequest"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/password/{id}": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePasswordAdminRequest"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePasswordAdminRequest"
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/login": {
       "post": {
         "tags": [
@@ -327,6 +236,97 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/auth/password": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/{id}": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordAdminRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordAdminRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/auth/register/bulk": {
