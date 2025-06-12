@@ -209,7 +209,7 @@ export default {
         }
     },
 
-    async FindAll(req: IReqUser, res: Response) {
+    async findAll(req: IReqUser, res: Response) {
         const { page = 1, limit = 10, search } = req.query as unknown as IPaginationQuery
         try {
             const query = {}
@@ -239,7 +239,19 @@ export default {
             response.error(res, error, "Failed find all User")
         }
     },
+    async findById(req: IReqUser, res: Response) {
+        const { id } = req.params
 
+        try {
+            const result = await UserModel.findById(id)
+            if (!result) {
+                return res.status(404).json({ message: 'User not found', data: null });
+            }
+            response.success(res, result, "Success find User by id")
+        } catch (error) {
+            response.error(res, error, "Failed find User by id")
+        }
+    },
     async bulkRegister(req: IReqUser, res: Response) {
         if (!req.file || !req.file.buffer) {
             return res.status(400).json({ message: 'No file uploaded', data: null });

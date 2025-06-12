@@ -60,7 +60,15 @@ router.get('/auth/me', authMiddleware, authController.me
         }]
     */
 )
-router.get('/auth/user', authController.FindAll
+router.get('/auth/user', authController.findAll
+    /**
+        #swagger.tags = ['Auth']
+        #swagger.security = [{
+            "bearerAuth": []
+        }]
+    */
+)
+router.get('/auth/user/:id', authController.findById
     /**
         #swagger.tags = ['Auth']
         #swagger.security = [{
