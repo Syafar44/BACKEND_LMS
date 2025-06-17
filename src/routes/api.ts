@@ -10,6 +10,7 @@ import subCompetencyController from '../controllers/subCompetency.controller';
 import kuisCompetencyController from '../controllers/kuisCompetency.controller';
 import kajianController from '../controllers/kajian.controller';
 import { uploadExcel } from '../middleware/upload.middleware';
+import scoreController from '../controllers/score.controller';
 
 
 const router = express.Router();
@@ -324,6 +325,55 @@ router.delete('/kuiscompetency/:id', kuisCompetencyController.remove
 router.get('/kuiscompetency/:subCompetencyId/subCompetencyId', kuisCompetencyController.findAllBySubCompetency
     /*
     #swagger.tags = ['Kuis Competency']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// SCORE
+router.post('/score', scoreController.create
+    /*
+    #swagger.tags = ['Score']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateScoreRequest"
+        }
+    }
+    */
+)
+router.get('/score', scoreController.findAll
+    /*
+    #swagger.tags = ['Score']
+    */
+)
+router.get('/score/:id', scoreController.findOne
+    /*
+    #swagger.tags = ['Score']
+    */
+)
+router.put('/score/:id', scoreController.update
+    /*
+    #swagger.tags = ['Score']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateScoreRequest"
+        }
+    }
+    */
+)
+router.delete('/score/:id', scoreController.remove
+    /*
+    #swagger.tags = ['Score']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+router.get('/score/:subCompetency/subCompetency', scoreController.findAllBySubCompetency
+    /*
+    #swagger.tags = ['Score']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )

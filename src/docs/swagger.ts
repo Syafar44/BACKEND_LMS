@@ -77,6 +77,11 @@ const doc = {
                 option4: "lorem ipsum dolor sit amet",
                 optionValid: 1,
             },
+            CreateScoreRequest: {
+                bySubCompetency: "subCompetencyId",
+                total_question: 5,
+                total_score: 5
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }
