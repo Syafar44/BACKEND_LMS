@@ -3,13 +3,16 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
-import ScoreModel, { scoreDAO } from "../models/score.model";
+import ScoreModel, { scoreDAO, TScore } from "../models/score.model";
 
 export default {
     async create(req: IReqUser, res: Response) {
         try {
-            await scoreDAO.validate(req.body)
-            const result = await ScoreModel.create(req.body)
+            const userId = req.user?.id;
+            console.log(userId)
+            const payload = {...req.body, createdBy: userId} as TScore
+            await scoreDAO.validate(payload)
+            const result = await ScoreModel.create(payload)
             response.success(res, result, "Success create Kuis Competancy")
         } catch (error) {
             response.error(res, error, "Failed create Kuis Competancy")
@@ -97,12 +100,13 @@ export default {
     async findAllBySubCompetency(req: IReqUser, res: Response) {
         try {
             const { subCompetency } = req.params
+            const userId = req.user?.id;
 
             if (!isValidObjectId(subCompetency)) {
                 return response.error(res, null, "Category not found");
             }
 
-            const result = await ScoreModel.find({ bySubCompetency: subCompetency }).exec();
+            const result = await ScoreModel.find({ bySubCompetency: subCompetency, createdBy: userId }).exec();
             response.success(res, result, "Success find all product by an category");
         } catch (error) {
             response.error(res, error, "Failed to find all product by an category")

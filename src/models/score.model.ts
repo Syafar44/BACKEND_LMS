@@ -7,14 +7,16 @@ const Schema = mongoose.Schema
 
 export const scoreDAO = Yup.object({
     bySubCompetency: Yup.string().required(),
+    createdBy: Yup.string(),
     total_question: Yup.string().required(),
     total_score: Yup.string().required(),
 })
 
 export type TScore = Yup.InferType<typeof scoreDAO>
 
-export interface Score extends Omit<TScore, "bySubCompetency" > {
+export interface Score extends Omit<TScore, "bySubCompetency" | "createdBy" > {
     bySubCompetency: ObjectId
+    createdBy: ObjectId
 }
 
 const CompetencyScema = new Schema<Score>({
@@ -22,6 +24,10 @@ const CompetencyScema = new Schema<Score>({
         type: Schema.Types.ObjectId,
         ref: "KuisCompetency",
         required: true,
+    },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
     },
     total_question: {
         type: Schema.Types.String,

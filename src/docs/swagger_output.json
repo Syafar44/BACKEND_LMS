@@ -1733,6 +1733,10 @@
             "type": "string",
             "example": "subCompetencyId"
           },
+          "user": {
+            "type": "string",
+            "example": "userid"
+          },
           "total_question": {
             "type": "number",
             "example": 5

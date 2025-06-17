@@ -330,7 +330,7 @@ router.get('/kuiscompetency/:subCompetencyId/subCompetencyId', kuisCompetencyCon
 )
 
 /// SCORE
-router.post('/score', scoreController.create
+router.post('/score', authMiddleware , scoreController.create
     /*
     #swagger.tags = ['Score']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -371,7 +371,7 @@ router.delete('/score/:id', scoreController.remove
     */
 )
 
-router.get('/score/:subCompetency/subCompetency', scoreController.findAllBySubCompetency
+router.get('/score/:subCompetency/subCompetency', authMiddleware,  scoreController.findAllBySubCompetency
     /*
     #swagger.tags = ['Score']
     #swagger.security = [{ "bearerAuth": [] }]
