@@ -11,6 +11,7 @@ import kuisCompetencyController from '../controllers/kuisCompetency.controller';
 import kajianController from '../controllers/kajian.controller';
 import { uploadExcel } from '../middleware/upload.middleware';
 import scoreController from '../controllers/score.controller';
+import videoController from '../controllers/video.controller';
 
 
 const router = express.Router();
@@ -374,6 +375,55 @@ router.delete('/score/:id', scoreController.remove
 router.get('/score/:subCompetency/subCompetency', authMiddleware,  scoreController.findAllBySubCompetency
     /*
     #swagger.tags = ['Score']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// VIDEO
+router.post('/video', authMiddleware , videoController.create
+    /*
+    #swagger.tags = ['Video']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateVideoRequest"
+        }
+    }
+    */
+)
+router.get('/video', videoController.findAll
+    /*
+    #swagger.tags = ['Video']
+    */
+)
+router.get('/video/:id', videoController.findOne
+    /*
+    #swagger.tags = ['Video']
+    */
+)
+router.put('/video/:id', videoController.update
+    /*
+    #swagger.tags = ['Video']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateVideoRequest"
+        }
+    }
+    */
+)
+router.delete('/video/:id', videoController.remove
+    /*
+    #swagger.tags = ['Video']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+router.get('/video/:subCompetency/subCompetency', authMiddleware,  videoController.findAllBySubCompetency
+    /*
+    #swagger.tags = ['Video']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
