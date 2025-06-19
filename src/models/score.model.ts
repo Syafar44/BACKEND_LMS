@@ -8,6 +8,7 @@ const Schema = mongoose.Schema
 export const scoreDAO = Yup.object({
     bySubCompetency: Yup.string().required(),
     createdBy: Yup.string(),
+    isPass: Yup.boolean(),
     total_question: Yup.string().required(),
     total_score: Yup.string().required(),
 })
@@ -23,6 +24,10 @@ const CompetencyScema = new Schema<Score>({
     bySubCompetency: {
         type: Schema.Types.ObjectId,
         ref: "KuisCompetency",
+        required: true,
+    },
+    isPass: {
+        type: Schema.Types.Boolean,
         required: true,
     },
     createdBy: {

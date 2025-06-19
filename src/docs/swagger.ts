@@ -79,6 +79,7 @@ const doc = {
             },
             CreateScoreRequest: {
                 bySubCompetency: "subCompetencyId",
+                isPass: true,
                 total_question: 5,
                 total_score: 5
             },

@@ -1918,6 +1918,10 @@
             "type": "string",
             "example": "subCompetencyId"
           },
+          "isPass": {
+            "type": "boolean",
+            "example": true
+          },
           "total_question": {
             "type": "number",
             "example": 5
