@@ -87,6 +87,10 @@ const doc = {
                 bySubCompetency: "subCompetencyId",
                 viewed: true
             },
+            CreateResumeRequest: {
+                kajian: "kajianId",
+                resume: "lorem ipsum dolor sit amet",
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }

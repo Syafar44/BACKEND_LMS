@@ -554,6 +554,170 @@
         ]
       }
     },
+    "/resume": {
+      "post": {
+        "tags": [
+          "Resume"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResumeRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResumeRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Resume"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/resume/{id}": {
+      "get": {
+        "tags": [
+          "Resume"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Resume"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResumeRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResumeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resume/{kajian}/kajian": {
+      "get": {
+        "tags": [
+          "Resume"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "kajian",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/competency": {
       "post": {
         "tags": [
@@ -1949,6 +2113,22 @@
         },
         "xml": {
           "name": "CreateVideoRequest"
+        }
+      },
+      "CreateResumeRequest": {
+        "type": "object",
+        "properties": {
+          "kajian": {
+            "type": "string",
+            "example": "kajianId"
+          },
+          "resume": {
+            "type": "string",
+            "example": "lorem ipsum dolor sit amet"
+          }
+        },
+        "xml": {
+          "name": "CreateResumeRequest"
         }
       },
       "RemoveMediaRequest": {

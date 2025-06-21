@@ -12,6 +12,7 @@ import kajianController from '../controllers/kajian.controller';
 import { uploadExcel } from '../middleware/upload.middleware';
 import scoreController from '../controllers/score.controller';
 import videoController from '../controllers/video.controller';
+import resumeController from '../controllers/resume.controller';
 
 
 const router = express.Router();
@@ -172,6 +173,57 @@ router.get('/kajian/:slug/slug', kajianController.findOneBySlug
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
+
+///
+router.post('/resume', authMiddleware, resumeController.create
+    /*
+    #swagger.tags = ['Resume']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateResumeRequest"
+        }
+    }
+    */
+)
+router.get('/resume', authMiddleware, resumeController.findAll
+    /*
+    #swagger.tags = ['Resume']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/resume/:id', resumeController.findOne
+    /*
+    #swagger.tags = ['Resume']
+    */
+)
+
+router.put('/resume/:id', authMiddleware, resumeController.update
+    /*
+    #swagger.tags = ['Resume']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateResumeRequest"
+        }
+    }
+    */
+)
+router.delete('/resume/:id'
+    /*
+    #swagger.tags = ['Resume']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/resume/:kajian/kajian', authMiddleware, resumeController.findAllByKajian
+    /*
+    #swagger.tags = ['Resume']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
 
 /// COMPETENCY
 router.post('/competency', competencyController.create
