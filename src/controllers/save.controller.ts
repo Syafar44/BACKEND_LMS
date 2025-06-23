@@ -116,9 +116,9 @@ export default {
         try {
             const userId = req.user?.id;
 
-            const result = await SaveModel.find({ createdBy: userId }).exec();
+            const result = await SaveModel.findOne({ createdBy: userId }).exec();
             response.success(res, result, "Success find save");
-            
+
         } catch (error) {
             response.error(res, error, "Failed to find save")
         }
