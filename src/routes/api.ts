@@ -13,6 +13,7 @@ import { uploadExcel } from '../middleware/upload.middleware';
 import scoreController from '../controllers/score.controller';
 import videoController from '../controllers/video.controller';
 import resumeController from '../controllers/resume.controller';
+import saveController from '../controllers/save.controller';
 
 
 const router = express.Router();
@@ -174,7 +175,7 @@ router.get('/kajian/:slug/slug', kajianController.findOneBySlug
     */
 )
 
-///
+/// RESUME
 router.post('/resume', authMiddleware, resumeController.create
     /*
     #swagger.tags = ['Resume']
@@ -211,7 +212,7 @@ router.put('/resume/:id', authMiddleware, resumeController.update
     }
     */
 )
-router.delete('/resume/:id'
+router.delete('/resume/:id', resumeController.update
     /*
     #swagger.tags = ['Resume']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -220,6 +221,56 @@ router.delete('/resume/:id'
 router.get('/resume/:kajian/kajian', authMiddleware, resumeController.findAllByKajian
     /*
     #swagger.tags = ['Resume']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// SAVE
+router.post('/save', authMiddleware, saveController.create
+    /*
+    #swagger.tags = ['Save']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSaveRequest"
+        }
+    }
+    */
+)
+router.get('/save', authMiddleware, saveController.findAll
+    /*
+    #swagger.tags = ['Save']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/save/:id', saveController.findOne
+    /*
+    #swagger.tags = ['Save']
+    */
+)
+
+router.put('/save/:id', authMiddleware, saveController.update
+    /*
+    #swagger.tags = ['Save']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSaveRequest"
+        }
+    }
+    */
+)
+router.delete('/save/:id', saveController.remove
+    /*
+    #swagger.tags = ['Save']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/save/:competency/competency', authMiddleware, saveController.findAllByCompetency
+    /*
+    #swagger.tags = ['Save']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )

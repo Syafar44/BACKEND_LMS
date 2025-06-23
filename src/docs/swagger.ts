@@ -91,6 +91,10 @@ const doc = {
                 kajian: "kajianId",
                 resume: "lorem ipsum dolor sit amet",
             },
+            CreateSaveRequest: {
+                competency: "competencyID",
+                workingOn: true,
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }
