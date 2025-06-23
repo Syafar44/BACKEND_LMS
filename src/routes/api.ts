@@ -274,6 +274,12 @@ router.get('/save/:competency/competency', authMiddleware, saveController.findAl
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
+router.get('/save-user', authMiddleware, saveController.findAllByUser
+    /*
+    #swagger.tags = ['Save']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 
 /// COMPETENCY

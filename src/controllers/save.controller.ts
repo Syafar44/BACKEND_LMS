@@ -112,5 +112,16 @@ export default {
             response.error(res, error, "Failed to find save")
         }
     },
+    async findAllByUser(req: IReqUser, res: Response) {
+        try {
+            const userId = req.user?.id;
+
+            const result = await SaveModel.find({ createdBy: userId }).exec();
+            response.success(res, result, "Success find save");
+            
+        } catch (error) {
+            response.error(res, error, "Failed to find save")
+        }
+    },
 
 }
