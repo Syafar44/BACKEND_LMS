@@ -6,7 +6,7 @@ export const SAVE_MODEL_NAME = "Save";
 const Schema = mongoose.Schema
 
 export const saveDAO = Yup.object({
-    subcompetency: Yup.string().required(),
+    competency: Yup.string().required(),
     createdBy: Yup.string(),
     workingOn: Yup.boolean(),
     progress: Yup.number().required()
@@ -14,13 +14,13 @@ export const saveDAO = Yup.object({
 
 export type TSave = Yup.InferType<typeof saveDAO>
 
-export interface Save extends Omit<TSave, "subcompetency" | "createdBy" > {
-    subcompetency: ObjectId
+export interface Save extends Omit<TSave, "competency" | "createdBy" > {
+    competency: ObjectId
     createdBy: ObjectId
 }
 
 const SaveScema = new Schema<Save>({
-    subcompetency: {
+    competency: {
         type: Schema.Types.ObjectId,
         ref: "Competency",
         required: true,

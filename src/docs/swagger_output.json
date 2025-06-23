@@ -906,7 +906,7 @@
         ]
       }
     },
-    "/save/{subcompetency}/subcompetency": {
+    "/save/{competency}/competency": {
       "get": {
         "tags": [
           "Save"
@@ -914,7 +914,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "subcompetency",
+            "name": "competency",
             "in": "path",
             "required": true,
             "schema": {
@@ -2350,7 +2350,7 @@
       "CreateSaveRequest": {
         "type": "object",
         "properties": {
-          "subcompetency": {
+          "competency": {
             "type": "string",
             "example": "competencyID"
           },

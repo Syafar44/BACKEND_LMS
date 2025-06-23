@@ -92,7 +92,7 @@ const doc = {
                 resume: "lorem ipsum dolor sit amet",
             },
             CreateSaveRequest: {
-                subcompetency: "competencyID",
+                competency: "competencyID",
                 progress: 1
             },
             RemoveMediaRequest: {
