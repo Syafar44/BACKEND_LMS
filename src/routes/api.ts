@@ -268,7 +268,7 @@ router.delete('/save/:id', saveController.remove
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/save/:competency/competency', authMiddleware, saveController.findAllByCompetency
+router.get('/save/:subcompetency/subcompetency', authMiddleware, saveController.findAllBySubCompetency
     /*
     #swagger.tags = ['Save']
     #swagger.security = [{ "bearerAuth": [] }]

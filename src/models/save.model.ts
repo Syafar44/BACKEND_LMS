@@ -6,27 +6,32 @@ export const SAVE_MODEL_NAME = "Save";
 const Schema = mongoose.Schema
 
 export const saveDAO = Yup.object({
-    competency: Yup.string().required(),
+    subcompetency: Yup.string().required(),
     createdBy: Yup.string(),
     workingOn: Yup.boolean(),
+    progress: Yup.number().required()
 })
 
 export type TSave = Yup.InferType<typeof saveDAO>
 
-export interface Save extends Omit<TSave, "competency" | "createdBy" > {
-    competency: ObjectId
+export interface Save extends Omit<TSave, "subcompetency" | "createdBy" > {
+    subcompetency: ObjectId
     createdBy: ObjectId
 }
 
-const CompetencyScema = new Schema<Save>({
-    competency: {
+const SaveScema = new Schema<Save>({
+    subcompetency: {
         type: Schema.Types.ObjectId,
         ref: "Competency",
         required: true,
     },
     workingOn: {
         type: Schema.Types.Boolean,
-        required: true,
+        default: true,
+    },
+    progress: {
+        type: Schema.Types.Number,
+        default: 0,
     },
     createdBy: {
         type: Schema.Types.ObjectId,
@@ -36,6 +41,6 @@ const CompetencyScema = new Schema<Save>({
     timestamps: true,
 })
 
-const SaveModel = mongoose.model(SAVE_MODEL_NAME, CompetencyScema)
+const SaveModel = mongoose.model(SAVE_MODEL_NAME, SaveScema)
 
 export default SaveModel

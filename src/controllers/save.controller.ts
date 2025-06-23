@@ -97,16 +97,16 @@ export default {
         }
     },
 
-    async findAllByCompetency(req: IReqUser, res: Response) {
+    async findAllBySubCompetency(req: IReqUser, res: Response) {
         try {
-            const { competency } = req.params
+            const { subcompetency } = req.params
             const userId = req.user?.id;
 
-            if (!isValidObjectId(competency)) {
+            if (!isValidObjectId(subcompetency)) {
                 return response.error(res, null, "save not found");
             }
 
-            const result = await SaveModel.find({ competency, createdBy: userId }).exec();
+            const result = await SaveModel.find({ subcompetency, createdBy: userId }).exec();
             response.success(res, result, "Success find save");
         } catch (error) {
             response.error(res, error, "Failed to find save")

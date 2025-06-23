@@ -92,8 +92,8 @@ const doc = {
                 resume: "lorem ipsum dolor sit amet",
             },
             CreateSaveRequest: {
-                competency: "competencyID",
-                workingOn: true,
+                subcompetency: "competencyID",
+                progress: 1
             },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
