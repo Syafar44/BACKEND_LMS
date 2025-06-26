@@ -11,6 +11,7 @@ export const readUsersFromExcelBuffer = async (buffer: Buffer): Promise<TRegiste
         fullName: item.fullName || item["Full Name"],
         email: item.email || item["Email"],
         access: item.access || item["Access"],
+        job: item.access || item["Job"],
         password: item.password || item["Password"],
         confirmPassword: item.confirmPassword || item["Confirm Password"],
     }));

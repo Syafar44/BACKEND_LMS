@@ -329,6 +329,48 @@
         }
       }
     },
+    "/auth/role/{id}": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/register/bulk": {
       "post": {
         "tags": [
@@ -2121,6 +2163,10 @@
           "access": {
             "type": "string",
             "example": "outlet"
+          },
+          "job": {
+            "type": "string",
+            "example": "Gerai Panglima"
           },
           "password": {
             "type": "string",

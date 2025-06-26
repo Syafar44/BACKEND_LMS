@@ -32,6 +32,7 @@ const doc = {
                 fullName: "syafaruddin",
                 email: "syafar@panglimaunivercity.com",
                 access: "outlet",
+                job: "Gerai Panglima",
                 password: "26/11/04",
                 confirmPassword: "26/11/04"
             },

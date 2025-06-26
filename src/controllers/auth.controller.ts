@@ -12,6 +12,7 @@ export type TRegister = {
     fullName: string;
     email: string;
     access: string;
+    job: string;
     password: string;
     confirmPassword: string;
 }
@@ -25,6 +26,7 @@ const registerValidationSchema = Yup.object({
     fullName: Yup.string().required(),
     email: Yup.string().required(),
     access: Yup.string().required(),
+    job: Yup.string().required(),
     password: Yup.string().required(),
     confirmPassword: Yup.string().required().oneOf([Yup.ref('password'), ""], 'Passwords must match'),
 })
@@ -43,13 +45,14 @@ const adminUpdatePasswordValidationSchema = Yup.object({
 export default {
     async register(req: Request, res: Response) {
         
-        const {fullName, email, access,  password, confirmPassword} = req.body as unknown as TRegister;
+        const {fullName, email, access, job,  password, confirmPassword} = req.body as unknown as TRegister;
     
         try {
             await registerValidationSchema.validate({
                 fullName,
                 email,
                 access,
+                job,
                 password,
                 confirmPassword
             });
@@ -62,6 +65,7 @@ export default {
             const result = await UserModel.create({
                 fullName,
                 access,
+                job,
                 email,
                 password
             });
@@ -161,9 +165,6 @@ export default {
             if (!userByIdentifier) {
                 return res.status(403).json({message: 'User not found', data: null})
             }
-
-            console.log("userByIdentifier", userByIdentifier);
-            console.log("password", encrypt(password));
             const validatePassword: boolean = encrypt(password) === userByIdentifier.password;
 
             if (!validatePassword) {
@@ -175,6 +176,7 @@ export default {
                 role: userByIdentifier.role,
                 email: userByIdentifier.email,
                 access: userByIdentifier.access,
+                job: userByIdentifier.job,
             })
 
             res.status(200).json(
@@ -223,6 +225,9 @@ export default {
                         },
                         {
                             access: { $regex: search, $options: 'i' },
+                        },
+                        {
+                            job: { $regex: search, $options: 'i' },
                         }
                     ],
                 })
@@ -255,7 +260,7 @@ export default {
     },
     async updateUser(req: IReqUser, res: Response) {
         const { id } = req.params;
-        const { fullName, email, access } = req.body as unknown as TRegister;
+        const { fullName, email, access, job } = req.body as unknown as TRegister;
         try {
             const user = await UserModel.findById(id);
             if (!user) {
@@ -264,6 +269,22 @@ export default {
             user.fullName = fullName;
             user.email = email;
             user.access = access;
+            user.job = job;
+            await user.save();
+            response.success(res, user, "Success update User")
+        } catch (error) {
+            response.error(res, error, "Failed update User")
+        }
+    },
+    async updateRole(req: IReqUser, res: Response) {
+        const { id } = req.params;
+        const { role } = req.body;
+        try {
+            const user = await UserModel.findById(id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found', data: null });
+            }
+            user.role = role;
             await user.save();
             response.success(res, user, "Success update User")
         } catch (error) {
@@ -306,6 +327,7 @@ export default {
                         fullName: user.fullName,
                         email: user.email,
                         access: user.access,
+                        job: user.job,
                         password: user.password,
                     });
 

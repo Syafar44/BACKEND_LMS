@@ -92,6 +92,12 @@ router.put('/auth/password/:id', authMiddleware ,authController.adminUpdatePassw
         }
     */
 );
+router.put('/auth/role/:id' ,authController.updateRole
+    /**
+        #swagger.tags = ['Auth']
+        #swagger.security = [{ "bearerAuth": [] }]
+    */
+);
 router.delete('/auth/user/:id', authController.deleteUser
     /**
         #swagger.tags = ['Auth']
