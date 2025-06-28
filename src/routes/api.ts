@@ -230,6 +230,12 @@ router.get('/resume/:kajian/kajian', authMiddleware, resumeController.findAllByK
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
+router.get('/resume-user', authMiddleware, resumeController.findAllByUser
+    /*
+    #swagger.tags = ['Resume']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 /// SAVE
 router.post('/save', authMiddleware, saveController.create
@@ -488,6 +494,12 @@ router.delete('/score/:id', scoreController.remove
 )
 
 router.get('/score/:subCompetency/subCompetency', authMiddleware,  scoreController.findAllBySubCompetency
+    /*
+    #swagger.tags = ['Score']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/score-user', authMiddleware,  scoreController.findAllByUser
     /*
     #swagger.tags = ['Score']
     #swagger.security = [{ "bearerAuth": [] }]

@@ -786,6 +786,24 @@
         ]
       }
     },
+    "/resume-user": {
+      "get": {
+        "tags": [
+          "Resume"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/save": {
       "post": {
         "tags": [
@@ -1841,6 +1859,24 @@
             }
           }
         ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/score-user": {
+      "get": {
+        "tags": [
+          "Score"
+        ],
+        "description": "",
         "responses": {
           "default": {
             "description": ""

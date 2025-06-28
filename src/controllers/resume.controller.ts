@@ -113,5 +113,13 @@ export default {
             response.error(res, error, "Failed to find all product by an category")
         }
     },
-
+    async findAllByUser(req: IReqUser, res: Response) {
+        try {
+            const userId = req.user?.id;
+            const result = await ResumeModel.findOne({ createdBy: userId }).exec();
+            response.success(res, result, "Success find all product by an category");
+        } catch (error) {
+            response.error(res, error, "Failed to find all product by an category")
+        }
+    },
 }

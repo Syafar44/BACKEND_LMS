@@ -107,10 +107,18 @@ export default {
             }
 
             const result = await ScoreModel.find({ bySubCompetency: subCompetency, createdBy: userId }).exec();
-            response.success(res, result, "Success find all product by an category");
+            response.success(res, result, "Success find Score");
         } catch (error) {
-            response.error(res, error, "Failed to find all product by an category")
+            response.error(res, error, "Failed to find Score")
         }
     },
-
+    async findAllByUser(req: IReqUser, res: Response) {
+        try {
+            const userId = req.user?.id;
+            const result = await ScoreModel.find({ createdBy: userId }).exec();
+            response.success(res, result, "Success find Score");
+        } catch (error) {
+            response.error(res, error, "Failed to find Score")
+        }
+    },
 }
