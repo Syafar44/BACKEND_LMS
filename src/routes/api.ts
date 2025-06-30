@@ -14,6 +14,7 @@ import scoreController from '../controllers/score.controller';
 import videoController from '../controllers/video.controller';
 import resumeController from '../controllers/resume.controller';
 import saveController from '../controllers/save.controller';
+import pendingController from '../controllers/pending.controller';
 
 
 const router = express.Router();
@@ -132,6 +133,26 @@ router.post(
     }
   */
 );
+
+/// PENDING
+router.post('/pending', authMiddleware , pendingController.create
+    /*
+    #swagger.tags = ['Pending']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/pending-user', authMiddleware , pendingController.findByUser
+    /*
+    #swagger.tags = ['Pending']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.delete('/pending/:id', authMiddleware , pendingController.remove
+    /*
+    #swagger.tags = ['Pending']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 /// KAJIAN
 router.post('/kajian', kajianController.create
