@@ -411,10 +411,10 @@
         }
       }
     },
-    "/pending": {
+    "/completed": {
       "post": {
         "tags": [
-          "Pending"
+          "Completed"
         ],
         "description": "",
         "responses": {
@@ -426,43 +426,30 @@
           {
             "bearerAuth": []
           }
-        ]
-      }
-    },
-    "/pending-user": {
-      "get": {
-        "tags": [
-          "Pending"
         ],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/pending/{id}": {
-      "delete": {
-        "tags": [
-          "Pending"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompletedRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCompletedRequest"
+              }
             }
           }
+        }
+      }
+    },
+    "/completed-user": {
+      "get": {
+        "tags": [
+          "Completed"
         ],
+        "description": "",
         "responses": {
           "default": {
             "description": ""
@@ -2525,6 +2512,18 @@
         },
         "xml": {
           "name": "CreateSaveRequest"
+        }
+      },
+      "CreateCompletedRequest": {
+        "type": "object",
+        "properties": {
+          "competency": {
+            "type": "string",
+            "example": "competencyID"
+          }
+        },
+        "xml": {
+          "name": "CreateCompletedRequest"
         }
       },
       "RemoveMediaRequest": {

@@ -96,6 +96,9 @@ const doc = {
                 competency: "competencyID",
                 progress: 1
             },
+            CreateCompletedRequest: {
+                competency: "competencyID",
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }

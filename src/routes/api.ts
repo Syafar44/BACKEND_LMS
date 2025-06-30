@@ -14,7 +14,7 @@ import scoreController from '../controllers/score.controller';
 import videoController from '../controllers/video.controller';
 import resumeController from '../controllers/resume.controller';
 import saveController from '../controllers/save.controller';
-import pendingController from '../controllers/pending.controller';
+import completedController from '../controllers/completed.controller';
 
 
 const router = express.Router();
@@ -134,22 +134,22 @@ router.post(
   */
 );
 
-/// PENDING
-router.post('/pending', authMiddleware , pendingController.create
+/// COMPLETED
+router.post('/completed', authMiddleware , completedController.create
     /*
-    #swagger.tags = ['Pending']
+    #swagger.tags = ['Completed']
     #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateCompletedRequest"
+        }
+    }
     */
 )
-router.get('/pending-user', authMiddleware , pendingController.findByUser
+router.get('/completed-user', authMiddleware , completedController.findAllByUser
     /*
-    #swagger.tags = ['Pending']
-    #swagger.security = [{ "bearerAuth": [] }]
-    */
-)
-router.delete('/pending/:id', authMiddleware , pendingController.remove
-    /*
-    #swagger.tags = ['Pending']
+    #swagger.tags = ['Completed']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
