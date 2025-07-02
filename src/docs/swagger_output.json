@@ -411,6 +411,55 @@
         }
       }
     },
+    "/lkp/mark": {
+      "post": {
+        "tags": [
+          "LKP"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/lkp-user": {
+      "get": {
+        "tags": [
+          "LKP"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/lkp/rekap": {
+      "post": {
+        "tags": [
+          "LKP"
+        ],
+        "description": "Pindahkan data LKP harian ke HistoryLkp",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/completed": {
       "post": {
         "tags": [

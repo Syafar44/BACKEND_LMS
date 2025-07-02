@@ -15,6 +15,8 @@ import videoController from '../controllers/video.controller';
 import resumeController from '../controllers/resume.controller';
 import saveController from '../controllers/save.controller';
 import completedController from '../controllers/completed.controller';
+import lkpController from '../controllers/lkp.controller';
+import historyLkpController from '../controllers/historyLkp.controller';
 
 
 const router = express.Router();
@@ -133,6 +135,29 @@ router.post(
     }
   */
 );
+
+/// LKP
+router.post('/lkp/mark', authMiddleware, lkpController.mark
+    /*
+    #swagger.tags = ['LKP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/lkp-user', authMiddleware, lkpController.getLkpByUser
+    /*
+    #swagger.tags = ['LKP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// LKP REKAP
+router.post("/lkp/rekap", historyLkpController.rekapHarian
+  /*
+  #swagger.tags = ['LKP']
+  #swagger.description = 'Pindahkan data LKP harian ke HistoryLkp'
+  */
+);
+
 
 /// COMPLETED
 router.post('/completed', authMiddleware , completedController.create
