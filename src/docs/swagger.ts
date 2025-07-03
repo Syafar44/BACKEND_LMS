@@ -99,6 +99,13 @@ const doc = {
             CreateCompletedRequest: {
                 competency: "competencyID",
             },
+            CreateAbsenRequest: {
+                subuh: "Tidak mengerjakan",
+                dzuhur: "Dikerjakan secara berjamaah",
+                ashar: "Dikerjakan secara berjamaah",
+                magrib:  "Dikerjakan namun tidak berjamaah",
+                isya:  "Dikerjakan namun tidak berjamaah",
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }

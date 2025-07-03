@@ -8,30 +8,23 @@ import dayjs from "dayjs";
 export default {
     async mark(req: IReqUser, res: Response) {
         try {
-        const userId = req.user?.id;
-        if (!userId) return response.error(res, null, "User tidak terautentikasi");
+            const userId = req.user?.id;
+            if (!userId) return response.error(res, null, "User tidak terautentikasi");
 
-        const date = dayjs().format("YYYY-MM-DD");
+            const date = dayjs().format("YYYY-MM-DD");
 
-        const payload = {
-            createdBy: `${userId}`,
-            date,
-        } as TLkp;
+            const payload = { ...req.body, createdBy: userId, date } as TLkp;
+            await lkpDAO.validate(payload);
 
-        await lkpDAO.validate(payload);
+            const result = await LkpModel.findOneAndUpdate(
+                { createdBy: userId, date },
+                { $set: payload },
+                { upsert: true, new: true }
+            );
 
-        const result = await LkpModel.findOneAndUpdate(
-            { createdBy: userId, date },
-            {
-            $inc: { count: 1 },
-            $setOnInsert: { createdBy: userId, date }
-            },
-            { upsert: true, new: true }
-        );
-
-        response.success(res, result, "Success mencatat absensi");
+            return response.success(res, result, "Absensi sholat berhasil disimpan");
         } catch (error) {
-        response.error(res, error, "Failed mencatat absensi");
+            return response.error(res, error, "Gagal menyimpan absensi");
         }
     },
 

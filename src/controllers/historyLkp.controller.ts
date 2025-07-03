@@ -11,11 +11,19 @@ export default {
 
       const lkps = await LkpModel.find({ date: yesterday });
 
+      if (!lkps.length) {
+        return response.success(res, [], "Tidak ada data yang direkap");
+      }
+
       const inserted = await HistoryLkpModel.insertMany(
         lkps.map(item => ({
           createdBy: item.createdBy,
           date: item.date,
-          count: item.count,
+          subuh: item.subuh,
+          dzuhur: item.dzuhur,
+          ashar: item.ashar,
+          magrib: item.magrib,
+          isya: item.isya,
         })),
         { ordered: false }
       );

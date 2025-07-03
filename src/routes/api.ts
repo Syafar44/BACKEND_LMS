@@ -141,6 +141,12 @@ router.post('/lkp/mark', authMiddleware, lkpController.mark
     /*
     #swagger.tags = ['LKP']
     #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateAbsenRequest"
+        }
+    }
     */
 )
 router.get('/lkp-user', authMiddleware, lkpController.getLkpByUser

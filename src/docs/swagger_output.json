@@ -426,7 +426,22 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAbsenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAbsenRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/lkp-user": {
@@ -2573,6 +2588,34 @@
         },
         "xml": {
           "name": "CreateCompletedRequest"
+        }
+      },
+      "CreateAbsenRequest": {
+        "type": "object",
+        "properties": {
+          "subuh": {
+            "type": "string",
+            "example": "Tidak mengerjakan"
+          },
+          "dzuhur": {
+            "type": "string",
+            "example": "Dikerjakan secara berjamaah"
+          },
+          "ashar": {
+            "type": "string",
+            "example": "Dikerjakan secara berjamaah"
+          },
+          "magrib": {
+            "type": "string",
+            "example": "Dikerjakan namun tidak berjamaah"
+          },
+          "isya": {
+            "type": "string",
+            "example": "Dikerjakan namun tidak berjamaah"
+          }
+        },
+        "xml": {
+          "name": "CreateAbsenRequest"
         }
       },
       "RemoveMediaRequest": {
