@@ -92,7 +92,6 @@ export default {
             response.error(res, error, "Failed remove SubCompetency")
         }
     },
-
     async findOneBySlug(req: IReqUser, res: Response) {
         try {
             const { slug } = req.params;
@@ -107,7 +106,6 @@ export default {
             response.error(res, error, "Failed find one by slug an SubCompetency");
         }
     },
-
     async findAllByCompetency(req: IReqUser, res: Response) {
         try {
             const { competencyId } = req.params;

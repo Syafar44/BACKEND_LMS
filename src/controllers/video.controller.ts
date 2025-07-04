@@ -96,7 +96,6 @@ export default {
             response.error(res, error, "Failed remove histori video")
         }
     },
-
     async findAllBySubCompetency(req: IReqUser, res: Response) {
         try {
             const { subCompetency } = req.params

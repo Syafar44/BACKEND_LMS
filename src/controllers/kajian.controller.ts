@@ -92,7 +92,6 @@ export default {
             response.error(res, error, "Failed remove Kajian")
         }
     },
-
     async findOneBySlug(req: IReqUser, res: Response) {
         try {
           const { slug } = req.params;

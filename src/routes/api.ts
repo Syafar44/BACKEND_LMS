@@ -47,7 +47,8 @@ router.get('/auth/me', authMiddleware, authController.me
         }]
         */
     )
-    router.get('/auth/user', authController.findAll
+    router.get('/auth/user', authMiddleware, aclMiddleware([ROLES.ADMIN]), authController.findAll
+
     /**
      #swagger.tags = ['Auth']
      #swagger.security = [{
@@ -63,7 +64,7 @@ router.get('/auth/user/:id', authController.findById
     }]
     */
 )
-router.put('/auth/user/:id', authController.updateUser
+router.put('/auth/user/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), authController.updateUser
     /**
      #swagger.tags = ['Auth']
      #swagger.security = [{
@@ -85,7 +86,7 @@ router.put('/auth/password', authMiddleware ,authController.updatePassword
         }
     */
 );
-router.put('/auth/password/:id', authMiddleware ,authController.adminUpdatePassword
+router.put('/auth/password/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]) ,authController.adminUpdatePassword
     /**
         #swagger.tags = ['Auth']
         #swagger.security = [{ "bearerAuth": [] }]
@@ -95,13 +96,13 @@ router.put('/auth/password/:id', authMiddleware ,authController.adminUpdatePassw
         }
     */
 );
-router.put('/auth/role/:id' ,authController.updateRole
+router.put('/auth/role/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]) ,authController.updateRole
     /**
         #swagger.tags = ['Auth']
         #swagger.security = [{ "bearerAuth": [] }]
     */
 );
-router.delete('/auth/user/:id', authController.deleteUser
+router.delete('/auth/user/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), authController.deleteUser
     /**
         #swagger.tags = ['Auth']
         #swagger.security = [{
@@ -111,6 +112,7 @@ router.delete('/auth/user/:id', authController.deleteUser
 )
 router.post(
   '/auth/register/bulk',
+  authMiddleware, aclMiddleware([ROLES.ADMIN]),
   uploadExcel.single("file"),
   authController.bulkRegister
 /*
@@ -163,7 +165,7 @@ router.post("/lkp/rekap", historyLkpController.rekapHarian
   #swagger.description = 'Pindahkan data LKP harian ke HistoryLkp'
   */
 );
-router.get("/lkp/rekap", historyLkpController.getAllHistory
+router.get("/lkp/rekap", authMiddleware, aclMiddleware([ROLES.ADMIN]),historyLkpController.getAllHistory
   /*
   #swagger.tags = ['LKP']
   #swagger.description = 'ambil rekap'
@@ -192,7 +194,7 @@ router.get('/completed-user', authMiddleware , completedController.findAllByUser
 )
 
 /// KAJIAN
-router.post('/kajian', kajianController.create
+router.post('/kajian', authMiddleware, aclMiddleware([ROLES.ADMIN]), kajianController.create
     /*
     #swagger.tags = ['Kajian']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -214,7 +216,7 @@ router.get('/kajian/:id', kajianController.findOne
     #swagger.tags = ['Kajian']
     */
 )
-router.put('/kajian/:id', kajianController.update
+router.put('/kajian/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), kajianController.update
     /*
     #swagger.tags = ['Kajian']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -226,7 +228,7 @@ router.put('/kajian/:id', kajianController.update
     }
     */
 )
-router.delete('/kajian/:id', kajianController.remove
+router.delete('/kajian/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), kajianController.remove
     /*
     #swagger.tags = ['Kajian']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -263,20 +265,7 @@ router.get('/resume/:id', resumeController.findOne
     #swagger.tags = ['Resume']
     */
 )
-
-router.put('/resume/:id', authMiddleware, resumeController.update
-    /*
-    #swagger.tags = ['Resume']
-    #swagger.security = [{ "bearerAuth": [] }]
-    #swagger.requestBody = {
-        required: true,
-        schema: {
-            $ref: "#/components/schemas/CreateResumeRequest"
-        }
-    }
-    */
-)
-router.delete('/resume/:id', resumeController.update
+router.delete('/resume/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), resumeController.remove
     /*
     #swagger.tags = ['Resume']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -319,19 +308,6 @@ router.get('/save/:id', saveController.findOne
     #swagger.tags = ['Save']
     */
 )
-
-router.put('/save/:id', authMiddleware, saveController.update
-    /*
-    #swagger.tags = ['Save']
-    #swagger.security = [{ "bearerAuth": [] }]
-    #swagger.requestBody = {
-        required: true,
-        schema: {
-            $ref: "#/components/schemas/CreateSaveRequest"
-        }
-    }
-    */
-)
 router.delete('/save/:id', saveController.remove
     /*
     #swagger.tags = ['Save']
@@ -353,7 +329,7 @@ router.get('/save-user', authMiddleware, saveController.findAllByUser
 
 
 /// COMPETENCY
-router.post('/competency', competencyController.create
+router.post('/competency', authMiddleware, aclMiddleware([ROLES.ADMIN]), competencyController.create
     /*
     #swagger.tags = ['Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -375,7 +351,7 @@ router.get('/competency/:id', competencyController.findOne
     #swagger.tags = ['Competency']
     */
 )
-router.put('/competency/:id', competencyController.update
+router.put('/competency/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), competencyController.update
     /*
     #swagger.tags = ['Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -387,7 +363,7 @@ router.put('/competency/:id', competencyController.update
     }
     */
 )
-router.delete('/competency/:id', competencyController.remove
+router.delete('/competency/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), competencyController.remove
     /*
     #swagger.tags = ['Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -408,7 +384,7 @@ router.get('/competency/:main_competency/main_competency', competencyController.
 
 
 /// SUB COMPETENCY
-router.post('/subcompetency', subCompetencyController.create
+router.post('/subcompetency', authMiddleware, aclMiddleware([ROLES.ADMIN]), subCompetencyController.create
     /*
     #swagger.tags = ['Sub Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -430,7 +406,8 @@ router.get('/subcompetency/:id', subCompetencyController.findOne
     #swagger.tags = ['Sub Competency']
     */
 )
-router.put('/subcompetency/:id', subCompetencyController.update
+router.put('/subcompetency/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), subCompetencyController.update
+
     /*
     #swagger.tags = ['Sub Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -442,7 +419,8 @@ router.put('/subcompetency/:id', subCompetencyController.update
     }
     */
 )
-router.delete('/subcompetency/:id', subCompetencyController.remove
+router.delete('/subcompetency/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), subCompetencyController.remove
+
     /*
     #swagger.tags = ['Sub Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -462,7 +440,7 @@ router.get('/subcompetency/:competencyId/competencyId', subCompetencyController.
 )
 
 /// KUIS COMPETENCY
-router.post('/kuiscompetency', kuisCompetencyController.create
+router.post('/kuiscompetency', authMiddleware, aclMiddleware([ROLES.ADMIN]), kuisCompetencyController.create
     /*
     #swagger.tags = ['Kuis Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -484,7 +462,7 @@ router.get('/kuiscompetency/:id', kuisCompetencyController.findOne
     #swagger.tags = ['Kuis Competency']
     */
 )
-router.put('/kuiscompetency/:id', kuisCompetencyController.update
+router.put('/kuiscompetency/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), kuisCompetencyController.update
     /*
     #swagger.tags = ['Kuis Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -496,7 +474,7 @@ router.put('/kuiscompetency/:id', kuisCompetencyController.update
     }
     */
 )
-router.delete('/kuiscompetency/:id', kuisCompetencyController.remove
+router.delete('/kuiscompetency/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), kuisCompetencyController.remove
     /*
     #swagger.tags = ['Kuis Competency']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -530,18 +508,6 @@ router.get('/score', scoreController.findAll
 router.get('/score/:id', scoreController.findOne
     /*
     #swagger.tags = ['Score']
-    */
-)
-router.put('/score/:id', scoreController.update
-    /*
-    #swagger.tags = ['Score']
-    #swagger.security = [{ "bearerAuth": [] }]
-    #swagger.requestBody = {
-        required: true,
-        schema: {
-            $ref: "#/components/schemas/CreateScoreRequest"
-        }
-    }
     */
 )
 router.delete('/score/:id', scoreController.remove
@@ -587,25 +553,12 @@ router.get('/video/:id', videoController.findOne
     #swagger.tags = ['Video']
     */
 )
-router.put('/video/:id', videoController.update
-    /*
-    #swagger.tags = ['Video']
-    #swagger.security = [{ "bearerAuth": [] }]
-    #swagger.requestBody = {
-        required: true,
-        schema: {
-            $ref: "#/components/schemas/CreateVideoRequest"
-        }
-    }
-    */
-)
 router.delete('/video/:id', videoController.remove
     /*
     #swagger.tags = ['Video']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-
 router.get('/video/:subCompetency/subCompetency', authMiddleware,  videoController.findAllBySubCompetency
     /*
     #swagger.tags = ['Video']
@@ -614,8 +567,7 @@ router.get('/video/:subCompetency/subCompetency', authMiddleware,  videoControll
 )
 
 /// MEDIA
-
-router.post('/media/upload-single', [
+router.post('/media/upload-single',authMiddleware, aclMiddleware([ROLES.ADMIN]), [
     mediaMiddleware.single('file')
 ], mediaController.single
     /* 
@@ -640,34 +592,7 @@ router.post('/media/upload-single', [
     */
 )
 
-router.post('/media/upload-multiple', [
-    mediaMiddleware.multiple('files')
-], mediaController.multiple
-    /*
-    #swagger.tags = ['Media']
-    #swagger.security = [{ "bearerAuth": [] }]
-    #swagger.requestBody = {
-        required: true,
-        content: {
-            "multipart/form-data": {
-                schema: {
-                    type: "object",
-                    properties: {
-                        files: {
-                            type: "array",
-                            items: {
-                                type: "string",
-                                format: "binary"
-                            }
-                        }
-                    }
-                }
-            }
-    }
-    */
-)
-
-router.delete('/media/remove', mediaController.remove
+router.delete('/media/remove',authMiddleware, aclMiddleware([ROLES.ADMIN]), mediaController.remove
     /*
     #swagger.tags = ['Media']
     #swagger.security = [{ "bearerAuth": [] }]

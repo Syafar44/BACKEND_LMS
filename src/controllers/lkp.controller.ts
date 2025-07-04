@@ -27,7 +27,6 @@ export default {
             return response.error(res, error, "Gagal menyimpan absensi");
         }
     },
-
     async getLkpByUser(req: IReqUser, res: Response) {
         try {
             const userId = req.user?.id;

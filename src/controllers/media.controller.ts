@@ -30,21 +30,6 @@ export default {
         response.error(res, null, "Failed upload a file");
       }
     },
-    async multiple(req: IReqUser, res: Response) {
-        if (!req.files || req.files.length === 0) {
-          return response.error(res, null, "files not found");
-        }
-    
-        try {
-          const result = await uploader.uploadMultiple(
-            req.files as Express.Multer.File[]
-          );
-    
-          response.success(res, result, "Success upload files");
-        } catch {
-          response.error(res, null, "Failed upload files");
-        }
-      },
     async remove(req: IReqUser, res: Response) {
         try {
             const { fileUrl } = req.body as { fileUrl: string}

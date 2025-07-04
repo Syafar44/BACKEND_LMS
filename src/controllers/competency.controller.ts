@@ -138,16 +138,16 @@ export default {
     },
     async findOneBySlug(req: IReqUser, res: Response) {
         try {
-          const { slug } = req.params;
-          const result = await CompetancyModel.findOne({
-            slug,
-          });
-    
-          if (!result) return response.notFound(res, "Competancy not found");
-    
-          response.success(res, result, "Success find one by slug an Competancy");
+            const { slug } = req.params;
+            const result = await CompetancyModel.findOne({
+                slug,
+            });
+        
+            if (!result) return response.notFound(res, "Competancy not found");
+        
+            response.success(res, result, "Success find one by slug an Competancy");
         } catch (error) {
-          response.error(res, error, "Failed find one by slug an Competancy");
+            response.error(res, error, "Failed find one by slug an Competancy");
         }
-      },
+    },
 }

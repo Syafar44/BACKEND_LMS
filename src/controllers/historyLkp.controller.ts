@@ -36,7 +36,7 @@ export default {
       return response.error(res, error, "Gagal memproses rekap harian");
     }
   },
-   async getAllHistory(req: IReqUser, res: Response) {
+  async getAllHistory(req: IReqUser, res: Response) {
     try {
       const { userId, month, year, name, email, job } = req.query;
 

@@ -76,8 +76,7 @@ export default {
             const err = error as unknown as Error;
             res.status(400).json({ message: err.message, data: null });
         }
-    },  
-    
+    },
     async updatePassword(req: IReqUser, res: Response) {
         const { currentPassword, newPassword, confirmPassword } = req.body;
 
@@ -119,7 +118,6 @@ export default {
             res.status(400).json({ message: err.message, data: null });
         }
     },
-
     async adminUpdatePassword(req: Request, res: Response) {
         const { newPassword } = req.body;
 
@@ -153,7 +151,6 @@ export default {
             res.status(400).json({ message: err.message, data: null });
         }
     },
-
     async login(req: Request, res: Response) {
 
         const {email, password} = req.body as unknown as TLogin;
@@ -192,7 +189,6 @@ export default {
         }
         
     },
-
     async me(req: IReqUser, res: Response) {
         
         try {
@@ -208,7 +204,6 @@ export default {
             res.status(400).json({message: err.message , data: null})
         }
     },
-
     async findAll(req: IReqUser, res: Response) {
         const { page = 1, limit = 10, search } = req.query as unknown as IPaginationQuery
         try {

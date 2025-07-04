@@ -62,26 +62,6 @@ export default {
             response.error(res, error, "Failed find a Kuis Competancy")
         }
     },
-    async update(req: IReqUser, res: Response) {
-        try {
-            try {
-                const { id } = req.params
-                
-                if (!isValidObjectId(id)) {
-                    return response.notFound(res, "failed find one a Kuis Competancy");
-                }
-                
-                const result = await ScoreModel.findByIdAndUpdate(id, req.body, {
-                    new: true
-                })
-                response.success(res, result, "Success update Kuis Competancy")
-            } catch (error) {
-                response.error(res, error, "Failed update Kuis Competancy")
-            }
-        } catch (error) {
-            response.error(res, error, "Failed update Kuis Competancy")
-        }
-    },
     async remove(req: IReqUser, res: Response) {
         try {
             const { id } = req.params

@@ -93,7 +93,6 @@ export default {
             response.error(res, error, "Failed remove Kuis Competancy")
         }
     },
-
     async findAllBySubCompetency(req: IReqUser, res: Response) {
         try {
             const { subCompetencyId } = req.params;
