@@ -473,6 +473,61 @@
             "description": ""
           }
         }
+      },
+      "get": {
+        "tags": [
+          "LKP"
+        ],
+        "description": "ambil rekap",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "job",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
       }
     },
     "/completed": {
@@ -2289,11 +2344,11 @@
         "properties": {
           "email": {
             "type": "string",
-            "example": "syafar@panglimaunivercity.com"
+            "example": "syafar@mail.com"
           },
           "password": {
             "type": "string",
-            "example": "26/11/04"
+            "example": "123456789"
           }
         },
         "xml": {

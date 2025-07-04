@@ -25,8 +25,8 @@ const doc = {
         },
         schemas: {
             LoginRequest: {
-                email: "syafar@panglimaunivercity.com",
-                password: "26/11/04"
+                email: "syafar@mail.com",
+                password: "123456789"
             },
             RegisterRequest: {
                 fullName: "syafaruddin",

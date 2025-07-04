@@ -1,7 +1,7 @@
 import mongoose, { ObjectId } from "mongoose";
 import * as Yup from "yup";
 
-export const HISTORYLKP_MODEL_NAME = "Lkp";
+export const HISTORYLKP_MODEL_NAME = "HistroyLkp";
 const Schema = mongoose.Schema;
 
 export const STATUS_OPTIONS = [

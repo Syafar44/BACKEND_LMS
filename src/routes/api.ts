@@ -163,6 +163,12 @@ router.post("/lkp/rekap", historyLkpController.rekapHarian
   #swagger.description = 'Pindahkan data LKP harian ke HistoryLkp'
   */
 );
+router.get("/lkp/rekap", historyLkpController.getAllHistory
+  /*
+  #swagger.tags = ['LKP']
+  #swagger.description = 'ambil rekap'
+  */
+);
 
 
 /// COMPLETED
