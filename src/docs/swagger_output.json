@@ -481,7 +481,21 @@
         "description": "ambil rekap",
         "parameters": [
           {
-            "name": "userId",
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
             "in": "query",
             "schema": {
               "type": "string"
@@ -502,14 +516,7 @@
             }
           },
           {
-            "name": "name",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "email",
+            "name": "userId",
             "in": "query",
             "schema": {
               "type": "string"
@@ -527,7 +534,12 @@
           "default": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/completed": {

@@ -168,6 +168,7 @@ router.post("/lkp/rekap", historyLkpController.rekapHarian
 router.get("/lkp/rekap", authMiddleware, aclMiddleware([ROLES.ADMIN]),historyLkpController.getAllHistory
   /*
   #swagger.tags = ['LKP']
+  #swagger.security = [{ "bearerAuth": [] }]
   #swagger.description = 'ambil rekap'
   */
 );

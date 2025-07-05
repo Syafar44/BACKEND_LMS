@@ -38,37 +38,54 @@ export default {
   },
   async getAllHistory(req: IReqUser, res: Response) {
     try {
-      const { userId, month, year, name, email, department } = req.query;
+      const { page = 1, limit = 10, search, month, year, userId, department } = req.query as unknown as {
+        page?: number;
+        limit?: number;
+        search?: string;
+        month?: string;
+        year?: string;
+        userId?: string;
+        department?: string;
+      };
 
-      const filter: any = {};
+      const query: any = {};
 
-      // Optional: filter by user
-      if (userId) {
-        filter.createdBy = userId;
-      }
-
-      // Optional: filter by month & year
+      // Filter tanggal berdasarkan bulan & tahun
       if (month && year) {
-        filter.date = {
-          $regex: `^${year}-${month.toString().padStart(2, "0")}` // e.g. "2025-07"
-        };
+        query.date = { $regex: `^${year}-${month.toString().padStart(2, "0")}` };
       }
 
-      const histories = await HistoryLkpModel.find(filter)
-        .populate("createdBy", "fullName email department")
-        .sort({ date: -1 });
+      // Filter berdasarkan userId
+      if (userId) {
+        query.createdBy = userId;
+      }
 
+      // Query data
+      const histories = await HistoryLkpModel.find(query)
+        .populate("createdBy", "fullName email department")
+        .sort({ date: -1 })
+        .limit(Number(limit))
+        .skip((Number(page) - 1) * Number(limit))
+        .exec();
+
+      // Filter tambahan pakai search, nama, email, department (kalau diinginkan)
       const filtered = histories.filter((item) => {
         const user = item.createdBy as any;
         return (
-          (!name || user.fullName?.toLowerCase().includes((name as string).toLowerCase())) &&
-          (!email || user.email?.toLowerCase().includes((email as string).toLowerCase())) &&
-          (!department || user.department?.toLowerCase().includes((department as string).toLowerCase()))
+          (!search || user.fullName?.toLowerCase().includes(search.toLowerCase()) || user.email?.toLowerCase().includes(search.toLowerCase())) &&
+          (!department || user.department?.toLowerCase().includes(department.toLowerCase()))
         );
       });
-      return response.success(res, filtered, "Data history LKP berhasil diambil");
+
+      const count = await HistoryLkpModel.countDocuments(query);
+
+      response.pagination(res, filtered, {
+        total: count,
+        totalPages: Math.ceil(count / Number(limit)),
+        current: Number(page),
+      }, "Data history LKP berhasil diambil");
     } catch (error) {
-      return response.error(res, error, "Gagal mengambil data history");
+      response.error(res, error, "Gagal mengambil data history");
     }
   }
 };
