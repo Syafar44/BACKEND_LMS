@@ -12,7 +12,7 @@ export type TRegister = {
     fullName: string;
     email: string;
     access: string;
-    job: string;
+    department: string;
     password: string;
     confirmPassword: string;
 }
@@ -26,7 +26,7 @@ const registerValidationSchema = Yup.object({
     fullName: Yup.string().required(),
     email: Yup.string().required(),
     access: Yup.string().required(),
-    job: Yup.string().required(),
+    department: Yup.string().required(),
     password: Yup.string().required(),
     confirmPassword: Yup.string().required().oneOf([Yup.ref('password'), ""], 'Passwords must match'),
 })
@@ -45,14 +45,14 @@ const adminUpdatePasswordValidationSchema = Yup.object({
 export default {
     async register(req: Request, res: Response) {
         
-        const {fullName, email, access, job,  password, confirmPassword} = req.body as unknown as TRegister;
+        const {fullName, email, access, department,  password, confirmPassword} = req.body as unknown as TRegister;
     
         try {
             await registerValidationSchema.validate({
                 fullName,
                 email,
                 access,
-                job,
+                department,
                 password,
                 confirmPassword
             });
@@ -65,7 +65,7 @@ export default {
             const result = await UserModel.create({
                 fullName,
                 access,
-                job,
+                department,
                 email,
                 password
             });
@@ -173,7 +173,7 @@ export default {
                 role: userByIdentifier.role,
                 email: userByIdentifier.email,
                 access: userByIdentifier.access,
-                job: userByIdentifier.job,
+                department: userByIdentifier.department,
             })
 
             res.status(200).json(
@@ -222,7 +222,7 @@ export default {
                             access: { $regex: search, $options: 'i' },
                         },
                         {
-                            job: { $regex: search, $options: 'i' },
+                            department: { $regex: search, $options: 'i' },
                         }
                     ],
                 })
@@ -255,7 +255,7 @@ export default {
     },
     async updateUser(req: IReqUser, res: Response) {
         const { id } = req.params;
-        const { fullName, email, access, job } = req.body as unknown as TRegister;
+        const { fullName, email, access, department } = req.body as unknown as TRegister;
         try {
             const user = await UserModel.findById(id);
             if (!user) {
@@ -264,7 +264,7 @@ export default {
             user.fullName = fullName;
             user.email = email;
             user.access = access;
-            user.job = job;
+            user.department = department;
             await user.save();
             response.success(res, user, "Success update User")
         } catch (error) {
@@ -322,7 +322,7 @@ export default {
                         fullName: user.fullName,
                         email: user.email,
                         access: user.access,
-                        job: user.job,
+                        department: user.department,
                         password: user.password,
                     });
 

@@ -8,7 +8,7 @@ export interface User {
     fullName: string;
     email: string;
     access: string;
-    job: string;
+    department: string;
     password: string;
     role: string;
     createdAt?: Date;
@@ -30,7 +30,7 @@ const UserSchema = new Schema<User>({
         type: Schema.Types.String,
         required: true 
     },
-    job: {
+    department: {
         type: Schema.Types.String,
         required: true 
     },

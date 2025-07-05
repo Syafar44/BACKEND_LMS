@@ -38,7 +38,7 @@ export default {
   },
   async getAllHistory(req: IReqUser, res: Response) {
     try {
-      const { userId, month, year, name, email, job } = req.query;
+      const { userId, month, year, name, email, department } = req.query;
 
       const filter: any = {};
 
@@ -55,7 +55,7 @@ export default {
       }
 
       const histories = await HistoryLkpModel.find(filter)
-        .populate("createdBy", "fullName email job")
+        .populate("createdBy", "fullName email department")
         .sort({ date: -1 });
 
       const filtered = histories.filter((item) => {
@@ -63,7 +63,7 @@ export default {
         return (
           (!name || user.fullName?.toLowerCase().includes((name as string).toLowerCase())) &&
           (!email || user.email?.toLowerCase().includes((email as string).toLowerCase())) &&
-          (!job || user.job?.toLowerCase().includes((job as string).toLowerCase()))
+          (!department || user.department?.toLowerCase().includes((department as string).toLowerCase()))
         );
       });
       return response.success(res, filtered, "Data history LKP berhasil diambil");

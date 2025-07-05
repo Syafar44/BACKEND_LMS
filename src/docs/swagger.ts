@@ -30,14 +30,14 @@ const doc = {
             },
             RegisterRequest: {
                 fullName: "syafaruddin",
-                email: "syafar@panglimaunivercity.com",
+                email: "syafar@mail.com",
                 access: "outlet",
-                job: "Gerai Panglima",
-                password: "26/11/04",
-                confirmPassword: "26/11/04"
+                department: "Marketing",
+                password: "123456789",
+                confirmPassword: "123456789"
             },
             UpdatePasswordRequest:{
-                currentPassword: "26/11/04",
+                currentPassword: "123456789",
                 newPassword: "26/11/04",
                 confirmPassword: "26/11/04"
             },

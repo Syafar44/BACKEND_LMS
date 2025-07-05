@@ -516,7 +516,7 @@
             }
           },
           {
-            "name": "job",
+            "name": "department",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2181,23 +2181,23 @@
           },
           "email": {
             "type": "string",
-            "example": "syafar@panglimaunivercity.com"
+            "example": "syafar@mail.com"
           },
           "access": {
             "type": "string",
             "example": "outlet"
           },
-          "job": {
+          "department": {
             "type": "string",
-            "example": "Gerai Panglima"
+            "example": "Marketing"
           },
           "password": {
             "type": "string",
-            "example": "26/11/04"
+            "example": "123456789"
           },
           "confirmPassword": {
             "type": "string",
-            "example": "26/11/04"
+            "example": "123456789"
           }
         },
         "xml": {
@@ -2209,7 +2209,7 @@
         "properties": {
           "currentPassword": {
             "type": "string",
-            "example": "26/11/04"
+            "example": "123456789"
           },
           "newPassword": {
             "type": "string",
