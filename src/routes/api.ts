@@ -168,7 +168,7 @@ router.post("/lkp/rekap", historyLkpController.rekapHarian
 router.get("/lkp/rekap", authMiddleware, aclMiddleware([ROLES.ADMIN]),historyLkpController.getAllHistory
   /*
   #swagger.tags = ['LKP']
-  #swagger.security = [{ "bearerAuth": [] }]
+  #swagger.security = [{ "bearerAuth": [] }]    
   #swagger.description = 'ambil rekap'
   */
 );
@@ -307,6 +307,18 @@ router.get('/save', authMiddleware, saveController.findAll
 router.get('/save/:id', saveController.findOne
     /*
     #swagger.tags = ['Save']
+    */
+)
+router.put('/save/:id', authMiddleware, saveController.update
+    /*
+    #swagger.tags = ['Save']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSaveRequest"
+        }
+    }
     */
 )
 router.delete('/save/:id', saveController.remove

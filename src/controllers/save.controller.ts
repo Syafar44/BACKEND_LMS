@@ -62,6 +62,26 @@ export default {
             response.error(res, error, "Failed find a save")
         }
     },
+    async update(req: IReqUser, res: Response) {
+        try {
+            try {
+                const { id } = req.params
+                
+                if (!isValidObjectId(id)) {
+                    return response.notFound(res, "failed find one a save");
+                }
+                
+                const result = await SaveModel.findByIdAndUpdate(id, req.body, {
+                    new: true
+                })
+                response.success(res, result, "Success update save")
+            } catch (error) {
+                response.error(res, error, "Failed update save")
+            }
+        } catch (error) {
+            response.error(res, error, "Failed update save")
+        }
+    },
     async remove(req: IReqUser, res: Response) {
         try {
             const { id } = req.params
@@ -76,7 +96,6 @@ export default {
             response.error(res, error, "Failed remove save")
         }
     },
-
     async findAllByCompetency(req: IReqUser, res: Response) {
         try {
             const { competency } = req.params
