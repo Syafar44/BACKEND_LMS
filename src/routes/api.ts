@@ -579,8 +579,9 @@ router.get('/video/:subCompetency/subCompetency', authMiddleware,  videoControll
     */
 )
 
-/// MEDIA
-router.post('/media/upload-single',authMiddleware, aclMiddleware([ROLES.ADMIN]), [
+router.post('/media/upload-single', [
+    authMiddleware, 
+    aclMiddleware([ROLES.ADMIN]),
     mediaMiddleware.single('file')
 ], mediaController.single
     /* 
@@ -605,7 +606,39 @@ router.post('/media/upload-single',authMiddleware, aclMiddleware([ROLES.ADMIN]),
     */
 )
 
-router.delete('/media/remove',authMiddleware, aclMiddleware([ROLES.ADMIN]), mediaController.remove
+router.post('/media/upload-multiple', [
+    authMiddleware, 
+    aclMiddleware([ROLES.SUPER_ADMIN]),
+    mediaMiddleware.multiple('files')
+], mediaController.multiple
+    /*
+    #swagger.tags = ['Media']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        content: {
+            "multipart/form-data": {
+                schema: {
+                    type: "object",
+                    properties: {
+                        files: {
+                            type: "array",
+                            items: {
+                                type: "string",
+                                format: "binary"
+                            }
+                        }
+                    }
+                }
+            }
+    }
+    */
+)
+
+router.delete('/media/remove', [
+    authMiddleware, 
+    aclMiddleware([ROLES.ADMIN]),
+], mediaController.remove
     /*
     #swagger.tags = ['Media']
     #swagger.security = [{ "bearerAuth": [] }]

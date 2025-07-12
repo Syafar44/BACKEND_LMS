@@ -2167,6 +2167,25 @@
         }
       }
     },
+    "/media/upload-multiple": {
+      "post": {
+        "tags": [
+          "Media"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {}
+      }
+    },
     "/media/remove": {
       "delete": {
         "tags": [
