@@ -468,9 +468,18 @@
           "LKP"
         ],
         "description": "Pindahkan data LKP harian ke HistoryLkp",
+        "parameters": [
+          {
+            "name": "secret",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "403": {
+            "description": "Forbidden"
           }
         }
       },

@@ -17,6 +17,7 @@ import saveController from '../controllers/save.controller';
 import completedController from '../controllers/completed.controller';
 import lkpController from '../controllers/lkp.controller';
 import historyLkpController from '../controllers/historyLkp.controller';
+import { SECRET } from '../utils/env';
 
 
 const router = express.Router();
@@ -159,7 +160,7 @@ router.get('/lkp-user', authMiddleware, lkpController.getLkpByUser
 )
 
 /// LKP REKAP
-router.post("/lkp/rekap", historyLkpController.rekapHarian
+router.post(`/lkp/rekap`, historyLkpController.rekapHarian
   /*
   #swagger.tags = ['LKP']
   #swagger.description = 'Pindahkan data LKP harian ke HistoryLkp'

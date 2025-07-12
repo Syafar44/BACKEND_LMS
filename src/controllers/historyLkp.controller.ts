@@ -4,10 +4,22 @@ import dayjs from "dayjs";
 import response from "../utils/response";
 import { IReqUser } from "../utils/interfaces";
 import LkpModel from "../models/lkp.model";
+import { SECRET } from "../utils/env";
 
 export default {
-  async rekapHarian(_req: IReqUser, res: Response) {
+  async rekapHarian(req: IReqUser, res: Response) {
     try {
+      const secret = req.query.secret;
+
+      if (secret !== `${SECRET}`) {
+        return res.status(403).json({
+          meta: {
+            status: 403,
+            message: "Unauthorized access",
+          },
+          data: null,
+        });
+      }
       const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD"); // 0 nya nanti di ganti dulu menjadi 1
 
       const lkps = await LkpModel.find({ date: yesterday });
