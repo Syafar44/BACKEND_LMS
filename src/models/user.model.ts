@@ -9,6 +9,7 @@ export interface User {
     email: string;
     access: string;
     department: string;
+    image?: string;
     password: string;
     role: string;
     createdAt?: Date;
@@ -33,6 +34,11 @@ const UserSchema = new Schema<User>({
     department: {
         type: Schema.Types.String,
         required: true 
+    },
+    image: {
+        type: Schema.Types.String,
+        required: false,
+        default: 'https://res.cloudinary.com/doyafjjum/image/upload/v1752563356/profile_2_iotcyt.jpg',
     },
     password: {
         type: Schema.Types.String,

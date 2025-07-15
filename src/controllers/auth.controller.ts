@@ -13,6 +13,7 @@ export type TRegister = {
     email: string;
     access: string;
     department: string;
+    image?: string;
     password: string;
     confirmPassword: string;
 }
@@ -27,6 +28,7 @@ const registerValidationSchema = Yup.object({
     email: Yup.string().required(),
     access: Yup.string().required(),
     department: Yup.string().required(),
+    image: Yup.string(),
     password: Yup.string().required(),
     confirmPassword: Yup.string().required().oneOf([Yup.ref('password'), ""], 'Passwords must match'),
 })
@@ -44,9 +46,7 @@ const adminUpdatePasswordValidationSchema = Yup.object({
 
 export default {
     async register(req: Request, res: Response) {
-        
         const {fullName, email, access, department,  password, confirmPassword} = req.body as unknown as TRegister;
-    
         try {
             await registerValidationSchema.validate({
                 fullName,
@@ -274,16 +274,50 @@ export default {
     async updateRole(req: IReqUser, res: Response) {
         const { id } = req.params;
         const { role } = req.body;
+
+        const allowedRoles = ['admin', 'user',];
+        if (!role) {
+            return res.status(400).json({ message: 'Role is required', data: null });
+        }
+        if (!allowedRoles.includes(role)) {
+            return res.status(400).json({ message: 'Invalid role', data: null });
+        }
+
         try {
-            const user = await UserModel.findById(id);
+            const user = await UserModel.findByIdAndUpdate(
+                id,
+                { role },
+                { new: true, runValidators: true }
+            );
+
             if (!user) {
                 return res.status(404).json({ message: 'User not found', data: null });
             }
-            user.role = role;
-            await user.save();
-            response.success(res, user, "Success update User")
+
+            response.success(res, user, "Success update User");
         } catch (error) {
-            response.error(res, error, "Failed update User")
+            console.error('Update role error:', error);
+            response.error(res, error, "Failed update User");
+        }
+    },
+    async updateImage(req: IReqUser, res: Response) {
+        const { id } = req.params;
+        const { image } = req.body;
+
+        try {
+            const user = await UserModel.findByIdAndUpdate(
+                id,
+                { image },
+                { new: true, runValidators: true }
+            );
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found', data: null });
+            }
+
+            response.success(res, user, "Success update Image");
+        } catch (error) {
+            response.error(res, error, "Failed update Image");
         }
     },
     async deleteUser(req: IReqUser, res: Response) {
