@@ -374,22 +374,12 @@
         }
       }
     },
-    "/auth/image/{id}": {
+    "/auth/image": {
       "put": {
         "tags": [
           "Auth"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "404": {
             "description": "Not Found"

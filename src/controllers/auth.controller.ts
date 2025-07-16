@@ -301,12 +301,12 @@ export default {
         }
     },
     async updateImage(req: IReqUser, res: Response) {
-        const { id } = req.params;
+        const userId = req.user?.id;
         const { image } = req.body;
 
         try {
             const user = await UserModel.findByIdAndUpdate(
-                id,
+                userId,
                 { image },
                 { new: true, runValidators: true }
             );

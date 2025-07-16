@@ -103,7 +103,7 @@ router.put('/auth/role/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]) ,authC
         #swagger.security = [{ "bearerAuth": [] }]
     */
 );
-router.put('/auth/image/:id', authMiddleware ,authController.updateImage
+router.put('/auth/image', authMiddleware ,authController.updateImage
     /**
         #swagger.tags = ['Auth']
         #swagger.security = [{ "bearerAuth": [] }]
