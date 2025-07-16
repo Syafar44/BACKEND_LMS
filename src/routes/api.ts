@@ -16,7 +16,6 @@ import resumeController from '../controllers/resume.controller';
 import saveController from '../controllers/save.controller';
 import completedController from '../controllers/completed.controller';
 import lkpController from '../controllers/lkp.controller';
-import historyLkpController from '../controllers/historyLkp.controller';
 import { SECRET } from '../utils/env';
 
 
@@ -164,21 +163,12 @@ router.get('/lkp-user', authMiddleware, lkpController.getLkpByUser
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-
-/// LKP REKAP
-router.post(`/lkp/rekap`, historyLkpController.rekapHarian
-  /*
-  #swagger.tags = ['LKP']
-  #swagger.description = 'Pindahkan data LKP harian ke HistoryLkp'
-  */
-);
-router.get("/lkp/rekap", authMiddleware, aclMiddleware([ROLES.ADMIN]),historyLkpController.getAllHistory
-  /*
-  #swagger.tags = ['LKP']
-  #swagger.security = [{ "bearerAuth": [] }]    
-  #swagger.description = 'ambil rekap'
-  */
-);
+router.get('/lkp-rekap', authMiddleware, lkpController.getAllHistory
+    /*
+    #swagger.tags = ['LKP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 
 /// COMPLETED

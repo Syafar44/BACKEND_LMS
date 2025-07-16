@@ -13,14 +13,16 @@ export default {
 
             const date = dayjs().format("YYYY-MM-DD");
 
+            // Cek apakah user sudah mengisi absensi hari ini
+            const existing = await LkpModel.findOne({ createdBy: userId, date });
+            if (existing) {
+                return response.error(res, null, "Kamu sudah mengisi absensi hari ini.");
+            }
+
             const payload = { ...req.body, createdBy: userId, date } as TLkp;
             await lkpDAO.validate(payload);
 
-            const result = await LkpModel.findOneAndUpdate(
-                { createdBy: userId, date },
-                { $set: payload },
-                { upsert: true, new: true }
-            );
+            const result = await LkpModel.create(payload);
 
             return response.success(res, result, "Absensi sholat berhasil disimpan");
         } catch (error) {
@@ -41,4 +43,56 @@ export default {
             response.error(res, error, "Failed mendapatkan absensi");
         }
     },
+    async getAllHistory(req: IReqUser, res: Response) {
+        try {
+          const { page = 1, limit = 10, search, month, year, userId, department } = req.query as unknown as {
+            page?: number;
+            limit?: number;
+            search?: string;
+            month?: string;
+            year?: string;
+            userId?: string;
+            department?: string;
+          };
+    
+          const query: any = {};
+    
+          // Filter tanggal berdasarkan bulan & tahun
+          if (month && year) {
+            query.date = { $regex: `^${year}-${month.toString().padStart(2, "0")}` };
+          }
+    
+          // Filter berdasarkan userId
+          if (userId) {
+            query.createdBy = userId;
+          }
+    
+          // Query data
+          const histories = await LkpModel.find(query)
+            .populate("createdBy", "fullName email department")
+            .sort({ date: -1 })
+            .limit(Number(limit))
+            .skip((Number(page) - 1) * Number(limit))
+            .exec();
+    
+          // Filter tambahan pakai search, nama, email, department (kalau diinginkan)
+          const filtered = histories.filter((item) => {
+            const user = item.createdBy as any;
+            return (
+              (!search || user.fullName?.toLowerCase().includes(search.toLowerCase()) || user.email?.toLowerCase().includes(search.toLowerCase())) &&
+              (!department || user.department?.toLowerCase().includes(department.toLowerCase()))
+            );
+          });
+    
+          const count = await LkpModel.countDocuments(query);
+    
+          response.pagination(res, filtered, {
+            total: count,
+            totalPages: Math.ceil(count / Number(limit)),
+            current: Number(page),
+          }, "Data history LKP berhasil diambil");
+        } catch (error) {
+          response.error(res, error, "Gagal mengambil data history");
+        }
+      }
 };

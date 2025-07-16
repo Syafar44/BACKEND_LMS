@@ -497,32 +497,12 @@
         ]
       }
     },
-    "/lkp/rekap": {
-      "post": {
-        "tags": [
-          "LKP"
-        ],
-        "description": "Pindahkan data LKP harian ke HistoryLkp",
-        "parameters": [
-          {
-            "name": "secret",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
+    "/lkp-rekap": {
       "get": {
         "tags": [
           "LKP"
         ],
-        "description": "ambil rekap",
+        "description": "",
         "parameters": [
           {
             "name": "page",
