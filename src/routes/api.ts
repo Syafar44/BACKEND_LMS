@@ -604,8 +604,7 @@ router.post('/media/upload-single', [
 )
 
 router.post('/media/upload-multiple', [
-    authMiddleware, 
-    aclMiddleware([ROLES.SUPER_ADMIN]),
+    authMiddleware,
     mediaMiddleware.multiple('files')
 ], mediaController.multiple
     /*
@@ -634,7 +633,6 @@ router.post('/media/upload-multiple', [
 
 router.delete('/media/remove', [
     authMiddleware, 
-    aclMiddleware([ROLES.ADMIN]),
 ], mediaController.remove
     /*
     #swagger.tags = ['Media']
