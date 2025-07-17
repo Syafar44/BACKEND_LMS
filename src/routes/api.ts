@@ -158,7 +158,7 @@ router.post('/notification/token', authMiddleware, notificationController.token
     }
     */
 )
-router.post('/notification/send', authMiddleware, notificationController.sendNotif
+router.post('/notification/send', notificationController.sendNotif
     /*
     #swagger.tags = ['Notification']
     #swagger.security = [{ "bearerAuth": [] }]
