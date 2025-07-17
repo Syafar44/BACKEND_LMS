@@ -35,31 +35,30 @@ export default {
         const { title, body } = req.body;
 
         try {
-        const tokens = await NotificationModel.find().distinct("token");
+            const tokens = await NotificationModel.find().distinct("token");
 
-        const message = {
-            notification: {
-            title: title || "Hai semuanya! 👋",
-            body: body || "Ini adalah pesan broadcast dari admin.",
-            },
-        };
+            const message = {
+                data: {
+                    title: title || "Hai semuanya! 👋",
+                    body: body || "Ini adalah pesan broadcast dari admin.",
+                },
+            };
 
-        const results = await Promise.allSettled(
-            tokens.map((token) =>
-            messaging.send({
-                ...message,
-                token,
-            })
-            )
-        );
+            const results = await Promise.allSettled(
+                tokens.map((token) =>
+                messaging.send({
+                    ...message,
+                    token,
+                })
+                )
+            );
 
-        const successCount = results.filter((r) => r.status === "fulfilled").length;
-        const failCount = results.filter((r) => r.status === "rejected").length;
+            const successCount = results.filter((r) => r.status === "fulfilled").length;
+            const failCount = results.filter((r) => r.status === "rejected").length;
 
-        return response.success(res, { successCount, failCount }, "Notifikasi berhasil dikirim.");
-            } catch (error) {
-        return response.error(res, error, "Gagal mengirim notifikasi.");
-    }
+            return response.success(res, { successCount, failCount }, "Notifikasi berhasil dikirim.");
+        } catch (error) {
+            return response.error(res, error, "Gagal mengirim notifikasi.");
+        }
     },
-    
 }
