@@ -6,17 +6,31 @@ import { messaging } from "../libs/firebase/admin";
 
 export default {
     async token(req: IReqUser, res: Response) {
-        const { token } = req.body
+        const { token } = req.body;
+
         try {
             const userId = req.user?.id;
-            const payload = {...req.body, createdBy: userId} as TNotification
-            await notificationDAO.validate(payload)
-            const result = await NotificationModel.create(payload)
-            response.success(res, result, "Success create token")
+            const payload = { ...req.body, createdBy: userId } as TNotification;
+
+            // ✅ Validasi format input
+            await notificationDAO.validate(payload);
+
+            // ✅ Cek apakah token sudah ada di database
+            const isExists = await NotificationModel.findOne({ token });
+            if (isExists) {
+            return res.status(200).json({
+                message: "Token already exists",
+                data: isExists,
+            });
+            }
+
+            // ✅ Simpan token baru
+            const result = await NotificationModel.create(payload);
+            response.success(res, result, "Success create token");
         } catch (error) {
-            response.error(res, error, "Failed create token")
+            response.error(res, error, "Failed create token");
         }
-    },
+        },
     async sendNotif(req: IReqUser, res: Response) {
         const { title, body } = req.body;
 
