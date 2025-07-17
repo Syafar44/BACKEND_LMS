@@ -577,8 +577,7 @@ router.get('/video/:subCompetency/subCompetency', authMiddleware,  videoControll
 )
 
 router.post('/media/upload-single', [
-    authMiddleware, 
-    aclMiddleware([ROLES.ADMIN]),
+    authMiddleware,
     mediaMiddleware.single('file')
 ], mediaController.single
     /* 
