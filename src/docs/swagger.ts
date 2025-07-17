@@ -106,6 +106,13 @@ const doc = {
                 magrib:  "Dikerjakan namun tidak berjamaah",
                 isya:  "Dikerjakan namun tidak berjamaah",
             },
+            CreateTokenRequest: {
+                token: "token"
+            },
+            CreateNotificationRequest: {
+                title: "Notifikasi",
+                body: "Ini adalah notifikasi dari admin"
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }

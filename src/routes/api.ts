@@ -17,6 +17,7 @@ import saveController from '../controllers/save.controller';
 import completedController from '../controllers/completed.controller';
 import lkpController from '../controllers/lkp.controller';
 import { SECRET } from '../utils/env';
+import notificationController from '../controllers/notification.controller';
 
 
 const router = express.Router();
@@ -142,6 +143,32 @@ router.post(
         }
     }
   */
+);
+
+/// NOTIFICATION
+router.post('/notification/token', authMiddleware, notificationController.token
+    /*
+    #swagger.tags = ['Notification']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateTokenRequest"
+        }
+    }
+    */
+)
+router.post('/notification/send', authMiddleware, notificationController.sendNotif
+    /*
+    #swagger.tags = ['Notification']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateNotificationRequest"
+        }
+    }
+    */
 );
 
 /// LKP

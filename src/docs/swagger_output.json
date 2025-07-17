@@ -446,6 +446,72 @@
         }
       }
     },
+    "/notification/token": {
+      "post": {
+        "tags": [
+          "Notification"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTokenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTokenRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/send": {
+      "post": {
+        "tags": [
+          "Notification"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificationRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/lkp/mark": {
       "post": {
         "tags": [
@@ -2584,6 +2650,34 @@
         },
         "xml": {
           "name": "CreateAbsenRequest"
+        }
+      },
+      "CreateTokenRequest": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "token"
+          }
+        },
+        "xml": {
+          "name": "CreateTokenRequest"
+        }
+      },
+      "CreateNotificationRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Notifikasi"
+          },
+          "body": {
+            "type": "string",
+            "example": "Ini adalah notifikasi dari admin"
+          }
+        },
+        "xml": {
+          "name": "CreateNotificationRequest"
         }
       },
       "RemoveMediaRequest": {
