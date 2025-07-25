@@ -15,7 +15,7 @@ export default {
         }
     },
     async findAll(req: IReqUser, res: Response) {
-        const { page = 1, limit = 10, search } = req.query as unknown as IPaginationQuery
+        const { page = 1, limit = 999, search } = req.query as unknown as IPaginationQuery
         try {
             const query = {}
             
