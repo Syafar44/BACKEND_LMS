@@ -1463,6 +1463,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "access",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

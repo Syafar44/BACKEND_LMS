@@ -95,15 +95,20 @@ export default {
     async findByMainCompetency(req: IReqUser, res: Response) {
         try {
             const { main_competency } = req.params;
-            const { search, limit = "10", page = "1" } = req.query;
+            const { search, limit = 999, page = 1, access } = req.query;
 
             // Inisialisasi filter dasar
             const filter: any = { main_competency };
 
-            // Tambahkan filter pencarian jika ada search
+            // Filter access berdasarkan user login
+            if (access) {
+                filter.access = { $in: [access] };
+            }
+
+            // Tambahkan filter pencarian jika ada
             if (search) {
                 filter.$or = [
-                    { name: { $regex: search, $options: "i" } },
+                    { title: { $regex: search, $options: "i" } },
                     { description: { $regex: search, $options: "i" } },
                 ];
             }
@@ -122,7 +127,7 @@ export default {
 
             // Jika tidak ditemukan
             if (!result || result.length === 0) {
-                return response.notFound(res, "No competency found with the given main competency");
+                return response.notFound(res, "No competency found with the given main competency and access");
             }
 
             // Respon data dengan pagination
