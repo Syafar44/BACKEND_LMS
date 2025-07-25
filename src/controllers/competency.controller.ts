@@ -102,7 +102,7 @@ export default {
 
             // Filter access berdasarkan user login
             if (access) {
-                filter.access = { $in: [access] };
+                filter.access = { $in: [access, "all-team"] };
             }
 
             // Tambahkan filter pencarian jika ada
