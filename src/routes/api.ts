@@ -18,6 +18,7 @@ import completedController from '../controllers/completed.controller';
 import lkpController from '../controllers/lkp.controller';
 import { SECRET } from '../utils/env';
 import notificationController from '../controllers/notification.controller';
+import lkpSunnahController from '../controllers/lkpSunnah.controller';
 
 
 const router = express.Router();
@@ -193,6 +194,32 @@ router.get('/lkp-user', authMiddleware, lkpController.getLkpByUser
 router.get('/lkp-rekap', authMiddleware, lkpController.getAllHistory
     /*
     #swagger.tags = ['LKP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// SUNNAH
+router.post('/sunnah/mark', authMiddleware, lkpSunnahController.mark
+    /*
+    #swagger.tags = ['LKP-Sunnah']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSunnahRequest"
+        }
+    }
+    */
+)
+router.get('/sunnah-user', authMiddleware, lkpSunnahController.getLkpByUser
+    /*
+    #swagger.tags = ['LKP-Sunnah']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/sunnah-rekap', authMiddleware, lkpSunnahController.getAllHistory
+    /*
+    #swagger.tags = ['LKP-Sunnah']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )

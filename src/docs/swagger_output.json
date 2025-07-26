@@ -632,6 +632,126 @@
         ]
       }
     },
+    "/sunnah/mark": {
+      "post": {
+        "tags": [
+          "LKP-Sunnah"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSunnahRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSunnahRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sunnah-user": {
+      "get": {
+        "tags": [
+          "LKP-Sunnah"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/sunnah-rekap": {
+      "get": {
+        "tags": [
+          "LKP-Sunnah"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "department",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/completed": {
       "post": {
         "tags": [
@@ -2330,11 +2450,11 @@
         "properties": {
           "email": {
             "type": "string",
-            "example": "syafar@mail.com"
+            "example": "admin@admin.com"
           },
           "password": {
             "type": "string",
-            "example": "123456789"
+            "example": "admin123"
           }
         },
         "xml": {
@@ -2657,6 +2777,26 @@
         },
         "xml": {
           "name": "CreateAbsenRequest"
+        }
+      },
+      "CreateSunnahRequest": {
+        "type": "object",
+        "properties": {
+          "dhuha": {
+            "type": "string",
+            "example": "2 Rakaat"
+          },
+          "rawatib": {
+            "type": "number",
+            "example": 2
+          },
+          "al_quran": {
+            "type": "string",
+            "example": "1 Halaman"
+          }
+        },
+        "xml": {
+          "name": "CreateSunnahRequest"
         }
       },
       "CreateTokenRequest": {

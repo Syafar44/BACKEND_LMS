@@ -25,8 +25,8 @@ const doc = {
         },
         schemas: {
             LoginRequest: {
-                email: "syafar@mail.com",
-                password: "123456789"
+                email: "admin@admin.com",
+                password: "admin123"
             },
             RegisterRequest: {
                 fullName: "syafaruddin",
@@ -105,6 +105,11 @@ const doc = {
                 ashar: "Dikerjakan secara berjamaah",
                 magrib:  "Dikerjakan namun tidak berjamaah",
                 isya:  "Dikerjakan namun tidak berjamaah",
+            },
+            CreateSunnahRequest: {
+                dhuha: "2 Rakaat",
+                rawatib: 2,
+                al_quran: "1 Halaman",
             },
             CreateTokenRequest: {
                 token: "token"
