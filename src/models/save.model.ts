@@ -9,6 +9,7 @@ export const saveDAO = Yup.object({
     competency: Yup.string().required(),
     createdBy: Yup.string(),
     workingOn: Yup.boolean(),
+    histroy: Yup.string(),
     progress: Yup.number().required()
 })
 
@@ -32,6 +33,9 @@ const SaveScema = new Schema<Save>({
     progress: {
         type: Schema.Types.Number,
         default: 0,
+    },
+    histroy: {
+        type: Schema.Types.String,
     },
     createdBy: {
         type: Schema.Types.ObjectId,

@@ -94,7 +94,8 @@ const doc = {
             },
             CreateSaveRequest: {
                 competency: "competencyID",
-                progress: 1
+                progress: 1,
+                history: "subCompetencyId"
             },
             CreateCompletedRequest: {
                 competency: "competencyID",

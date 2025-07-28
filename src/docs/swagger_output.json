@@ -2733,6 +2733,10 @@
           "progress": {
             "type": "number",
             "example": 1
+          },
+          "history": {
+            "type": "string",
+            "example": "subCompetencyId"
           }
         },
         "xml": {
