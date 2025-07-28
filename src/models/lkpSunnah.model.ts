@@ -4,24 +4,12 @@ import * as Yup from "yup";
 export const LKP_SUNNAH_MODEL_NAME = "Lkp-Sunnah";
 const Schema = mongoose.Schema;
 
-export const DHUHA = [
-  "2 Rakaat",
-  "4 Rakaat",
-  "8 Rakaat"
-];
-
-export const AL_QURAN = [
-  "1 Halaman",
-  "2 Halaman",
-  "Lebih dari 2 Halaman"
-];
-
 export const lkpSunnahDAO = Yup.object({
   createdBy: Yup.string().required(),
   date: Yup.string(),
-  dhuha: Yup.string().oneOf(DHUHA),
-  rawatib: Yup.number(),
-  al_quran: Yup.string().oneOf(AL_QURAN),
+  rawatib: Yup.string(),
+  dhuha: Yup.number(),
+  al_quran: Yup.string(),
 });
 
 export type TLkpSunnah = Yup.InferType<typeof lkpSunnahDAO>;
@@ -41,18 +29,16 @@ const LkpSchema = new Schema<Lkp>(
         type: Schema.Types.String, 
         required: true 
     },
-    dhuha: { 
-        type: Schema.Types.String, 
-        enum: DHUHA, 
+    rawatib: { 
+        type: Schema.Types.String,  
         default: "Tidak Mengerjakan"
     },
-    rawatib: { 
+    dhuha: { 
         type: Schema.Types.Number, 
         default: 0
     },
     al_quran: { 
         type: Schema.Types.String, 
-        enum: AL_QURAN, 
         default: "Tidak Mengerjakan" 
     },
   },

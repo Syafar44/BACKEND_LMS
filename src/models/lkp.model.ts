@@ -7,7 +7,8 @@ const Schema = mongoose.Schema;
 export const STATUS_OPTIONS = [
   "Dikerjakan secara berjamaah",
   "Dikerjakan namun tidak berjamaah",
-  "Tidak mengerjakan"
+  "Tidak mengerjakan",
+  "Tidak Sholat karena haid (Perempuan)"
 ];
 
 export const lkpDAO = Yup.object({
