@@ -1048,7 +1048,7 @@
             }
           },
           {
-            "name": "user",
+            "name": "fullName",
             "in": "query",
             "schema": {
               "type": "string"

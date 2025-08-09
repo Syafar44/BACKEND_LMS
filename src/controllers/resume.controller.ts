@@ -19,36 +19,45 @@ export default {
         }
     },
     async findAll(req: IReqUser, res: Response) {
-        const { page = 1, limit = 9999999, search, user } = req.query as unknown as IPaginationQuery;
+        const { page = 1, limit = 9999999, search, fullName } = req.query as unknown as IPaginationQuery;
         try {
             const query: any = {};
 
             const result = await ResumeModel.find(query)
-                .populate({
-                    path: "createdBy",
-                    match: user ? { fullName: { $regex: user, $options: "i" } } : {},
-                }).populate({
-                    path: "kajian",
-                    match: search
-                        ? { title: { $regex: search, $options: "i" } }
-                        : {},
-                })
-                .limit(Number(limit))
-                .skip((Number(page) - 1) * Number(limit))
-                .sort({ createdAt: -1 })
-                .exec();
+            .populate({
+                path: "createdBy",
+                select: "fullName",
+            })
+            .populate({
+                path: "kajian",
+                select: "title",
+            })
+            .limit(Number(limit))
+            .skip((Number(page) - 1) * Number(limit))
+            .sort({ createdAt: -1 })
+            .exec();
 
             const filteredResult = result.filter(item => {
-                if (search) {
-                    const matchInUser = typeof item.createdBy === "object" && "fullName" in item.createdBy
-                        ? (item.createdBy as { fullName?: string }).fullName?.match(new RegExp(search, "i"))
-                        : false;
-                    const matchInKajian = typeof item.kajian === "object" && item.kajian && "title" in item.kajian
-                        ? (item.kajian as { title?: string }).title?.match(new RegExp(search, "i"))
-                        : false;
-                    return matchInUser || matchInKajian || true; 
-                }
-                return true;
+            let matchUser = true;
+            let matchKajian = true;
+
+            if (fullName) {
+                matchUser =
+                    typeof item.createdBy === "object" &&
+                    item.createdBy &&
+                    "fullName" in item.createdBy &&
+                    !!(item.createdBy as { fullName?: string }).fullName?.match(new RegExp(fullName, "i"));
+            }
+
+            if (search) {
+                matchKajian =
+                    typeof item.kajian === "object" &&
+                    item.kajian &&
+                    "title" in item.kajian &&
+                    !!(item.kajian as { title?: string }).title?.match(new RegExp(search, "i"));
+            }
+
+            return matchUser && matchKajian;
             });
 
             const count = filteredResult.length;

@@ -13,5 +13,5 @@ export interface IPaginationQuery {
     limit: number,
     search?: string,
     kajian?: string
-    user?: string,
+    fullName?: string,
 }
