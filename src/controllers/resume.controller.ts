@@ -173,6 +173,7 @@ export default {
                 {
                     $project: {
                         fullName: 1,
+                        department: 1,
                         "kajianTitle": "$kajianData.title",
                         "resume": "$resumeData.resume",
                         "publishDate": "$resumeData.createdAt"
