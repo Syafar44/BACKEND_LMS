@@ -12,4 +12,6 @@ export interface IPaginationQuery {
     page: number,
     limit: number,
     search?: string,
+    kajian?: string
+    user?: string,
 }

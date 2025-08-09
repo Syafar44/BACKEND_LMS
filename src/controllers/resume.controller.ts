@@ -3,6 +3,7 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
 import ResumeModel, { resumeDAO, TResume } from "../models/resume.model";
+import UserModel from "../models/user.model";
 
 export default {
     async create(req: IReqUser, res: Response) {
@@ -18,33 +19,52 @@ export default {
         }
     },
     async findAll(req: IReqUser, res: Response) {
-        const { page = 1, limit = 10, search } = req.query as unknown as IPaginationQuery
+        const { page = 1, limit = 9999999, search, user } = req.query as unknown as IPaginationQuery;
         try {
-            const query = {}
-            
-            if(search) {
-                Object.assign(query, {
-                    $or: [
-                        {
-                            title: { $regex: search, $options: 'i' },
-                        },
-                        {
-                            description: { $regex: search, $options: 'i' },
-                        }
-                    ],
+            const query: any = {};
+
+            const result = await ResumeModel.find(query)
+                .populate({
+                    path: "createdBy",
+                    match: user ? { fullName: { $regex: user, $options: "i" } } : {},
+                }).populate({
+                    path: "kajian",
+                    match: search
+                        ? { title: { $regex: search, $options: "i" } }
+                        : {},
                 })
-            }
+                .limit(Number(limit))
+                .skip((Number(page) - 1) * Number(limit))
+                .sort({ createdAt: -1 })
+                .exec();
 
-            const result = await ResumeModel.find(query).limit(limit).skip((page - 1) * limit).sort({createdAt: -1}).exec()
-            const count =  await ResumeModel.countDocuments(query)
+            const filteredResult = result.filter(item => {
+                if (search) {
+                    const matchInUser = typeof item.createdBy === "object" && "fullName" in item.createdBy
+                        ? (item.createdBy as { fullName?: string }).fullName?.match(new RegExp(search, "i"))
+                        : false;
+                    const matchInKajian = typeof item.kajian === "object" && item.kajian && "title" in item.kajian
+                        ? (item.kajian as { title?: string }).title?.match(new RegExp(search, "i"))
+                        : false;
+                    return matchInUser || matchInKajian || true; 
+                }
+                return true;
+            });
 
-            response.pagination(res, result, {
-                total: count,
-                totalPages: Math.ceil(count / limit),
-                current: page,
-            }, "Success find all Kuis Competancy")
+            const count = filteredResult.length;
+
+            response.pagination(
+                res,
+                filteredResult,
+                {
+                    total: count,
+                    totalPages: Math.ceil(count / Number(limit)),
+                    current: Number(page),
+                },
+                "Success find all Kuis Competancy"
+            );
         } catch (error) {
-            response.error(res, error, "Failed find all Kuis Competancy")
+            response.error(res, error, "Failed find all Kuis Competancy");
         }
     },
     async findOne(req: IReqUser, res: Response) {
@@ -77,7 +97,7 @@ export default {
         }
     },
 
-    async findAllByKajian(req: IReqUser, res: Response) {
+    async findResumeByKajian(req: IReqUser, res: Response) {
         try {
             const { kajian } = req.params
             const userId = req.user?.id;
@@ -99,6 +119,62 @@ export default {
             response.success(res, result, "Success find all product by an category");
         } catch (error) {
             response.error(res, error, "Failed to find all product by an category")
+        }
+    },
+    async exportResume(req: IReqUser, res: Response) {
+        try {
+            const { title } = req.query;
+
+            const matchStage: any = {};
+            if (title) {
+                matchStage["kajianData.title"] = { $regex: title, $options: "i" };
+            }
+
+            const result = await UserModel.aggregate([
+                {
+                    $lookup: {
+                        from: "resumes",
+                        localField: "_id",
+                        foreignField: "createdBy",
+                        as: "resumeData"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "kajians",
+                        localField: "resumeData.kajian",
+                        foreignField: "_id",
+                        as: "kajianData"
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$resumeData",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $unwind: {
+                        path: "$kajianData",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                // Filter berdasarkan title jika ada
+                ...(title ? [{ $match: matchStage }] : []),
+                {
+                    $project: {
+                        fullName: 1,
+                        "kajianTitle": "$kajianData.title",
+                        "resume": "$resumeData.resume",
+                        "publishDate": "$resumeData.createdAt"
+                    }
+                },
+                { $sort: { fullName: 1 } }
+            ]);
+
+            response.success(res, result, "Success export resume data");
+        } catch (error) {
+            response.error(res, error, "Failed to export resume data");
         }
     },
 }

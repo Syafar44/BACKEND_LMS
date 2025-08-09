@@ -1046,6 +1046,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "user",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1153,6 +1160,28 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/resume-export": {
+      "get": {
+        "tags": [
+          "Resume"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "title",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
       }
     },
     "/save": {

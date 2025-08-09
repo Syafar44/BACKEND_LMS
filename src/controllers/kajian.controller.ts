@@ -105,5 +105,5 @@ export default {
         } catch (error) {
           response.error(res, error, "Failed find one by slug an Kajian");
         }
-      },
+    },
 }

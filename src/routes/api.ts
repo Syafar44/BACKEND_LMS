@@ -323,7 +323,7 @@ router.delete('/resume/:id', authMiddleware, aclMiddleware([ROLES.ADMIN]), resum
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/resume/:kajian/kajian', authMiddleware, resumeController.findAllByKajian
+router.get('/resume/:kajian/kajian', authMiddleware, resumeController.findResumeByKajian
     /*
     #swagger.tags = ['Resume']
     #swagger.security = [{ "bearerAuth": [] }]
@@ -333,6 +333,11 @@ router.get('/resume-user', authMiddleware, resumeController.findAllByUser
     /*
     #swagger.tags = ['Resume']
     #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/resume-export', resumeController.exportResume
+    /*
+    #swagger.tags = ['Resume']
     */
 )
 
