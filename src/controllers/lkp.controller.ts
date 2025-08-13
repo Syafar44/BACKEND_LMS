@@ -44,55 +44,87 @@ export default {
         }
     },
     async getAllHistory(req: IReqUser, res: Response) {
-        try {
-          const { page = 1, limit = 10, search, month, year, userId, department } = req.query as unknown as {
-            page?: number;
-            limit?: number;
-            search?: string;
-            month?: string;
-            year?: string;
-            userId?: string;
-            department?: string;
-          };
-    
-          const query: any = {};
-    
-          // Filter tanggal berdasarkan bulan & tahun
-          if (month && year) {
-            query.date = { $regex: `^${year}-${month.toString().padStart(2, "0")}` };
-          }
-    
-          // Filter berdasarkan userId
-          if (userId) {
-            query.createdBy = userId;
-          }
-    
-          // Query data
-          const histories = await LkpModel.find(query)
-            .populate("createdBy", "fullName email department")
-            .sort({ date: -1 })
-            .limit(Number(limit))
-            .skip((Number(page) - 1) * Number(limit))
-            .exec();
-    
-          // Filter tambahan pakai search, nama, email, department (kalau diinginkan)
-          const filtered = histories.filter((item) => {
-            const user = item.createdBy as any;
-            return (
-              (!search || user.fullName?.toLowerCase().includes(search.toLowerCase()) || user.email?.toLowerCase().includes(search.toLowerCase())) &&
-              (!department || user.department?.toLowerCase().includes(department.toLowerCase()))
-            );
-          });
-    
-          const count = await LkpModel.countDocuments(query);
-    
-          response.pagination(res, filtered, {
-            total: count,
-            totalPages: Math.ceil(count / Number(limit)),
-            current: Number(page),
-          }, "Data history LKP berhasil diambil");
-        } catch (error) {
-          response.error(res, error, "Gagal mengambil data history");
+      try {
+        const { 
+          page = 1, 
+          limit = 9999999, 
+          search, 
+          month, 
+          year, 
+          department 
+        } = req.query as unknown as {
+          page?: number;
+          limit?: number;
+          search?: string;
+          month?: string;
+          year?: string;
+          department?: string;
+        };
+
+        const matchStage: any = {};
+
+        // Filter tanggal berdasarkan bulan & tahun
+        if (month && year) {
+          matchStage.date = { $regex: `^${year}-${month.toString().padStart(2, "0")}` };
         }
+
+        const pipeline: any[] = [
+          { $match: matchStage },
+          {
+            $lookup: {
+              from: "users", // nama collection user
+              localField: "createdBy",
+              foreignField: "_id",
+              as: "createdBy",
+            },
+          },
+          { $unwind: "$createdBy" },
+        ];
+
+        // Filter langsung berdasarkan fullName, email, department
+        if (search || department) {
+          const andConditions: any[] = [];
+          if (search) {
+            andConditions.push({
+              $or: [
+                { "createdBy.fullName": { $regex: search, $options: "i" } },
+                { "createdBy.email": { $regex: search, $options: "i" } },
+              ],
+            });
+          }
+          if (department) {
+            andConditions.push({
+              "createdBy.department": { $regex: department, $options: "i" },
+            });
+          }
+          pipeline.push({ $match: { $and: andConditions } });
+        }
+
+        // Sort + Pagination
+        pipeline.push(
+          { $sort: { date: -1 } },
+          { $skip: (Number(page) - 1) * Number(limit) },
+          { $limit: Number(limit) }
+        );
+
+        const histories = await LkpModel.aggregate(pipeline);
+
+        // Hitung total data
+        const totalPipeline = pipeline.filter(
+          stage => !("$skip" in stage || "$limit" in stage || "$sort" in stage)
+        );
+        totalPipeline.push({ $count: "total" });
+        const totalCountResult = await LkpModel.aggregate(totalPipeline);
+        const count = totalCountResult[0]?.total || 0;
+
+        response.pagination(res, histories, {
+          total: count,
+          totalPages: Math.ceil(count / Number(limit)),
+          current: Number(page),
+        }, "Data history LKP berhasil diambil");
+
+      } catch (error) {
+        response.error(res, error, "Gagal mengambil data history");
       }
+    }
 };

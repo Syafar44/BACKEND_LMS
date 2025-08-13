@@ -606,13 +606,6 @@
             }
           },
           {
-            "name": "userId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "department",
             "in": "query",
             "schema": {
