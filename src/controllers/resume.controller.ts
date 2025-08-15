@@ -135,29 +135,19 @@ export default {
             const { search } = req.query;
 
             const result = await UserModel.aggregate([
+                // Ambil semua resume milik user
                 {
                     $lookup: {
                         from: "resumes",
                         let: { userId: "$_id" },
                         pipeline: [
-                            {
-                                $match: {
-                                    $expr: { $eq: ["$createdBy", "$$userId"] }
-                                }
-                            },
+                            { $match: { $expr: { $eq: ["$createdBy", "$$userId"] } } },
                             {
                                 $lookup: {
                                     from: "kajians",
                                     let: { kajianId: "$kajian" },
                                     pipeline: [
-                                        {
-                                            $match: {
-                                                $expr: { $eq: ["$_id", "$$kajianId"] },
-                                                ...(search
-                                                    ? { title: { $regex: search, $options: "i" } }
-                                                    : {})
-                                            }
-                                        },
+                                        { $match: { $expr: { $eq: ["$_id", "$$kajianId"] } } },
                                         { $project: { title: 1 } }
                                     ],
                                     as: "kajianData"
@@ -168,28 +158,95 @@ export default {
                         as: "resumeData"
                     }
                 },
+                // Pecah resumeData biar satu baris satu resume
                 { $unwind: { path: "$resumeData", preserveNullAndEmptyArrays: true } },
+                // Tambahkan flag isFollowed sesuai search
                 {
                     $addFields: {
-                        isFollowed: {
-                            $cond: [
-                                { $and: [
-                                    { $ne: ["$resumeData", null] },
-                                    { $ne: ["$resumeData.kajianData", null] }
-                                ] },
-                                true,
-                                false
-                            ]
-                        }
+                        isFollowed: search
+                            ? {
+                                $cond: [
+                                    {
+                                        $and: [
+                                            { $ne: ["$resumeData", null] },
+                                            { $regexMatch: {
+                                                input: "$resumeData.kajianData.title",
+                                                regex: search,
+                                                options: "i"
+                                            }}
+                                        ]
+                                    },
+                                    true,
+                                    false
+                                ]
+                            }
+                            : { $cond: [{ $ne: ["$resumeData", null] }, true, false] }
                     }
                 },
+                // Kalau search ada dan tidak match, kosongkan kajianTitle & resume, tapi user tetap ada
+                ...(search
+                    ? [
+                        {
+                            $addFields: {
+                                kajianTitle: {
+                                    $cond: [
+                                        {
+                                            $regexMatch: {
+                                                input: "$resumeData.kajianData.title",
+                                                regex: search,
+                                                options: "i"
+                                            }
+                                        },
+                                        "$resumeData.kajianData.title",
+                                        null
+                                    ]
+                                },
+                                resume: {
+                                    $cond: [
+                                        {
+                                            $regexMatch: {
+                                                input: "$resumeData.kajianData.title",
+                                                regex: search,
+                                                options: "i"
+                                            }
+                                        },
+                                        "$resumeData.resume",
+                                        null
+                                    ]
+                                },
+                                publishDate: {
+                                    $cond: [
+                                        {
+                                            $regexMatch: {
+                                                input: "$resumeData.kajianData.title",
+                                                regex: search,
+                                                options: "i"
+                                            }
+                                        },
+                                        "$resumeData.createdAt",
+                                        null
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                    : [
+                        {
+                            $addFields: {
+                                kajianTitle: "$resumeData.kajianData.title",
+                                resume: "$resumeData.resume",
+                                publishDate: "$resumeData.createdAt"
+                            }
+                        }
+                    ]),
                 {
                     $project: {
                         fullName: 1,
                         department: 1,
-                        kajianTitle: "$resumeData.kajianData.title",
-                        resume: "$resumeData.resume",
-                        publishDate: "$resumeData.createdAt",
+                        kajianTitle: 1,
+                        resume: 1,
+                        publishDate: 1,
+                        isFollowed: 1
                     }
                 },
                 { $sort: { fullName: 1 } }
@@ -199,5 +256,5 @@ export default {
         } catch (error) {
             response.error(res, error, "Failed to export resume data");
         }
-    },
+    }
 }
