@@ -1163,7 +1163,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "title",
+            "name": "search",
             "in": "query",
             "schema": {
               "type": "string"

@@ -132,51 +132,64 @@ export default {
     },
     async exportResume(req: IReqUser, res: Response) {
         try {
-            const { title } = req.query;
-
-            const matchStage: any = {};
-            if (title) {
-                matchStage["kajianData.title"] = { $regex: title, $options: "i" };
-            }
+            const { search } = req.query;
 
             const result = await UserModel.aggregate([
                 {
                     $lookup: {
                         from: "resumes",
-                        localField: "_id",
-                        foreignField: "createdBy",
+                        let: { userId: "$_id" },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: { $eq: ["$createdBy", "$$userId"] }
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "kajians",
+                                    let: { kajianId: "$kajian" },
+                                    pipeline: [
+                                        {
+                                            $match: {
+                                                $expr: { $eq: ["$_id", "$$kajianId"] },
+                                                ...(search
+                                                    ? { title: { $regex: search, $options: "i" } }
+                                                    : {})
+                                            }
+                                        },
+                                        { $project: { title: 1 } }
+                                    ],
+                                    as: "kajianData"
+                                }
+                            },
+                            { $unwind: { path: "$kajianData", preserveNullAndEmptyArrays: true } }
+                        ],
                         as: "resumeData"
                     }
                 },
+                { $unwind: { path: "$resumeData", preserveNullAndEmptyArrays: true } },
                 {
-                    $lookup: {
-                        from: "kajians",
-                        localField: "resumeData.kajian",
-                        foreignField: "_id",
-                        as: "kajianData"
+                    $addFields: {
+                        isFollowed: {
+                            $cond: [
+                                { $and: [
+                                    { $ne: ["$resumeData", null] },
+                                    { $ne: ["$resumeData.kajianData", null] }
+                                ] },
+                                true,
+                                false
+                            ]
+                        }
                     }
                 },
-                {
-                    $unwind: {
-                        path: "$resumeData",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$kajianData",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                // Filter berdasarkan title jika ada
-                ...(title ? [{ $match: matchStage }] : []),
                 {
                     $project: {
                         fullName: 1,
                         department: 1,
-                        "kajianTitle": "$kajianData.title",
-                        "resume": "$resumeData.resume",
-                        "publishDate": "$resumeData.createdAt"
+                        kajianTitle: "$resumeData.kajianData.title",
+                        resume: "$resumeData.resume",
+                        publishDate: "$resumeData.createdAt",
                     }
                 },
                 { $sort: { fullName: 1 } }
