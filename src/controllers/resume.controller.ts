@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
-import { isValidObjectId } from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import ResumeModel, { resumeDAO, TResume } from "../models/resume.model";
 import UserModel from "../models/user.model";
 
@@ -19,45 +19,38 @@ export default {
         }
     },
     async findAll(req: IReqUser, res: Response) {
-        const { page = 1, limit = 9999999, search, fullName } = req.query as unknown as IPaginationQuery;
+        const { page = 1, limit = 9999999, kajian, fullName } = req.query as unknown as IPaginationQuery;
+
         try {
             const query: any = {};
-
+            if (kajian) {
+                query.kajian = new mongoose.Types.ObjectId(String(kajian));
+            }
             const result = await ResumeModel.find(query)
-            .populate({
-                path: "createdBy",
-                select: "fullName",
-            })
-            .populate({
-                path: "kajian",
-                select: "title",
-            })
-            .limit(Number(limit))
-            .skip((Number(page) - 1) * Number(limit))
-            .sort({ createdAt: -1 })
-            .exec();
-
+                .populate({
+                    path: "createdBy",
+                    select: "fullName",
+                })
+                .populate({
+                    path: "kajian",
+                    select: "title",
+                })
+                .limit(Number(limit))
+                .skip((Number(page) - 1) * Number(limit))
+                .sort({ createdAt: -1 })
+                .exec();
             const filteredResult = result.filter(item => {
-            let matchUser = true;
-            let matchKajian = true;
+                let matchUser = true;
 
-            if (fullName) {
-                matchUser =
-                    typeof item.createdBy === "object" &&
-                    item.createdBy &&
-                    "fullName" in item.createdBy &&
-                    !!(item.createdBy as { fullName?: string }).fullName?.match(new RegExp(fullName, "i"));
-            }
+                if (fullName) {
+                    matchUser =
+                        typeof item.createdBy === "object" &&
+                        item.createdBy &&
+                        "fullName" in item.createdBy &&
+                        !!(item.createdBy as { fullName?: string }).fullName?.match(new RegExp(fullName, "i"));
+                }
 
-            if (search) {
-                matchKajian =
-                    typeof item.kajian === "object" &&
-                    item.kajian &&
-                    "title" in item.kajian &&
-                    !!(item.kajian as { title?: string }).title?.match(new RegExp(search, "i"));
-            }
-
-            return matchUser && matchKajian;
+                return matchUser;
             });
 
             const count = filteredResult.length;
@@ -70,10 +63,10 @@ export default {
                     totalPages: Math.ceil(count / Number(limit)),
                     current: Number(page),
                 },
-                "Success find all Kuis Competancy"
+                "Success find all Resume"
             );
         } catch (error) {
-            response.error(res, error, "Failed find all Kuis Competancy");
+            response.error(res, error, "Failed find all Resume");
         }
     },
     async findOne(req: IReqUser, res: Response) {
@@ -105,7 +98,6 @@ export default {
             response.error(res, error, "Failed remove Kuis Competancy")
         }
     },
-
     async findResumeByKajian(req: IReqUser, res: Response) {
         try {
             const { kajian } = req.params
@@ -132,24 +124,27 @@ export default {
     },
     async exportResume(req: IReqUser, res: Response) {
         try {
-            const { search } = req.query;
+            const { kajian } = req.query; 
+
+            const objectIdKajian = kajian ? new mongoose.Types.ObjectId(String(kajian)) : null;
 
             const result = await UserModel.aggregate([
-                // Ambil semua resume milik user
                 {
                     $lookup: {
                         from: "resumes",
                         let: { userId: "$_id" },
                         pipeline: [
-                            { $match: { $expr: { $eq: ["$createdBy", "$$userId"] } } },
+                            {
+                                $match: {
+                                    $expr: { $eq: ["$createdBy", "$$userId"] },
+                                    ...(objectIdKajian ? { kajian: objectIdKajian } : {})
+                                }
+                            },
                             {
                                 $lookup: {
                                     from: "kajians",
-                                    let: { kajianId: "$kajian" },
-                                    pipeline: [
-                                        { $match: { $expr: { $eq: ["$_id", "$$kajianId"] } } },
-                                        { $project: { title: 1 } }
-                                    ],
+                                    localField: "kajian",
+                                    foreignField: "_id",
                                     as: "kajianData"
                                 }
                             },
@@ -158,95 +153,21 @@ export default {
                         as: "resumeData"
                     }
                 },
-                // Pecah resumeData biar satu baris satu resume
                 { $unwind: { path: "$resumeData", preserveNullAndEmptyArrays: true } },
-                // Tambahkan flag isFollowed sesuai search
                 {
                     $addFields: {
-                        isFollowed: search
-                            ? {
-                                $cond: [
-                                    {
-                                        $and: [
-                                            { $ne: ["$resumeData", null] },
-                                            { $regexMatch: {
-                                                input: "$resumeData.kajianData.title",
-                                                regex: search,
-                                                options: "i"
-                                            }}
-                                        ]
-                                    },
-                                    true,
-                                    false
-                                ]
-                            }
-                            : { $cond: [{ $ne: ["$resumeData", null] }, true, false] }
+                        isFollowed: {
+                            $cond: [{ $ne: ["$resumeData", null] }, true, false]
+                        }
                     }
                 },
-                // Kalau search ada dan tidak match, kosongkan kajianTitle & resume, tapi user tetap ada
-                ...(search
-                    ? [
-                        {
-                            $addFields: {
-                                kajianTitle: {
-                                    $cond: [
-                                        {
-                                            $regexMatch: {
-                                                input: "$resumeData.kajianData.title",
-                                                regex: search,
-                                                options: "i"
-                                            }
-                                        },
-                                        "$resumeData.kajianData.title",
-                                        null
-                                    ]
-                                },
-                                resume: {
-                                    $cond: [
-                                        {
-                                            $regexMatch: {
-                                                input: "$resumeData.kajianData.title",
-                                                regex: search,
-                                                options: "i"
-                                            }
-                                        },
-                                        "$resumeData.resume",
-                                        null
-                                    ]
-                                },
-                                publishDate: {
-                                    $cond: [
-                                        {
-                                            $regexMatch: {
-                                                input: "$resumeData.kajianData.title",
-                                                regex: search,
-                                                options: "i"
-                                            }
-                                        },
-                                        "$resumeData.createdAt",
-                                        null
-                                    ]
-                                }
-                            }
-                        }
-                    ]
-                    : [
-                        {
-                            $addFields: {
-                                kajianTitle: "$resumeData.kajianData.title",
-                                resume: "$resumeData.resume",
-                                publishDate: "$resumeData.createdAt"
-                            }
-                        }
-                    ]),
                 {
                     $project: {
                         fullName: 1,
                         department: 1,
-                        kajianTitle: 1,
-                        resume: 1,
-                        publishDate: 1,
-                        isFollowed: 1
+                        kajianTitle: "$resumeData.kajianData.title",
+                        resume: "$resumeData.resume",
+                        publishDate: "$resumeData.createdAt",
                     }
                 },
                 { $sort: { fullName: 1 } }

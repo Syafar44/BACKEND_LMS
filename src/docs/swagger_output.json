@@ -1034,7 +1034,7 @@
             }
           },
           {
-            "name": "search",
+            "name": "kajian",
             "in": "query",
             "schema": {
               "type": "string"
@@ -1163,7 +1163,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "search",
+            "name": "kajian",
             "in": "query",
             "schema": {
               "type": "string"
