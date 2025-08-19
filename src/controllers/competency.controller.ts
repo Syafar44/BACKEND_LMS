@@ -15,33 +15,45 @@ export default {
         }
     },
     async findAll(req: IReqUser, res: Response) {
-        const { page = 1, limit = 999, search } = req.query as unknown as IPaginationQuery
+        const { page = 1, limit = 9999, search, main_competency } = req.query as unknown as IPaginationQuery;
         try {
-            const query = {}
+            const query: any = {};
             
-            if(search) {
+            // filter search
+            if (search) {
                 Object.assign(query, {
                     $or: [
-                        {
-                            title: { $regex: search, $options: 'i' },
-                        },
-                        {
-                            description: { $regex: search, $options: 'i' },
-                        }
+                        { title: { $regex: search, $options: "i" } },
+                        { description: { $regex: search, $options: "i" } },
                     ],
-                })
+                });
             }
 
-            const result = await CompetancyModel.find(query).limit(limit).skip((page - 1) * limit).sort({createdAt: -1}).exec()
-            const count =  await CompetancyModel.countDocuments(query)
+            // filter main_competency
+            if (main_competency) {
+                query.main_competency = main_competency;
+            }
 
-            response.pagination(res, result, {
-                total: count,
-                totalPages: Math.ceil(count / limit),
-                current: page,
-            }, "Success find all Competancy")
+            const result = await CompetancyModel.find(query)
+                .limit(Number(limit))
+                .skip((Number(page) - 1) * Number(limit))
+                .sort({ createdAt: -1 })
+                .exec();
+
+            const count = await CompetancyModel.countDocuments(query);
+
+            response.pagination(
+                res,
+                result,
+                {
+                    total: count,
+                    totalPages: Math.ceil(count / Number(limit)),
+                    current: Number(page),
+                },
+                "Success find all Competancy"
+            );
         } catch (error) {
-            response.error(res, error, "Failed find all Competancy")
+            response.error(res, error, "Failed find all Competancy");
         }
     },
     async findOne(req: IReqUser, res: Response) {

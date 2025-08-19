@@ -1443,6 +1443,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "main_competency",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2226,6 +2233,64 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/score-export": {
+      "get": {
+        "tags": [
+          "Score"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "competency",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subCompetency",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/score-final": {
+      "get": {
+        "tags": [
+          "Score"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "competencyId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mainCompetency",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
       }
     },
     "/video": {

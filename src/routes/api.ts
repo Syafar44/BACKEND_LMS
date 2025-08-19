@@ -598,6 +598,16 @@ router.get('/score-user', authMiddleware,  scoreController.findAllByUser
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
+router.get('/score-export', scoreController.exportScore
+    /*
+    #swagger.tags = ['Score']
+    */
+)
+router.get('/score-final', scoreController.exportFinalScore
+    /*
+    #swagger.tags = ['Score']
+    */
+)
 
 /// VIDEO
 router.post('/video', authMiddleware , videoController.create

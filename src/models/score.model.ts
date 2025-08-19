@@ -23,7 +23,7 @@ export interface Score extends Omit<TScore, "bySubCompetency" | "createdBy" > {
 const CompetencyScema = new Schema<Score>({
     bySubCompetency: {
         type: Schema.Types.ObjectId,
-        ref: "KuisCompetency",
+        ref: "SubCompetency",
         required: true,
     },
     isPass: {
