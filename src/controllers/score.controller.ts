@@ -20,49 +20,104 @@ export default {
         }
     },
     async findAll(req: IReqUser, res: Response) {
-        const { page = 1, limit = 999, search } = req.query as unknown as IPaginationQuery
+        const { page = 1, limit = 9999, search, competency, subCompetency } =
+            req.query as unknown as IPaginationQuery;
+
         try {
-            const query = {}
-            
-            if(search) {
-                Object.assign(query, {
-                    $or: [
-                        {
-                            title: { $regex: search, $options: 'i' },
-                        },
-                        {
-                            description: { $regex: search, $options: 'i' },
-                        }
-                    ],
-                })
+            const match: any = {};
+
+            // filter by subCompetencyId
+            if (subCompetency) {
+            match["bySubCompetency"] = new mongoose.Types.ObjectId(subCompetency);
             }
 
-            const result = await ScoreModel.find(query)
-            .populate('createdBy', 'fullName email department')
-            .populate({
-                path: 'bySubCompetency',
-                select: 'title ',
-                populate: {
-                    path: 'byCompetency',
-                    model: 'Competency',
-                    select: 'main_competency title '
-                }
-            })
-            .limit(limit)
-            .skip((page - 1) * limit)
-            .sort({createdAt: -1}).exec()
+            const pipeline: any[] = [
+            {
+                $lookup: {
+                from: "subcompetencies",
+                localField: "bySubCompetency",
+                foreignField: "_id",
+                as: "bySubCompetency",
+                pipeline: [
+                    {
+                    $lookup: {
+                        from: "competencies",
+                        localField: "byCompetency",
+                        foreignField: "_id",
+                        as: "byCompetency",
+                    },
+                    },
+                    { $unwind: "$byCompetency" },
+                ],
+                },
+            },
+            { $unwind: "$bySubCompetency" },
+            {
+                $lookup: {
+                from: "users",
+                localField: "createdBy",
+                foreignField: "_id",
+                as: "createdBy",
+                },
+            },
+            { $unwind: "$createdBy" },
+            ];
 
-            const count =  await ScoreModel.countDocuments(query)
+            // filter competency id
+            if (competency) {
+            pipeline.push({
+                $match: {
+                "bySubCompetency.byCompetency._id": new mongoose.Types.ObjectId(
+                    competency
+                ),
+                },
+            });
+            }
 
-            response.pagination(res, result, {
+            // search title / description
+            if (search) {
+            pipeline.push({
+                $match: {
+                $or: [
+                    { "bySubCompetency.title": { $regex: search, $options: "i" } },
+                    { "bySubCompetency.byCompetency.title": { $regex: search, $options: "i" } },
+                ],
+                },
+            });
+            }
+
+            // pagination + sorting
+            pipeline.push({ $sort: { createdAt: -1 } });
+            pipeline.push({ $skip: (Number(page) - 1) * Number(limit) });
+            pipeline.push({ $limit: Number(limit) });
+
+            const result = await ScoreModel.aggregate(pipeline);
+
+            // hitung total data (tanpa skip/limit)
+            const countPipeline = [...pipeline];
+            countPipeline.pop(); // remove limit
+            countPipeline.pop(); // remove skip
+            countPipeline.pop(); // remove sort
+            countPipeline.push({ $count: "total" });
+
+            const countResult = await ScoreModel.aggregate(countPipeline);
+            const count = countResult[0]?.total || 0;
+
+            response.pagination(
+            res,
+            result,
+            {
                 total: count,
-                totalPages: Math.ceil(count / limit),
-                current: page,
-            }, "Success find all Kuis Competancy")
+                totalPages: Math.ceil(count / Number(limit)),
+                current: Number(page),
+            },
+            "Success find all Kuis Competency"
+            );
         } catch (error) {
-            response.error(res, error, "Failed find all Kuis Competancy")
+            response.error(res, error, "Failed find all Kuis Competency");
         }
     },
+
     async findOne(req: IReqUser, res: Response) {
         try {
             const { id } = req.params

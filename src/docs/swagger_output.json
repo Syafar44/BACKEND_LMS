@@ -2131,6 +2131,20 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "competency",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subCompetency",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

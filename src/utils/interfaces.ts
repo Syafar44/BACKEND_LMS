@@ -15,4 +15,6 @@ export interface IPaginationQuery {
     main_competency?: string,
     kajian?: string
     fullName?: string,
+    competency?: string,
+    subCompetency?: string
 }
