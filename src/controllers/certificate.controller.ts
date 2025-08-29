@@ -73,12 +73,21 @@ export default {
         }
     },
     async findAllByUser(req: IReqUser, res: Response) {
+        const { page = 1, limit = 10 } = req.query as unknown as IPaginationQuery;
+        
         try {
             const userId = req.user?.id;
 
-            const result = await CertificateModel.find({ createdBy: userId }).populate('competency').exec();
-            response.success(res, result, "Success find certificate");
+            const query = { createdBy: userId };
 
+            const result = await CertificateModel.find(query).populate('competency').limit(limit).skip((page - 1) * limit).sort({createdAt: -1}).exec();
+            const count =  await CertificateModel.countDocuments(query)
+
+            response.pagination(res, result,{
+                total: count,
+                totalPages: Math.ceil(count / limit),
+                current: page,
+            }, "Success find certificate");
         } catch (error) {
             response.error(res, error, "Failed to find save")
         }
