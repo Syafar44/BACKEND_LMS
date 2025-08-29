@@ -51,7 +51,7 @@ export default {
         try {
             const { id } = req.params
             
-            const result = await CertificateModel.find({id}).populate("createdBy competency")
+            const result = await CertificateModel.findOne({id}).populate("createdBy competency")
 
             response.success(res, result, "Success find a certificate")
         } catch (error) {
