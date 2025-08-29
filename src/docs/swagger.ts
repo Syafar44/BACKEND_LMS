@@ -119,6 +119,9 @@ const doc = {
                 title: "Notifikasi",
                 body: "Ini adalah notifikasi dari admin"
             },
+            CreateCertificateRequest: {
+                competency: "competencyId",
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }

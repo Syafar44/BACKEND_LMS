@@ -16,9 +16,9 @@ import resumeController from '../controllers/resume.controller';
 import saveController from '../controllers/save.controller';
 import completedController from '../controllers/completed.controller';
 import lkpController from '../controllers/lkp.controller';
-import { SECRET } from '../utils/env';
 import notificationController from '../controllers/notification.controller';
 import lkpSunnahController from '../controllers/lkpSunnah.controller';
+import certificateController from '../controllers/certificate.controller';
 
 
 const router = express.Router();
@@ -145,6 +145,45 @@ router.post(
     }
   */
 );
+
+/// CERTIFICATION
+router.post('/certification', authMiddleware, certificateController.create
+    /*
+    #swagger.tags = ['Certification']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateCertificateRequest"
+        }
+    }
+    */
+)
+router.get('/certification', certificateController.findAll
+    /*
+    #swagger.tags = ['Certification']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/certification/:id', certificateController.findOneById
+    /*
+    #swagger.tags = ['Certification']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.delete('/certification/:id', certificateController.remove
+    /*
+    #swagger.tags = ['Certification']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/certification-user', authMiddleware, certificateController.findAllByUser
+    /*
+    #swagger.tags = ['Certification']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
 
 /// NOTIFICATION
 router.post('/notification/token', authMiddleware, notificationController.token
