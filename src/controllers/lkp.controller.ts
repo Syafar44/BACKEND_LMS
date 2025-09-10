@@ -11,7 +11,7 @@ export default {
             const userId = req.user?.id;
             if (!userId) return response.error(res, null, "User tidak terautentikasi");
 
-            const date = dayjs().format("YYYY-MM-DD");
+            const date = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 
             // Cek apakah user sudah mengisi absensi hari ini
             const existing = await LkpModel.findOne({ createdBy: userId, date });
@@ -34,7 +34,7 @@ export default {
             const userId = req.user?.id;
             if (!userId) return response.error(res, null, "User tidak terautentikasi");
 
-            const date = dayjs().format("YYYY-MM-DD");
+            const date = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 
             const result = await LkpModel.findOne({ createdBy: userId, date }).lean();
 
