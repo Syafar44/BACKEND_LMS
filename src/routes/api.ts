@@ -19,6 +19,8 @@ import lkpController from '../controllers/lkp.controller';
 import notificationController from '../controllers/notification.controller';
 import lkpSunnahController from '../controllers/lkpSunnah.controller';
 import certificateController from '../controllers/certificate.controller';
+import sopIkController from '../controllers/sopIk.controller';
+import kuisSopIkController from '../controllers/kuisSopIk.controller';
 
 
 const router = express.Router();
@@ -145,6 +147,108 @@ router.post(
     }
   */
 );
+
+/// KUIS SOP & IK
+router.post('/kuissopik', kuisSopIkController.create
+    /*
+    #swagger.tags = ['KUIS SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisSopIkRequest"
+        }
+    }
+    */
+)
+router.get('/kuissopik', kuisSopIkController.findAll
+    /*
+    #swagger.tags = ['KUIS SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuissopik/:id', kuisSopIkController.findOne
+    /*
+    #swagger.tags = ['KUIS SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.put('/kuissopik/:id', kuisSopIkController.update
+    /*
+    #swagger.tags = ['KUIS SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisSopIkRequest"
+        }
+    }
+    */
+)
+router.delete('/kuissopik/:id', kuisSopIkController.remove
+    /*
+    #swagger.tags = ['KUIS SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuissopik/:sopIkId/sopIkId', kuisSopIkController.findAllBySopIk
+    /*
+    #swagger.tags = ['KUIS SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+
+/// SOP & IK
+router.post('/sopik', sopIkController.create
+    /*
+    #swagger.tags = ['SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSopIkRequest"
+        }
+    }
+    */
+)
+router.get('/sopik', sopIkController.findAll
+    /*
+    #swagger.tags = ['SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/sopik/:id', sopIkController.findOne
+    /*
+    #swagger.tags = ['SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.put('/sopik/:id', sopIkController.update
+    /*
+    #swagger.tags = ['SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSopIkRequest"
+        }
+    }
+    */
+)
+router.delete('/sopik/:id', sopIkController.remove
+    /*
+    #swagger.tags = ['SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/sopiik/:slug/slug', sopIkController.findOneBySlug
+    /*
+    #swagger.tags = ['SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
 
 /// CERTIFICATION
 router.post('/certification', authMiddleware, certificateController.create

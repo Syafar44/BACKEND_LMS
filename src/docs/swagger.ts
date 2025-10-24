@@ -36,6 +36,19 @@ const doc = {
                 password: "123456789",
                 confirmPassword: "123456789"
             },
+            CreateSopIkRequest: {
+                title: "nama ujian",
+                description: "deskripsi",
+            },
+            CreateKuisSopIkRequest: {
+                bySopIk: "id sopik",
+                question: "Soal",
+                option1: "opsi soal",
+                option2: "opsi soal",
+                option3: "opsi soal",
+                option4: "opsi soal",
+                optionValid: 1,
+            },
             UpdatePasswordRequest:{
                 currentPassword: "123456789",
                 newPassword: "26/11/04",

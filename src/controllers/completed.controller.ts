@@ -25,5 +25,4 @@ export default {
             response.error(res, error, "Failed to find pending")
         }
     },
-
 }
