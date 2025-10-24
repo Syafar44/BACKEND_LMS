@@ -148,6 +148,59 @@ router.post(
   */
 );
 
+/// SCORE
+router.post('/scoresopik', authMiddleware , scoreController.create
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateScoreRequest"
+        }
+    }
+    */
+)
+router.get('/scoresopik', scoreController.findAll
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    */
+)
+router.get('/scoresopik/:id', scoreController.findOne
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    */
+)
+router.delete('/scoresopik/:id', scoreController.remove
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+router.get('/scoresopik/:sopIk/sopIk', authMiddleware,  scoreController.findAllBySubCompetency
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoresopik-user', authMiddleware,  scoreController.findAllByUser
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoresopik-export', scoreController.exportScore
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    */
+)
+router.get('/scoresopik-final', scoreController.exportFinalScore
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    */
+)
+
 /// KUIS SOP & IK
 router.post('/kuissopik', kuisSopIkController.create
     /*
