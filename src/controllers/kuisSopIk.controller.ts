@@ -3,7 +3,7 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 
 import response from "../utils/response";
 import { isValidObjectId } from "mongoose";
-import KuisSopIkModel, { kuisSopIkDAO } from "../models/kuisSopik.model";
+import KuisSopIkModel, { kuisSopIkDAO } from "../models/kuisSopIk.model";
 
 export default {
     async create(req: IReqUser, res: Response) {
