@@ -290,7 +290,7 @@ router.delete('/sopik/:id', sopIkController.remove
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/sopiik/:slug/slug', sopIkController.findOneBySlug
+router.get('/sopik/:slug/slug', sopIkController.findOneBySlug
     /*
     #swagger.tags = ['SOP & IK']
     #swagger.security = [{ "bearerAuth": [] }]

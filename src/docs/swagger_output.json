@@ -477,54 +477,6 @@
             }
           }
         }
-      },
-      "get": {
-        "tags": [
-          "Score SOP & IK"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "competency",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "subCompetency",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
       }
     },
     "/scoresopik/{id}": {
@@ -1063,7 +1015,7 @@
         ]
       }
     },
-    "/sopiik/{slug}/slug": {
+    "/sopik/{slug}/slug": {
       "get": {
         "tags": [
           "SOP & IK"
