@@ -467,12 +467,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateScoreRequest"
+                "$ref": "#/components/schemas/CreateScoreSopIkRequest"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/CreateScoreRequest"
+                "$ref": "#/components/schemas/CreateScoreSopIkRequest"
               }
             }
           }
@@ -3647,6 +3647,30 @@
         },
         "xml": {
           "name": "CreateScoreRequest"
+        }
+      },
+      "CreateScoreSopIkRequest": {
+        "type": "object",
+        "properties": {
+          "bySopIk": {
+            "type": "string",
+            "example": "SopIkId"
+          },
+          "isPass": {
+            "type": "boolean",
+            "example": true
+          },
+          "total_question": {
+            "type": "number",
+            "example": 5
+          },
+          "total_score": {
+            "type": "number",
+            "example": 5
+          }
+        },
+        "xml": {
+          "name": "CreateScoreSopIkRequest"
         }
       },
       "CreateVideoRequest": {

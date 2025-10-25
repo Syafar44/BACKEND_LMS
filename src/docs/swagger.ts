@@ -97,6 +97,12 @@ const doc = {
                 total_question: 5,
                 total_score: 5
             },
+            CreateScoreSopIkRequest: {
+                bySopIk: "SopIkId",
+                isPass: true,
+                total_question: 5,
+                total_score: 5
+            },
             CreateVideoRequest: {
                 bySubCompetency: "subCompetencyId",
                 viewed: true

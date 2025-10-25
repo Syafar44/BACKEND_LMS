@@ -21,6 +21,7 @@ import lkpSunnahController from '../controllers/lkpSunnah.controller';
 import certificateController from '../controllers/certificate.controller';
 import sopIkController from '../controllers/sopIk.controller';
 import kuisSopIkController from '../controllers/kuisSopIk.controller';
+import scoreSopIkController from '../controllers/scoreSopIk.controller';
 
 
 const router = express.Router();
@@ -148,54 +149,48 @@ router.post(
   */
 );
 
-/// SCORE
-router.post('/scoresopik', authMiddleware , scoreController.create
+/// SCORE SOP & IK
+router.post('/scoresopik', authMiddleware , scoreSopIkController.create
     /*
     #swagger.tags = ['Score SOP & IK']
     #swagger.security = [{ "bearerAuth": [] }]
     #swagger.requestBody = {
         required: true,
         schema: {
-            $ref: "#/components/schemas/CreateScoreRequest"
+            $ref: "#/components/schemas/CreateScoreSopIkRequest"
         }
     }
     */
 )
-router.get('/scoresopik', scoreController.findAll
+router.get('/scoresopik/:id', scoreSopIkController.findOne
     /*
     #swagger.tags = ['Score SOP & IK']
     */
 )
-router.get('/scoresopik/:id', scoreController.findOne
-    /*
-    #swagger.tags = ['Score SOP & IK']
-    */
-)
-router.delete('/scoresopik/:id', scoreController.remove
+router.delete('/scoresopik/:id', scoreSopIkController.remove
     /*
     #swagger.tags = ['Score SOP & IK']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-
-router.get('/scoresopik/:sopIk/sopIk', authMiddleware,  scoreController.findAllBySubCompetency
+router.get('/scoresopik/:sopIk/sopIk', authMiddleware,  scoreSopIkController.findAllBySopIk
     /*
     #swagger.tags = ['Score SOP & IK']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/scoresopik-user', authMiddleware,  scoreController.findAllByUser
+router.get('/scoresopik-user', authMiddleware,  scoreSopIkController.findAllByUser
     /*
     #swagger.tags = ['Score SOP & IK']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.get('/scoresopik-export', scoreController.exportScore
+router.get('/scoresopik-export', scoreSopIkController.exportScore
     /*
     #swagger.tags = ['Score SOP & IK']
     */
 )
-router.get('/scoresopik-final', scoreController.exportFinalScore
+router.get('/scoresopik-final', scoreSopIkController.exportFinalScore
     /*
     #swagger.tags = ['Score SOP & IK']
     */
