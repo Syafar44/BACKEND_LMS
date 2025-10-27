@@ -623,43 +623,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "competency",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "subCompetency",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/scoresopik-final": {
-      "get": {
-        "tags": [
-          "Score SOP & IK"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "competencyId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "mainCompetency",
+            "name": "sopik",
             "in": "query",
             "schema": {
               "type": "string"

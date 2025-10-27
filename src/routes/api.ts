@@ -195,11 +195,6 @@ router.get('/scoresopik-export', scoreSopIkController.exportScore
     #swagger.tags = ['Score SOP & IK']
     */
 )
-router.get('/scoresopik-final', scoreSopIkController.exportFinalScore
-    /*
-    #swagger.tags = ['Score SOP & IK']
-    */
-)
 
 /// KUIS SOP & IK
 router.post('/kuissopik', kuisSopIkController.create
