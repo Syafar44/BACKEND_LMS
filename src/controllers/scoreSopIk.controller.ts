@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { IReqUser } from "../utils/interfaces";
+import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import mongoose, { isValidObjectId } from "mongoose";
 import UserModel from "../models/user.model";
@@ -13,23 +13,101 @@ export default {
             const payload = {...req.body, createdBy: userId} as TScoreSopIk
             await scoreSopIkDAO.validate(payload)
             const result = await ScoreSopIkModel.create(payload)
-            response.success(res, result, "Success create Kuis Competancy")
+            response.success(res, result, "Success create SOP & IK")
         } catch (error) {
-            response.error(res, error, "Failed create Kuis Competancy")
+            response.error(res, error, "Failed create SOP & IK")
         }
     },
+    async findAll(req: IReqUser, res: Response) {
+  const { page = 1, limit = 9999, search, sopIk } = req.query as unknown as IPaginationQuery;
+
+  try {
+    const match: any = {};
+
+    if (sopIk) {
+      match["bySopIk"] = new mongoose.Types.ObjectId(sopIk);
+    }
+
+    const pipeline: any[] = [
+      { $match: match },
+
+      // Populate SOP/IK
+      {
+        $lookup: {
+          from: "sop&iks",
+          localField: "bySopIk",
+          foreignField: "_id",
+          as: "bySopIk",
+        },
+      },
+      { $unwind: { path: "$bySopIk", preserveNullAndEmptyArrays: true } },
+
+      // Populate CreatedBy
+      {
+        $lookup: {
+          from: "users",
+          localField: "createdBy",
+          foreignField: "_id",
+          as: "createdBy",
+        },
+      },
+      { $unwind: { path: "$createdBy", preserveNullAndEmptyArrays: true } },
+    ];
+
+    // Search (jika ada keyword)
+    if (search) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { "bySopIk.title": { $regex: search, $options: "i" } },
+            { "createdBy.fullName": { $regex: search, $options: "i" } }, // contoh tambahan
+          ],
+        },
+      });
+    }
+
+    // Sorting & Pagination
+    pipeline.push({ $sort: { createdAt: -1 } });
+    pipeline.push({ $skip: (Number(page) - 1) * Number(limit) });
+    pipeline.push({ $limit: Number(limit) });
+
+    const result = await ScoreSopIkModel.aggregate(pipeline);
+
+    // Count total data (tanpa skip/limit)
+    const countPipeline = pipeline.filter(stage =>
+      !("$skip" in stage) && !("$limit" in stage) && !("$sort" in stage)
+    );
+    countPipeline.push({ $count: "total" });
+
+    const countResult = await ScoreSopIkModel.aggregate(countPipeline);
+    const count = countResult[0]?.total || 0;
+
+    response.pagination(
+      res,
+      result,
+      {
+        total: count,
+        totalPages: Math.ceil(count / Number(limit)),
+        current: Number(page),
+      },
+      "Success find all SOP & IK"
+    );
+  } catch (error) {
+    response.error(res, error, "Failed find all SOP & IK");
+  }
+},
     async findOne(req: IReqUser, res: Response) {
         try {
             const { id } = req.params
             
             if (!isValidObjectId(id)) {
-                return response.notFound(res, "failed find one a Kuis Competancy");
+                return response.notFound(res, "failed find one a SOP & IK");
             }
             
             const result = await ScoreSopIkModel.findById(id)
-            response.success(res, result, "Success find a Kuis Competancy")
+            response.success(res, result, "Success find a SOP & IK")
         } catch (error) {
-            response.error(res, error, "Failed find a Kuis Competancy")
+            response.error(res, error, "Failed find a SOP & IK")
         }
     },
     async remove(req: IReqUser, res: Response) {
@@ -37,13 +115,13 @@ export default {
             const { id } = req.params
             
             if (!isValidObjectId(id)) {
-                return response.notFound(res, "Failed find one a KuisCompetancy");
+                return response.notFound(res, "Failed find one a SOP & IK");
             }
             
                 const result = await ScoreSopIkModel.findByIdAndDelete(id, {new: true})
-                response.success(res, result, "Success remove Kuis Competancy")
+                response.success(res, result, "Success remove SOP & IK")
         } catch (error) {
-            response.error(res, error, "Failed remove Kuis Competancy")
+            response.error(res, error, "Failed remove SOP & IK")
         }
     },
     async findAllBySopIk(req: IReqUser, res: Response) {
@@ -86,13 +164,13 @@ export default {
                 {
                     $match: {
                     $expr: { $eq: ["$createdBy", "$$userId"] },
-                    ...(objectIdSubCompetency ? { bySubCompetency: objectIdSubCompetency } : {}),
+                    ...(objectIdSubCompetency ? { bySopIk: objectIdSubCompetency } : {}),
                     },
                 },
                 {
                     $lookup: {
                     from: "subcompetencies",
-                    let: { subCompetencyId: "$bySubCompetency" },
+                    let: { subCompetencyId: "$bySopIk" },
                     pipeline: [
                         {
                         $match: {
@@ -167,7 +245,7 @@ export default {
                 {
                     $lookup: {
                     from: "subcompetencies",
-                    localField: "bySubCompetency",
+                    localField: "bySopIk",
                     foreignField: "_id",
                     as: "subCompetencyData",
                     },

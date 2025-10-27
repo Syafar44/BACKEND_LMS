@@ -117,7 +117,6 @@ export default {
             response.error(res, error, "Failed find all Kuis Competency");
         }
     },
-
     async findOne(req: IReqUser, res: Response) {
         try {
             const { id } = req.params

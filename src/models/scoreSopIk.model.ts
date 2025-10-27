@@ -23,7 +23,7 @@ export interface ScoreSopIk extends Omit<TScoreSopIk, "bySopIk" | "createdBy" > 
 const ScoreSopIkScema = new Schema<ScoreSopIk>({
     bySopIk: {
         type: Schema.Types.ObjectId,
-        ref: "SopIk",
+        ref: "Sop&Ik",
         required: true,
     },
     isPass: {

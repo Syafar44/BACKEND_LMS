@@ -162,6 +162,11 @@ router.post('/scoresopik', authMiddleware , scoreSopIkController.create
     }
     */
 )
+router.get('/scoresopik', scoreSopIkController.findAll
+    /*
+    #swagger.tags = ['Score SOP & IK']
+    */
+)
 router.get('/scoresopik/:id', scoreSopIkController.findOne
     /*
     #swagger.tags = ['Score SOP & IK']
