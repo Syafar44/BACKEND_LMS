@@ -1,27 +1,37 @@
 import mongoose from "mongoose";
 import * as Yup from "yup";
 
-export const SOP_IK_MODEL_NAME = "Sop&Ik";
+export const IK_MODEL_NAME = "Ik";
 
 const Schema = mongoose.Schema
 
-export const sopIkDAO = Yup.object({
+export const ikDAO = Yup.object({
     title: Yup.string().required(),
     description: Yup.string().required(),
+    image: Yup.string().required(),
+    video: Yup.string().required(),
     file: Yup.string(),
     duration: Yup.number(),
     countdown: Yup.number(),
     slug: Yup.string(),
 })
 
-export type TSopIk = Yup.InferType<typeof sopIkDAO>
+export type TIk = Yup.InferType<typeof ikDAO>
 
-const SopIkScema = new Schema<TSopIk>({
+const IkScema = new Schema<TIk>({
     title: {
         type: Schema.Types.String,
         required: true,
     },
     description: {
+        type: Schema.Types.String,
+        required: true,
+    },
+    image: {
+        type: Schema.Types.String,
+        required: true,
+    },
+    video: {
         type: Schema.Types.String,
         required: true,
     },
@@ -42,13 +52,13 @@ const SopIkScema = new Schema<TSopIk>({
     timestamps: true,
 })
 
-SopIkScema.pre("save", function () {
+IkScema.pre("save", function () {
     if (!this.slug) {
         const slug = this.title.split(" ").join("-").toLowerCase();
         this.slug = `${slug}`;
     }
 });
 
-const SopIkModel = mongoose.model(SOP_IK_MODEL_NAME, SopIkScema)
+const IkModel = mongoose.model(IK_MODEL_NAME, IkScema)
 
-export default SopIkModel
+export default IkModel

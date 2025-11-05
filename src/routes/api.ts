@@ -22,6 +22,12 @@ import certificateController from '../controllers/certificate.controller';
 import sopIkController from '../controllers/sopIk.controller';
 import kuisSopIkController from '../controllers/kuisSopIk.controller';
 import scoreSopIkController from '../controllers/scoreSopIk.controller';
+import scoreSopController from '../controllers/scoreSop.controller';
+import scoreIkController from '../controllers/scoreIk.controller';
+import kuisIkController from '../controllers/kuisIk.controller';
+import kuisSopController from '../controllers/kuisSop.controller';
+import ikController from '../controllers/ik.controller';
+import sopController from '../controllers/sop.controller';
 
 
 const router = express.Router();
@@ -196,6 +202,100 @@ router.get('/scoresopik-export', scoreSopIkController.exportScore
     */
 )
 
+/// SCORE SOP
+router.post('/scoresop', authMiddleware , scoreSopController.create
+    /*
+    #swagger.tags = ['Score SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateScoreSopIkRequest"
+        }
+    }
+    */
+)
+router.get('/scoresop', scoreSopController.findAll
+    /*
+    #swagger.tags = ['Score SOP']
+    */
+)
+router.get('/scoresop/:id', scoreSopController.findOne
+    /*
+    #swagger.tags = ['Score SOP']
+    */
+)
+router.delete('/scoresop/:id', scoreSopController.remove
+    /*
+    #swagger.tags = ['Score SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoresop/:sop/sop', authMiddleware,  scoreSopController.findAllBySop
+    /*
+    #swagger.tags = ['Score SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoresop-user', authMiddleware,  scoreSopController.findAllByUser
+    /*
+    #swagger.tags = ['Score SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoresop-export', scoreSopController.exportScore
+    /*
+    #swagger.tags = ['Score SOP']
+    */
+)
+
+/// SCORE IK
+router.post('/scoreik', authMiddleware , scoreIkController.create
+    /*
+    #swagger.tags = ['Score IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateScoreSopIkRequest"
+        }
+    }
+    */
+)
+router.get('/scoreik', scoreIkController.findAll
+    /*
+    #swagger.tags = ['Score IK']
+    */
+)
+router.get('/scoreik/:id', scoreIkController.findOne
+    /*
+    #swagger.tags = ['Score IK']
+    */
+)
+router.delete('/scoreik/:id', scoreIkController.remove
+    /*
+    #swagger.tags = ['Score IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoreik/:ik/ik', authMiddleware,  scoreIkController.findAllByIk
+    /*
+    #swagger.tags = ['Score IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoreik-user', authMiddleware,  scoreIkController.findAllByUser
+    /*
+    #swagger.tags = ['Score IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scoreik-export', scoreIkController.exportScore
+    /*
+    #swagger.tags = ['Score IK']
+    */
+)
+
 /// KUIS SOP & IK
 router.post('/kuissopik', kuisSopIkController.create
     /*
@@ -246,11 +346,110 @@ router.get('/kuissopik/:sopIkId/sopIkId', kuisSopIkController.findAllBySopIk
     */
 )
 
+/// KUIS SOP
+router.post('/kuissop', kuisSopController.create
+    /*
+    #swagger.tags = ['KUIS SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisSopIkRequest"
+        }
+    }
+    */
+)
+router.get('/kuissop', kuisSopController.findAll
+    /*
+    #swagger.tags = ['KUIS SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuissop/:id', kuisSopController.findOne
+    /*
+    #swagger.tags = ['KUIS SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.put('/kuissop/:id', kuisSopController.update
+    /*
+    #swagger.tags = ['KUIS SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisSopIkRequest"
+        }
+    }
+    */
+)
+router.delete('/kuissop/:id', kuisSopController.remove
+    /*
+    #swagger.tags = ['KUIS SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuissop/:sop/sop', kuisSopController.findAllBySop
+    /*
+    #swagger.tags = ['KUIS SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// KUIS IK
+router.post('/kuisik', kuisIkController.create
+    /*
+    #swagger.tags = ['KUIS IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisSopIkRequest"
+        }
+    }
+    */
+)
+router.get('/kuisik', kuisIkController.findAll
+    /*
+    #swagger.tags = ['KUIS IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuisik/:id', kuisIkController.findOne
+    /*
+    #swagger.tags = ['KUIS IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.put('/kuisik/:id', kuisIkController.update
+    /*
+    #swagger.tags = ['KUIS IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisSopIkRequest"
+        }
+    }
+    */
+)
+router.delete('/kuisik/:id', kuisIkController.remove
+    /*
+    #swagger.tags = ['KUIS IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuisik/:ik/ik', kuisIkController.findAllByIk
+    /*
+    #swagger.tags = ['KUIS IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 /// SOP & IK
 router.post('/sopik', sopIkController.create
     /*
-    #swagger.tags = ['SOP & IK']
+    #swagger.tags = ['SOP & IK AFTER UPDATE']
     #swagger.security = [{ "bearerAuth": [] }]
     #swagger.requestBody = {
         required: true,
@@ -262,19 +461,19 @@ router.post('/sopik', sopIkController.create
 )
 router.get('/sopik', sopIkController.findAll
     /*
-    #swagger.tags = ['SOP & IK']
+    #swagger.tags = ['SOP & IK AFTER UPDATE']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.get('/sopik/:id', sopIkController.findOne
     /*
-    #swagger.tags = ['SOP & IK']
+    #swagger.tags = ['SOP & IK AFTER UPDATE']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.put('/sopik/:id', sopIkController.update
     /*
-    #swagger.tags = ['SOP & IK']
+    #swagger.tags = ['SOP & IK AFTER UPDATE']
     #swagger.security = [{ "bearerAuth": [] }]
     #swagger.requestBody = {
         required: true,
@@ -286,13 +485,114 @@ router.put('/sopik/:id', sopIkController.update
 )
 router.delete('/sopik/:id', sopIkController.remove
     /*
-    #swagger.tags = ['SOP & IK']
+    #swagger.tags = ['SOP & IK AFTER UPDATE']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
 router.get('/sopik/:slug/slug', sopIkController.findOneBySlug
     /*
-    #swagger.tags = ['SOP & IK']
+    #swagger.tags = ['SOP & IK AFTER UPDATE']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+
+/// SOP
+router.post('/sop', sopController.create
+    /*
+    #swagger.tags = ['SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSopRequest"
+        }
+    }
+    */
+)
+router.get('/sop', sopController.findAll
+    /*
+    #swagger.tags = ['SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/sop/:id', sopController.findOne
+    /*
+    #swagger.tags = ['SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.put('/sop/:id', sopController.update
+    /*
+    #swagger.tags = ['SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateSopRequest"
+        }
+    }
+    */
+)
+router.delete('/sop/:id', sopController.remove
+    /*
+    #swagger.tags = ['SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/sop/:slug/slug', sopController.findOneBySlug
+    /*
+    #swagger.tags = ['SOP']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// IK
+router.post('/ik', ikController.create
+    /*
+    #swagger.tags = ['IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateIkRequest"
+        }
+    }
+    */
+)
+router.get('/ik', ikController.findAll
+    /*
+    #swagger.tags = ['IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/ik/:id', ikController.findOne
+    /*
+    #swagger.tags = ['IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.put('/ik/:id', ikController.update
+    /*
+    #swagger.tags = ['IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateIkRequest"
+        }
+    }
+    */
+)
+router.delete('/ik/:id', ikController.remove
+    /*
+    #swagger.tags = ['IK']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/ik/:slug/slug', ikController.findOneBySlug
+    /*
+    #swagger.tags = ['IK']
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )

@@ -39,6 +39,25 @@ const doc = {
             CreateSopIkRequest: {
                 title: "nama ujian",
                 description: "deskripsi",
+                file: "",
+                duration: "",
+                countdown: "",
+            },
+            CreateSopRequest: {
+                title: "nama ujian",
+                description: "deskripsi",
+                file: "",
+                duration: "",
+                countdown: "",
+            },
+            CreateIkRequest: {
+                title: "nama ujian",
+                description: "deskripsi",
+                video: "linkvideo",
+                image: "linkimage",
+                file: "",
+                duration: "",
+                countdown: "",
             },
             CreateKuisSopIkRequest: {
                 bySopIk: "id sopik",

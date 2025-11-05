@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import * as Yup from "yup";
 
-export const SOP_IK_MODEL_NAME = "Sop&Ik";
+export const SOP_MODEL_NAME = "Sop";
 
 const Schema = mongoose.Schema
 
-export const sopIkDAO = Yup.object({
+export const sopDAO = Yup.object({
     title: Yup.string().required(),
     description: Yup.string().required(),
     file: Yup.string(),
@@ -14,9 +14,9 @@ export const sopIkDAO = Yup.object({
     slug: Yup.string(),
 })
 
-export type TSopIk = Yup.InferType<typeof sopIkDAO>
+export type TSop = Yup.InferType<typeof sopDAO>
 
-const SopIkScema = new Schema<TSopIk>({
+const SopScema = new Schema<TSop>({
     title: {
         type: Schema.Types.String,
         required: true,
@@ -42,13 +42,13 @@ const SopIkScema = new Schema<TSopIk>({
     timestamps: true,
 })
 
-SopIkScema.pre("save", function () {
+SopScema.pre("save", function () {
     if (!this.slug) {
         const slug = this.title.split(" ").join("-").toLowerCase();
         this.slug = `${slug}`;
     }
 });
 
-const SopIkModel = mongoose.model(SOP_IK_MODEL_NAME, SopIkScema)
+const SopModel = mongoose.model(SOP_MODEL_NAME, SopScema)
 
-export default SopIkModel
+export default SopModel

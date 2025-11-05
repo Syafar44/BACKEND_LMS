@@ -3,29 +3,29 @@ import { IPaginationQuery, IReqUser } from "../utils/interfaces";
 import response from "../utils/response";
 import mongoose, { isValidObjectId } from "mongoose";
 import UserModel from "../models/user.model";
-import ScoreSopIkModel, { scoreSopIkDAO, TScoreSopIk } from "../models/scoreSopIk.model";
+import ScoreSopModel, { scoreSopDAO, TScoreSop } from "../models/scoreSop.model";
 
 export default {
     async create(req: IReqUser, res: Response) {
         try {
             const userId = req.user?.id;
             console.log(userId)
-            const payload = {...req.body, createdBy: userId} as TScoreSopIk
-            await scoreSopIkDAO.validate(payload)
-            const result = await ScoreSopIkModel.create(payload)
-            response.success(res, result, "Success create SOP & IK")
+            const payload = {...req.body, createdBy: userId} as TScoreSop
+            await scoreSopDAO.validate(payload)
+            const result = await ScoreSopModel.create(payload)
+            response.success(res, result, "Success create SOP")
         } catch (error) {
-            response.error(res, error, "Failed create SOP & IK")
+            response.error(res, error, "Failed create SOP")
         }
     },
     async findAll(req: IReqUser, res: Response) {
-  const { page = 1, limit = 9999, search, sopIk } = req.query as unknown as IPaginationQuery;
+  const { page = 1, limit = 9999, search, sop } = req.query as unknown as IPaginationQuery;
 
   try {
     const match: any = {};
 
-    if (sopIk) {
-      match["bySopIk"] = new mongoose.Types.ObjectId(sopIk);
+    if (sop) {
+      match["bySop"] = new mongoose.Types.ObjectId(sop);
     }
 
     const pipeline: any[] = [
@@ -34,13 +34,13 @@ export default {
       // Populate SOP/IK
       {
         $lookup: {
-          from: "sop&iks",
-          localField: "bySopIk",
+          from: "sops",
+          localField: "bySop",
           foreignField: "_id",
-          as: "bySopIk",
+          as: "bySop",
         },
       },
-      { $unwind: { path: "$bySopIk", preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$bySop", preserveNullAndEmptyArrays: true } },
 
       // Populate CreatedBy
       {
@@ -59,7 +59,7 @@ export default {
       pipeline.push({
         $match: {
           $or: [
-            { "bySopIk.title": { $regex: search, $options: "i" } },
+            { "bySop.title": { $regex: search, $options: "i" } },
             { "createdBy.fullName": { $regex: search, $options: "i" } },
           ],
         },
@@ -71,7 +71,7 @@ export default {
     pipeline.push({ $skip: (Number(page) - 1) * Number(limit) });
     pipeline.push({ $limit: Number(limit) });
 
-    const result = await ScoreSopIkModel.aggregate(pipeline);
+    const result = await ScoreSopModel.aggregate(pipeline);
 
     // Count total data (tanpa skip/limit)
     const countPipeline = pipeline.filter(stage =>
@@ -79,7 +79,7 @@ export default {
     );
     countPipeline.push({ $count: "total" });
 
-    const countResult = await ScoreSopIkModel.aggregate(countPipeline);
+    const countResult = await ScoreSopModel.aggregate(countPipeline);
     const count = countResult[0]?.total || 0;
 
     response.pagination(
@@ -90,10 +90,10 @@ export default {
         totalPages: Math.ceil(count / Number(limit)),
         current: Number(page),
       },
-      "Success find all SOP & IK"
+      "Success find all SOP"
     );
   } catch (error) {
-    response.error(res, error, "Failed find all SOP & IK");
+    response.error(res, error, "Failed find all SOP");
   }
 },
     async findOne(req: IReqUser, res: Response) {
@@ -101,13 +101,13 @@ export default {
             const { id } = req.params
             
             if (!isValidObjectId(id)) {
-                return response.notFound(res, "failed find one a SOP & IK");
+                return response.notFound(res, "failed find one a SOP");
             }
             
-            const result = await ScoreSopIkModel.findById(id)
-            response.success(res, result, "Success find a SOP & IK")
+            const result = await ScoreSopModel.findById(id)
+            response.success(res, result, "Success find a SOP")
         } catch (error) {
-            response.error(res, error, "Failed find a SOP & IK")
+            response.error(res, error, "Failed find a SOP")
         }
     },
     async remove(req: IReqUser, res: Response) {
@@ -115,25 +115,25 @@ export default {
             const { id } = req.params
             
             if (!isValidObjectId(id)) {
-                return response.notFound(res, "Failed find one a SOP & IK");
+                return response.notFound(res, "Failed find one a SOP");
             }
             
-                const result = await ScoreSopIkModel.findByIdAndDelete(id, {new: true})
-                response.success(res, result, "Success remove SOP & IK")
+                const result = await ScoreSopModel.findByIdAndDelete(id, {new: true})
+                response.success(res, result, "Success remove SOP")
         } catch (error) {
-            response.error(res, error, "Failed remove SOP & IK")
+            response.error(res, error, "Failed remove SOP")
         }
     },
-    async findAllBySopIk(req: IReqUser, res: Response) {
+    async findAllBySop(req: IReqUser, res: Response) {
         try {
-            const { sopIk } = req.params
+            const { sop } = req.params
             const userId = req.user?.id;
 
-            if (!isValidObjectId(sopIk)) {
-                return response.error(res, null, "Category not found");
+            if (!isValidObjectId(sop)) {
+                return response.error(res, null, "SOP not found");
             }
 
-            const result = await ScoreSopIkModel.find({ bySopIk: sopIk, createdBy: userId }).exec();
+            const result = await ScoreSopModel.find({ bySop: sop, createdBy: userId }).exec();
             response.success(res, result, "Success find Score");
         } catch (error) {
             response.error(res, error, "Failed to find Score")
@@ -142,7 +142,7 @@ export default {
     async findAllByUser(req: IReqUser, res: Response) {
         try {
             const userId = req.user?.id;
-            const result = await ScoreSopIkModel.find({ createdBy: userId }).exec();
+            const result = await ScoreSopModel.find({ createdBy: userId }).exec();
             response.success(res, result, "Success find Score");
         } catch (error) {
             response.error(res, error, "Failed to find Score")
@@ -150,32 +150,32 @@ export default {
     },
     async exportScore(req: IReqUser, res: Response) {
   try {
-    const { sopik } = req.query;
-    const objectIdSopIk = sopik ? new mongoose.Types.ObjectId(String(sopik)) : null;
+    const { sop } = req.query;
+    const objectIdSop = sop ? new mongoose.Types.ObjectId(String(sop)) : null;
 
     const result = await UserModel.aggregate([
       // Ambil semua user
       {
         $lookup: {
-          from: "scoresopiks",
+          from: "scoresops",
           let: { userId: "$_id" },
           pipeline: [
             {
               $match: {
                 $expr: { $eq: ["$createdBy", "$$userId"] },
-                ...(objectIdSopIk ? { bySopIk: objectIdSopIk } : {}),
+                ...(objectIdSop ? { bySop: objectIdSop } : {}),
               },
             },
 
             {
               $lookup: {
-                from: "sop&iks", // perbaiki nama koleksi (hindari 'sop&iks')
-                localField: "bySopIk",
+                from: "sops", // perbaiki nama koleksi (hindari 'sop&iks')
+                localField: "bySop",
                 foreignField: "_id",
-                as: "sopIkData",
+                as: "sopData",
               },
             },
-            { $unwind: { path: "$sopIkData", preserveNullAndEmptyArrays: true } },
+            { $unwind: { path: "$sopData", preserveNullAndEmptyArrays: true } },
           ],
           as: "scoreData",
         },
@@ -198,7 +198,7 @@ export default {
           "scoreData.total_question": 1,
           "scoreData.isPass": 1,
           "scoreData.createdAt": 1,
-          "scoreData.sopIkData.title": 1,
+          "scoreData.sopData.title": 1,
           isDone: 1,
         },
       },

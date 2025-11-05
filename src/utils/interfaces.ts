@@ -18,4 +18,6 @@ export interface IPaginationQuery {
     competency?: string,
     subCompetency?: string
     sopIk?: string
+    sop?: string
+    ik?: string
 }
