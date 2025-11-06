@@ -9,8 +9,8 @@ export const sopDAO = Yup.object({
     title: Yup.string().required(),
     description: Yup.string().required(),
     file: Yup.string(),
-    duration: Yup.number(),
-    countdown: Yup.number(),
+    duration: Yup.string(),
+    countdown: Yup.string(),
     slug: Yup.string(),
 })
 
@@ -29,10 +29,10 @@ const SopScema = new Schema<TSop>({
         type: Schema.Types.String,
     },
     duration: {
-        type: Schema.Types.Number,
+        type: Schema.Types.String,
     },
     countdown: {
-        type: Schema.Types.Number,
+        type: Schema.Types.String,
     },
     slug: {
         type: Schema.Types.String,
