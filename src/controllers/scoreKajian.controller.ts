@@ -148,67 +148,66 @@ export default {
         }
     },
     async exportScore(req: IReqUser, res: Response) {
-  try {
-    const { kajian } = req.query;
-    const objectIdKajian = kajian ? new mongoose.Types.ObjectId(String(kajian)) : null;
+      try {
+        const { kajian } = req.query;
+        const objectIdKajian = kajian ? new mongoose.Types.ObjectId(String(kajian)) : null;
 
-    const result = await UserModel.aggregate([
-      // Ambil semua user
-      {
-        $lookup: {
-          from: "scoreKajians",
-          let: { userId: "$_id" },
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$createdBy", "$$userId"] },
-                ...(objectIdKajian ? { byKajian: objectIdKajian } : {}),
-              },
+        const result = await UserModel.aggregate([
+          // Ambil semua user
+          {
+            $lookup: {
+              from: "scorekajians",
+              let: { userId: "$_id" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: { $eq: ["$createdBy", "$$userId"] },
+                    ...(objectIdKajian ? { byKajian: objectIdKajian } : {}),
+                  },
+                },
+
+                {
+                  $lookup: {
+                    from: "kajians", // perbaKajiani nama koleksi (hindari 'sop&Kajians')
+                    localField: "byKajian",
+                    foreignField: "_id",
+                    as: "kajianData",
+                  },
+                },
+                { $unwind: { path: "$kajianData", preserveNullAndEmptyArrays: true } },
+              ],
+              as: "scoreData",
             },
+          },
 
-            {
-              $lookup: {
-                from: "kajians", // perbaKajiani nama koleksi (hindari 'sop&Kajians')
-                localField: "byKajian",
-                foreignField: "_id",
-                as: "kajianData",
-              },
+          // Tambahkan flag apakah user sudah mengisi skor
+          {
+            $addFields: {
+              isDone: { $gt: [{ $size: "$scoreData" }, 0] },
             },
-            { $unwind: { path: "$kajianData", preserveNullAndEmptyArrays: true } },
-          ],
-          as: "scoreData",
-        },
-      },
+          },
 
-      // Tambahkan flag apakah user sudah mengisi skor
-      {
-        $addFields: {
-          isDone: { $gt: [{ $size: "$scoreData" }, 0] },
-        },
-      },
+          // Pilih field yang ingin diexport
+          {
+            $project: {
+              fullName: 1,
+              email: 1,
+              department: 1,
+              "scoreData.total_score": 1,
+              "scoreData.total_question": 1,
+              "scoreData.isPass": 1,
+              "scoreData.createdAt": 1,
+              "scoreData.kajianData.title": 1,
+              isDone: 1,
+            },
+          },
 
-      // Pilih field yang ingin diexport
-      {
-        $project: {
-          fullName: 1,
-          email: 1,
-          department: 1,
-          "scoreData.total_score": 1,
-          "scoreData.total_question": 1,
-          "scoreData.isPass": 1,
-          "scoreData.createdAt": 1,
-          "scoreData.kajianData.title": 1,
-          isDone: 1,
-        },
-      },
+          { $sort: { fullName: 1 } },
+        ]);
 
-      { $sort: { fullName: 1 } },
-    ]);
-
-    response.success(res, result, "Success export score data");
-  } catch (error) {
-    response.error(res, error, "Failed to export score data");
+        response.success(res, result, "Success export score data");
+      } catch (error) {
+        response.error(res, error, "Failed to export score data");
+      }
+    }
   }
-}
-
-}
