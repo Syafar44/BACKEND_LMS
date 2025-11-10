@@ -122,6 +122,12 @@ const doc = {
                 total_question: 5,
                 total_score: 5
             },
+            CreateScoreKajianRequest: {
+                byKajian: "KajianId",
+                isPass: true,
+                total_question: 5,
+                total_score: 5
+            },
             CreateVideoRequest: {
                 bySubCompetency: "subCompetencyId",
                 viewed: true

@@ -28,6 +28,8 @@ import kuisIkController from '../controllers/kuisIk.controller';
 import kuisSopController from '../controllers/kuisSop.controller';
 import ikController from '../controllers/ik.controller';
 import sopController from '../controllers/sop.controller';
+import kuisKajianController from '../controllers/kuisKajian.controller';
+import scoreKajianController from '../controllers/scoreKajian.controller';
 
 
 const router = express.Router();
@@ -154,6 +156,103 @@ router.post(
     }
   */
 );
+
+/// SCORE KAJIAN
+router.post('/scorekajian', authMiddleware , scoreKajianController.create
+    /*
+    #swagger.tags = ['SCORE KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateScoreKajianRequest"
+        }
+    }
+    */
+)
+router.get('/scorekajian', scoreKajianController.findAll
+    /*
+    #swagger.tags = ['SCORE KAJIAN']
+    */
+)
+router.get('/scorekajian/:id', scoreKajianController.findOne
+    /*
+    #swagger.tags = ['SCORE KAJIAN']
+    */
+)
+router.delete('/scorekajian/:id', scoreKajianController.remove
+    /*
+    #swagger.tags = ['SCORE KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scorekajian/:kajian/kajian', authMiddleware,  scoreKajianController.findAllByKajian
+    /*
+    #swagger.tags = ['SCORE KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scorekajian-user', authMiddleware,  scoreKajianController.findAllByUser
+    /*
+    #swagger.tags = ['SCORE KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/scorekajian-export', scoreKajianController.exportScore
+    /*
+    #swagger.tags = ['SCORE KAJIAN']
+    */
+)
+
+/// KUIS KAJIAN
+router.post('/kuiskajian', kuisKajianController.create
+    /*
+    #swagger.tags = ['KUIS KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisKajianRequest"
+        }
+    }
+    */
+)
+router.get('/kuiskajian', kuisKajianController.findAll
+    /*
+    #swagger.tags = ['KUIS KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuiskajian/:id', kuisKajianController.findOne
+    /*
+    #swagger.tags = ['KUIS KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.put('/kuiskajian/:id', kuisKajianController.update
+    /*
+    #swagger.tags = ['KUIS KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisSopIkRequest"
+        }
+    }
+    */
+)
+router.delete('/kuiskajian/:id', kuisKajianController.remove
+    /*
+    #swagger.tags = ['KUIS KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuiskajian/:kajian/kajian', kuisKajianController.findAllByKajian
+    /*
+    #swagger.tags = ['KUIS KAJIAN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 /// SCORE SOP & IK
 router.post('/scoresopik', authMiddleware , scoreSopIkController.create
