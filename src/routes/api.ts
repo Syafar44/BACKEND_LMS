@@ -30,7 +30,10 @@ import ikController from '../controllers/ik.controller';
 import sopController from '../controllers/sop.controller';
 import kuisKajianController from '../controllers/kuisKajian.controller';
 import scoreKajianController from '../controllers/scoreKajian.controller';
-
+import asesmenController from '../controllers/asesmen.controller';
+import kuisAsesmenController from '../controllers/kuisAsesmen.controller';
+import partAsesmenController from '../controllers/partAsesmen.controller';
+import retAsesmenController from '../controllers/retAsesmen.controller';
 
 const router = express.Router();
 
@@ -156,6 +159,180 @@ router.post(
     }
   */
 );
+
+/// ASESMEN
+router.post('/asesmen', authMiddleware , asesmenController.create
+    /*
+    #swagger.tags = ['ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateAsesmenRequest"
+        }
+    }
+    */
+)
+router.get('/asesmen', asesmenController.findAll
+    /*
+    #swagger.tags = ['ASESMEN']
+    */
+)
+router.get('/asesmen/:id', asesmenController.findOne
+    /*
+    #swagger.tags = ['ASESMEN']
+    */
+)
+router.put('/asesmen/:id', asesmenController.update
+    /*
+    #swagger.tags = ['ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateAsesmenRequest"
+        }
+    }
+    */
+)
+router.delete('/asesmen/:id', asesmenController.remove
+    /*
+    #swagger.tags = ['ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// KUIS ASESMEN
+router.post('/kuisasesmen', authMiddleware , kuisAsesmenController.create
+    /*
+    #swagger.tags = ['KUIS ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisAsesmenRequest"
+        }
+    }
+    */
+)
+router.get('/kuisasesmen', kuisAsesmenController.findAll
+    /*
+    #swagger.tags = ['KUIS ASESMEN']
+    */
+)
+router.get('/kuisasesmen/:id', kuisAsesmenController.findOne
+    /*
+    #swagger.tags = ['KUIS ASESMEN']
+    */
+)
+router.put('/kuisasesmen/:id', kuisAsesmenController.update
+    /*
+    #swagger.tags = ['KUIS ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateKuisAsesmenRequest"
+        }
+    }
+    */
+)
+router.delete('/kuisasesmen/:id', kuisAsesmenController.remove
+    /*
+    #swagger.tags = ['KUIS ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/kuisasesmen/:asesmen/asesmen', kuisAsesmenController.findAllByAsesmen
+    /*
+    #swagger.tags = ['KUIS ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// PARTISIPAN ASESMEN
+router.post('/partasesmen', authMiddleware , partAsesmenController.create
+    /*
+    #swagger.tags = ['PART ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreatePartAsesmenRequest"
+        }
+    }
+    */
+)
+router.get('/partasesmen', partAsesmenController.findAll
+    /*
+    #swagger.tags = ['PART ASESMEN']
+    */
+)
+router.get('/partasesmen/:id', partAsesmenController.findOne
+    /*
+    #swagger.tags = ['PART ASESMEN']
+    */
+)
+router.put('/partasesmen/:id', partAsesmenController.update
+    /*
+    #swagger.tags = ['PART ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreatePartAsesmenRequest"
+        }
+    }
+    */
+)
+router.delete('/partasesmen/:id', partAsesmenController.remove
+    /*
+    #swagger.tags = ['PART ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.get('/partasesmen/:protector_id/protector_id', partAsesmenController.findOneByProtId
+    /*
+    #swagger.tags = ['PART ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+
+/// RETURN ASESMEN
+router.post('/retasesmen', authMiddleware , retAsesmenController.create
+    /*
+    #swagger.tags = ['RET ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
+        required: true,
+        schema: {
+            $ref: "#/components/schemas/CreateRetAsesmenRequest"
+        }
+    }
+    */
+)
+router.get('/retasesmen', retAsesmenController.findAll
+    /*
+    #swagger.tags = ['RET ASESMEN']
+    */
+)
+router.get('/retasesmen/:id', retAsesmenController.findOne
+    /*
+    #swagger.tags = ['RET ASESMEN']
+    */
+)
+router.delete('/retasesmen/:id', retAsesmenController.remove
+    /*
+    #swagger.tags = ['RET ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
+router.delete('/retasesmen/:createdBy/createdBy', retAsesmenController.findAllByUserId
+    /*
+    #swagger.tags = ['RET ASESMEN']
+    #swagger.security = [{ "bearerAuth": [] }]
+    */
+)
 
 /// SCORE KAJIAN
 router.post('/scorekajian', authMiddleware , scoreKajianController.create

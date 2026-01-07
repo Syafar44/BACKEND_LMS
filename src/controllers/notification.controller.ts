@@ -12,19 +12,16 @@ export default {
             const userId = req.user?.id;
             const payload = { ...req.body, createdBy: userId } as TNotification;
 
-            // ✅ Validasi format input
             await notificationDAO.validate(payload);
 
-            // ✅ Cek apakah token sudah ada di database
             const isExists = await NotificationModel.findOne({ token });
             if (isExists) {
-            return res.status(200).json({
-                message: "Token already exists",
-                data: isExists,
-            });
+                return res.status(200).json({
+                    message: "Token already exists",
+                    data: isExists,
+                });
             }
 
-            // ✅ Simpan token baru
             const result = await NotificationModel.create(payload);
             response.success(res, result, "Success create token");
         } catch (error) {

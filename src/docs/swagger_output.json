@@ -446,6 +446,698 @@
         }
       }
     },
+    "/asesmen": {
+      "post": {
+        "tags": [
+          "ASESMEN"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAsesmenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAsesmenRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/asesmen/{id}": {
+      "get": {
+        "tags": [
+          "ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAsesmenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAsesmenRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/kuisasesmen": {
+      "post": {
+        "tags": [
+          "KUIS ASESMEN"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKuisAsesmenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKuisAsesmenRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "KUIS ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/kuisasesmen/{id}": {
+      "get": {
+        "tags": [
+          "KUIS ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "KUIS ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKuisAsesmenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKuisAsesmenRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "KUIS ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/kuisasesmen/{asesmen}/asesmen": {
+      "get": {
+        "tags": [
+          "KUIS ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "asesmen",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/partasesmen": {
+      "post": {
+        "tags": [
+          "PART ASESMEN"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartAsesmenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartAsesmenRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "PART ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/partasesmen/{id}": {
+      "get": {
+        "tags": [
+          "PART ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PART ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartAsesmenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartAsesmenRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "PART ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/partasesmen/{protector_id}/protector_id": {
+      "get": {
+        "tags": [
+          "PART ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "protector_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/retasesmen": {
+      "post": {
+        "tags": [
+          "RET ASESMEN"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRetAsesmenRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRetAsesmenRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "RET ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/retasesmen/{id}": {
+      "get": {
+        "tags": [
+          "RET ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RET ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/retasesmen/{createdBy}/createdBy": {
+      "delete": {
+        "tags": [
+          "RET ASESMEN"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "createdBy",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/scorekajian": {
       "post": {
         "tags": [
@@ -5491,6 +6183,110 @@
         },
         "xml": {
           "name": "CreateCertificateRequest"
+        }
+      },
+      "CreateAsesmenRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Asesmen 1"
+          },
+          "type": {
+            "type": "string",
+            "example": "1"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description 1"
+          },
+          "duration": {
+            "type": "number",
+            "example": 60
+          },
+          "countdown": {
+            "type": "number",
+            "example": 10
+          }
+        },
+        "xml": {
+          "name": "CreateAsesmenRequest"
+        }
+      },
+      "CreateKuisAsesmenRequest": {
+        "type": "object",
+        "properties": {
+          "byAsesmen": {
+            "type": "string",
+            "example": "asesmenId"
+          },
+          "question": {
+            "type": "string",
+            "example": "Soal asesmen"
+          },
+          "option1": {
+            "type": "string",
+            "example": "opsi soal"
+          },
+          "option2": {
+            "type": "string",
+            "example": "opsi soal"
+          },
+          "option3": {
+            "type": "string",
+            "example": "opsi soal"
+          },
+          "option4": {
+            "type": "string",
+            "example": "opsi soal"
+          }
+        },
+        "xml": {
+          "name": "CreateKuisAsesmenRequest"
+        }
+      },
+      "CreatePartAsesmenRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Part Asesmen 1"
+          },
+          "type": {
+            "type": "string",
+            "example": "1"
+          },
+          "completed": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "xml": {
+          "name": "CreatePartAsesmenRequest"
+        }
+      },
+      "CreateRetAsesmenRequest": {
+        "type": "object",
+        "properties": {
+          "byAsesmen": {
+            "type": "string",
+            "example": "asesmenId"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "answer": {
+                  "type": "string",
+                  "example": "jawaban 2"
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "CreateRetAsesmenRequest"
         }
       },
       "RemoveMediaRequest": {

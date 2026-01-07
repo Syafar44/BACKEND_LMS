@@ -166,6 +166,33 @@ const doc = {
             CreateCertificateRequest: {
                 competency: "competencyId",
             },
+            CreateAsesmenRequest: {
+                title: "Asesmen 1",
+                type: "1",
+                description: "Description 1",
+                duration: 60,
+                countdown: 10,
+            },
+            CreateKuisAsesmenRequest: {
+                byAsesmen: "asesmenId",
+                question: "Soal asesmen",
+                option1: "opsi soal",
+                option2: "opsi soal",
+                option3: "opsi soal",
+                option4: "opsi soal",
+            },
+            CreatePartAsesmenRequest: {
+                title: "Part Asesmen 1",
+                type: "1",
+                completed: false
+            },
+            CreateRetAsesmenRequest: {
+                byAsesmen: "asesmenId",
+                answers: [
+                    { answer: "jawaban 1" },
+                    { answer: "jawaban 2" }
+                ]
+            },
             RemoveMediaRequest: {
                 fileUrl: "fileUrl"
             }
