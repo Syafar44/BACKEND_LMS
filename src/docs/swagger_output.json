@@ -6277,6 +6277,10 @@
             "items": {
               "type": "object",
               "properties": {
+                "question": {
+                  "type": "string",
+                  "example": "Soal 2"
+                },
                 "answer": {
                   "type": "string",
                   "example": "jawaban 2"

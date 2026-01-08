@@ -189,8 +189,8 @@ const doc = {
             CreateRetAsesmenRequest: {
                 byAsesmen: "asesmenId",
                 answers: [
-                    { answer: "jawaban 1" },
-                    { answer: "jawaban 2" }
+                    { question: "Soal 1", answer: "jawaban 1" },
+                    { question: "Soal 2", answer: "jawaban 2" }
                 ]
             },
             RemoveMediaRequest: {

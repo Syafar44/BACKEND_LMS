@@ -9,7 +9,6 @@ export const asesmenDAO = Yup.object({
     title: Yup.string().required(),
     type: Yup.string().required(),
     duration: Yup.string(),
-    countdown: Yup.string(),
     slug: Yup.string(),
 })
 
@@ -25,9 +24,6 @@ const AsesmenScema = new Schema<TAsesmen>({
         required: true,
     },
     duration: {
-        type: Schema.Types.String,
-    },
-    countdown: {
         type: Schema.Types.String,
     },
     slug: {

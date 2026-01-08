@@ -19,11 +19,16 @@ export const retAsesmenDAO = Yup.object({
 
 const AnswerSchema = new Schema(
     {
+        question: {
+            type: Schema.Types.String,
+            required: false,
+        },
         answer: {
-            type: Schema.Types.Mixed,
+            type: Schema.Types.String,
             required: true,
         },
     },
+    { _id: false }
 )
 
 export type TRetAsesmen = Yup.InferType<typeof retAsesmenDAO>
