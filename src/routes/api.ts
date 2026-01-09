@@ -299,7 +299,7 @@ router.get('/partasesmen/:protector_id/protector_id', partAsesmenController.find
 )
 
 /// RETURN ASESMEN
-router.post('/retasesmen', authMiddleware , retAsesmenController.create
+router.post('/retasesmen' , retAsesmenController.create
     /*
     #swagger.tags = ['RET ASESMEN']
     #swagger.security = [{ "bearerAuth": [] }]

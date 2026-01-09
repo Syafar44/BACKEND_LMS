@@ -188,6 +188,7 @@ const doc = {
             },
             CreateRetAsesmenRequest: {
                 byAsesmen: "asesmenId",
+                createdBy: "userId",
                 answers: [
                     { question: "Soal 1", answer: "jawaban 1" },
                     { question: "Soal 2", answer: "jawaban 2" }

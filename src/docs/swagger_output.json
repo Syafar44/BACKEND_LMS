@@ -6272,6 +6272,10 @@
             "type": "string",
             "example": "asesmenId"
           },
+          "createdBy": {
+            "type": "string",
+            "example": "userId"
+          },
           "answers": {
             "type": "array",
             "items": {

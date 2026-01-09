@@ -33,9 +33,8 @@ const AnswerSchema = new Schema(
 
 export type TRetAsesmen = Yup.InferType<typeof retAsesmenDAO>
 
-export interface RetAsesmen extends Omit<TRetAsesmen, "byAsesmen" | "createdBy" > {
+export interface RetAsesmen extends Omit<TRetAsesmen, "byAsesmen" > {
     byAsesmen: ObjectId
-    createdBy: ObjectId
 }
 
 const RetAsesmenSchema = new Schema<RetAsesmen>({
@@ -45,8 +44,7 @@ const RetAsesmenSchema = new Schema<RetAsesmen>({
         required: true,
     },
     createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        type: Schema.Types.String,
     },
     answers: {
         type: [AnswerSchema],
