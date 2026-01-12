@@ -1111,7 +1111,7 @@
       }
     },
     "/retasesmen/{createdBy}/createdBy": {
-      "delete": {
+      "get": {
         "tags": [
           "RET ASESMEN"
         ],

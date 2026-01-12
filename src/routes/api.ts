@@ -327,7 +327,7 @@ router.delete('/retasesmen/:id', retAsesmenController.remove
     #swagger.security = [{ "bearerAuth": [] }]
     */
 )
-router.delete('/retasesmen/:createdBy/createdBy', retAsesmenController.findAllByUserId
+router.get('/retasesmen/:createdBy/createdBy', retAsesmenController.findAllByUserId
     /*
     #swagger.tags = ['RET ASESMEN']
     #swagger.security = [{ "bearerAuth": [] }]
