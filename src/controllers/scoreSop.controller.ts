@@ -7,16 +7,26 @@ import ScoreSopModel, { scoreSopDAO, TScoreSop } from "../models/scoreSop.model"
 
 export default {
     async create(req: IReqUser, res: Response) {
-        try {
-            const userId = req.user?.id;
-            console.log(userId)
-            const payload = {...req.body, createdBy: userId} as TScoreSop
-            await scoreSopDAO.validate(payload)
-            const result = await ScoreSopModel.create(payload)
-            response.success(res, result, "Success create SOP")
-        } catch (error) {
-            response.error(res, error, "Failed create SOP")
+      try {
+        const userId = req.user?.id;
+
+        if (!userId) {
+          return response.unauthorized(res, "Unauthorized: user not authenticated");
         }
+
+        const payload = {
+          ...req.body,
+          createdBy: userId,
+        } as TScoreSop;
+
+        await scoreSopDAO.validate(payload);
+
+        const result = await ScoreSopModel.create(payload);
+
+        response.success(res, result, "Success create SOP");
+      } catch (error) {
+        response.error(res, error, "Failed create SOP");
+      }
     },
     async findAll(req: IReqUser, res: Response) {
   const { page = 1, limit = 9999, search, sop } = req.query as unknown as IPaginationQuery;

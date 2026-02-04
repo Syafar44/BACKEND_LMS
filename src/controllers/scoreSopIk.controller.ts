@@ -7,95 +7,104 @@ import ScoreSopIkModel, { scoreSopIkDAO, TScoreSopIk } from "../models/scoreSopI
 
 export default {
     async create(req: IReqUser, res: Response) {
-        try {
-            const userId = req.user?.id;
-            console.log(userId)
-            const payload = {...req.body, createdBy: userId} as TScoreSopIk
-            await scoreSopIkDAO.validate(payload)
-            const result = await ScoreSopIkModel.create(payload)
-            response.success(res, result, "Success create SOP & IK")
-        } catch (error) {
-            response.error(res, error, "Failed create SOP & IK")
+      try {
+        const userId = req.user?.id;
+
+        if (!userId) {
+          return response.unauthorized(res, "Unauthorized");
         }
+
+        const payload = {
+          ...req.body,
+          createdBy: userId,
+        } as TScoreSopIk;
+
+        await scoreSopIkDAO.validate(payload);
+        const result = await ScoreSopIkModel.create(payload);
+
+        response.success(res, result, "Success create SOP & IK");
+      } catch (error) {
+        response.error(res, error, "Failed create SOP & IK");
+      }
     },
     async findAll(req: IReqUser, res: Response) {
-  const { page = 1, limit = 9999, search, sopIk } = req.query as unknown as IPaginationQuery;
+      const { page = 1, limit = 9999, search, sopIk } = req.query as unknown as IPaginationQuery;
 
-  try {
-    const match: any = {};
+      try {
+        const match: any = {};
 
-    if (sopIk) {
-      match["bySopIk"] = new mongoose.Types.ObjectId(sopIk);
-    }
+        if (sopIk) {
+          match["bySopIk"] = new mongoose.Types.ObjectId(sopIk);
+        }
 
-    const pipeline: any[] = [
-      { $match: match },
+        const pipeline: any[] = [
+          { $match: match },
 
-      // Populate SOP/IK
-      {
-        $lookup: {
-          from: "sop&iks",
-          localField: "bySopIk",
-          foreignField: "_id",
-          as: "bySopIk",
-        },
-      },
-      { $unwind: { path: "$bySopIk", preserveNullAndEmptyArrays: true } },
+          // Populate SOP/IK
+          {
+            $lookup: {
+              from: "sop&iks",
+              localField: "bySopIk",
+              foreignField: "_id",
+              as: "bySopIk",
+            },
+          },
+          { $unwind: { path: "$bySopIk", preserveNullAndEmptyArrays: true } },
 
-      // Populate CreatedBy
-      {
-        $lookup: {
-          from: "users",
-          localField: "createdBy",
-          foreignField: "_id",
-          as: "createdBy",
-        },
-      },
-      { $unwind: { path: "$createdBy", preserveNullAndEmptyArrays: true } },
-    ];
+          // Populate CreatedBy
+          {
+            $lookup: {
+              from: "users",
+              localField: "createdBy",
+              foreignField: "_id",
+              as: "createdBy",
+            },
+          },
+          { $unwind: { path: "$createdBy", preserveNullAndEmptyArrays: true } },
+        ];
 
-    // Search (jika ada keyword)
-    if (search) {
-      pipeline.push({
-        $match: {
-          $or: [
-            { "bySopIk.title": { $regex: search, $options: "i" } },
-            { "createdBy.fullName": { $regex: search, $options: "i" } },
-          ],
-        },
-      });
-    }
+        // Search (jika ada keyword)
+        if (search) {
+          pipeline.push({
+            $match: {
+              $or: [
+                { "bySopIk.title": { $regex: search, $options: "i" } },
+                { "createdBy.fullName": { $regex: search, $options: "i" } },
+              ],
+            },
+          });
+        }
 
-    // Sorting & Pagination
-    pipeline.push({ $sort: { createdAt: -1 } });
-    pipeline.push({ $skip: (Number(page) - 1) * Number(limit) });
-    pipeline.push({ $limit: Number(limit) });
+        // Sorting & Pagination
+        pipeline.push({ $sort: { createdAt: -1 } });
+        pipeline.push({ $skip: (Number(page) - 1) * Number(limit) });
+        pipeline.push({ $limit: Number(limit) });
 
-    const result = await ScoreSopIkModel.aggregate(pipeline);
+        const result = await ScoreSopIkModel.aggregate(pipeline);
 
-    // Count total data (tanpa skip/limit)
-    const countPipeline = pipeline.filter(stage =>
-      !("$skip" in stage) && !("$limit" in stage) && !("$sort" in stage)
-    );
-    countPipeline.push({ $count: "total" });
+        // Count total data (tanpa skip/limit)
+        const countPipeline = pipeline.filter(stage =>
+          !("$skip" in stage) && !("$limit" in stage) && !("$sort" in stage)
+        );
+        countPipeline.push({ $count: "total" });
 
-    const countResult = await ScoreSopIkModel.aggregate(countPipeline);
-    const count = countResult[0]?.total || 0;
+        const countResult = await ScoreSopIkModel.aggregate(countPipeline);
+        const count = countResult[0]?.total || 0;
 
-    response.pagination(
-      res,
-      result,
-      {
-        total: count,
-        totalPages: Math.ceil(count / Number(limit)),
-        current: Number(page),
-      },
-      "Success find all SOP & IK"
-    );
-  } catch (error) {
-    response.error(res, error, "Failed find all SOP & IK");
-  }
-},
+        response.pagination(
+          res,
+          result,
+          {
+            total: count,
+            totalPages: Math.ceil(count / Number(limit)),
+            current: Number(page),
+          },
+          "Success find all SOP & IK"
+        );
+      } catch (error) {
+        response.error(res, error, "Failed find all SOP & IK");
+      }
+    },
     async findOne(req: IReqUser, res: Response) {
         try {
             const { id } = req.params

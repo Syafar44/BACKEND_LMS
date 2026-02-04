@@ -7,16 +7,26 @@ import ScoreIkModel, { scoreIkDAO, TScoreIk } from "../models/scoreIk.model";
 
 export default {
     async create(req: IReqUser, res: Response) {
-        try {
-            const userId = req.user?.id;
-            console.log(userId)
-            const payload = {...req.body, createdBy: userId} as TScoreIk
-            await scoreIkDAO.validate(payload)
-            const result = await ScoreIkModel.create(payload)
-            response.success(res, result, "Success create IK")
-        } catch (error) {
-            response.error(res, error, "Failed create IK")
+      try {
+        const userId = req.user?.id;
+
+        if (!userId) {
+          return response.unauthorized(res, "Unauthorized: user not authenticated");
         }
+
+        const payload = {
+          ...req.body,
+          createdBy: userId,
+        } as TScoreIk;
+
+        await scoreIkDAO.validate(payload);
+
+        const result = await ScoreIkModel.create(payload);
+
+        response.success(res, result, "Success create IK");
+      } catch (error) {
+        response.error(res, error, "Failed create IK");
+      }
     },
     async findAll(req: IReqUser, res: Response) {
   const { page = 1, limit = 9999, search, ik } = req.query as unknown as IPaginationQuery;
